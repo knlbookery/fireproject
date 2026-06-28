@@ -26,7 +26,9 @@ import {
   Building2,
   TrendingUp,
   Check,
+  X,
 } from "lucide-react";
+
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
