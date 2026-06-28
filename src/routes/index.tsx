@@ -973,10 +973,7 @@ function Donate() {
                 </button>
               ))}
             </div>
-            <a
-              href="#"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-primary transition hover:bg-white/90"
-            >
+            <a href="#" className={`mt-5 w-full ${BTN.onDarkSolid}`}>
               <Heart className="h-4 w-4" />
               Donate Now
             </a>
