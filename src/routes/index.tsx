@@ -20,27 +20,30 @@ import {
   UserPlus,
   Mail,
 } from "lucide-react";
-import ghanaAerial from "@/assets/ghana-aerial.jpg";
-import volunteers from "@/assets/volunteers.jpg";
-import storyLab from "@/assets/story-lab.jpg";
-import storyLeadership from "@/assets/story-leadership.jpg";
-import storyBasketball from "@/assets/story-basketball.jpg";
-import portrait1 from "@/assets/story-portrait-1.jpg";
-import portrait2 from "@/assets/story-portrait-2.jpg";
-import portrait3 from "@/assets/story-portrait-3.jpg";
-import portrait4 from "@/assets/story-portrait-4.jpg";
-import portrait5 from "@/assets/story-portrait-5.jpg";
-import portrait6 from "@/assets/story-portrait-6.jpg";
-import portrait7 from "@/assets/story-portrait-7.jpg";
-import portrait8 from "@/assets/story-portrait-8.jpg";
-import portrait9 from "@/assets/story-portrait-9.jpg";
-import portrait10 from "@/assets/story-portrait-10.jpg";
-import progTech from "@/assets/program-tech.jpg";
-import progYouth from "@/assets/program-youth.jpg";
-import progSports from "@/assets/program-sports.jpg";
-import progBiz from "@/assets/program-entrepreneurship.jpg";
-import eventConference from "@/assets/event-conference.jpg";
-import eventWeekend from "@/assets/event-weekend.jpg";
+// Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
+const U = (id: string, w = 1600) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+const ghanaAerial = U("1580060839134-75a5edca2e99"); // Accra skyline / Ghana
+const volunteers = U("1593113598332-cd288d649433"); // volunteers hands together
+const storyLab = U("1581091870622-1e7e9b1f17b2"); // students at laptops
+const storyLeadership = U("1573497019940-1c28c88b4f3e"); // confident African woman portrait
+const storyBasketball = U("1546519638-68e109498ffc"); // basketball action
+const portrait1 = U("1531123897727-8f129e1688ce"); // African woman entrepreneur
+const portrait2 = U("1500648767791-00dcc994a43e"); // young man portrait
+const portrait3 = U("1521119989659-a83eee488004"); // athlete portrait
+const portrait4 = U("1507003211169-0a1dd7228f2d"); // older mentor portrait
+const portrait5 = U("1502323777036-f29e3972d82f"); // scholar girl
+const portrait6 = U("1542178243-bc20204b769f"); // software engineer
+const portrait7 = U("1519085360753-af0119f7cbe7"); // hooper
+const portrait8 = U("1544005313-94ddf0286df2"); // teacher
+const portrait9 = U("1539571696357-5a69c17a67c6"); // founder portrait
+const portrait10 = U("1517841905240-472988babdf9"); // student portrait
+const progTech = U("1517048676732-d65bc937f952"); // tech classroom
+const progYouth = U("1488521787991-ed7bbaae773c"); // youth group
+const progSports = U("1552674605-db6ffd4facb5"); // youth sports outdoor
+const progBiz = U("1556761175-5973dc0f32e7"); // entrepreneurship meeting
+const eventConference = U("1540575467063-178a50c2df87"); // conference
+const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
 
 export const Route = createFileRoute("/")({
   head: () => ({
