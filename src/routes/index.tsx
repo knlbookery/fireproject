@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import AutoplayPlugin from "embla-carousel-autoplay";
 import {
   ArrowRight,
   Users,
@@ -554,41 +556,86 @@ function Impact() {
 
 /* ---------------------- Stories ---------------------- */
 function Stories() {
-  const portraits = [
-    { img: portrait1, name: "Ama", role: "Entrepreneur · Accra" },
-    { img: storyLeadership, name: "Kojo", role: "Youth Leader · Kumasi" },
-    { img: portrait2, name: "Daniel", role: "Tech Fellow · Philadelphia" },
-    { img: portrait5, name: "Esi", role: "Scholar · Volta Region" },
-    { img: portrait3, name: "Akua", role: "Athlete · Accra" },
-    { img: portrait4, name: "Mr. Mensah", role: "Mentor · Tema" },
-    { img: storyBasketball, name: "Kwame", role: "Coach · Accra" },
+  const stories = [
+    {
+      img: portrait1,
+      name: "Ama",
+      role: "Entrepreneur · Accra",
+      quote:
+        "F.I.R.E. gave me the seed funding and mentorship to turn my shea butter idea into a business that now employs eight women.",
+    },
+    {
+      img: storyLeadership,
+      name: "Kojo",
+      role: "Youth Leader · Kumasi",
+      quote:
+        "I came in as a shy teenager. The leadership workshops gave me a voice — today I run our after-school program.",
+    },
+    {
+      img: portrait2,
+      name: "Daniel",
+      role: "Tech Fellow · Philadelphia",
+      quote:
+        "Through the tech fellowship I learned to code, built my first app, and landed an internship I never imagined possible.",
+    },
+    {
+      img: portrait5,
+      name: "Esi",
+      role: "Scholar · Volta Region",
+      quote:
+        "The scholarship meant I could stay in school. My family no longer has to choose between food and my future.",
+    },
+    {
+      img: portrait3,
+      name: "Akua",
+      role: "Athlete · Accra",
+      quote:
+        "Basketball gave me discipline. F.I.R.E. gave me a team. Together they're sending me to university on a sports scholarship.",
+    },
+    {
+      img: portrait4,
+      name: "Mr. Mensah",
+      role: "Mentor · Tema",
+      quote:
+        "Watching the young people I mentor grow into community leaders is the most rewarding work of my life.",
+    },
+    {
+      img: storyBasketball,
+      name: "Kwame",
+      role: "Coach · Accra",
+      quote:
+        "We're not just teaching sport — we're building character, courage, and the belief that anything is possible.",
+    },
   ];
 
-  // Arc layout — center is forward, edges curve back and down
-  const arc = [
-    { rotate: -28, y: 64, z: -120, scale: 0.86, opacity: 0.85 },
-    { rotate: -18, y: 28, z: -60, scale: 0.92, opacity: 0.95 },
-    { rotate: -9, y: 8, z: -20, scale: 0.97, opacity: 1 },
-    { rotate: 0, y: 0, z: 0, scale: 1.04, opacity: 1 },
-    { rotate: 9, y: 8, z: -20, scale: 0.97, opacity: 1 },
-    { rotate: 18, y: 28, z: -60, scale: 0.92, opacity: 0.95 },
-    { rotate: 28, y: 64, z: -120, scale: 0.86, opacity: 0.85 },
-  ];
+  const autoplay = useRef(
+    AutoplayPlugin({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }),
+  );
+  const [emblaRef, embla] = useEmblaCarousel(
+    { loop: true, align: "start", slidesToScroll: 1 },
+    [autoplay.current],
+  );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [snapCount, setSnapCount] = useState(0);
 
-  const features = [
-    {
-      title: "Real Community Voices",
-      body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need.",
-    },
-    {
-      title: "Long-Term Mentorship",
-      body: "Our fellows and coaches stay with participants for years, not weeks. Relationships are the engine of lasting change.",
-    },
-    {
-      title: "Measurable Impact",
-      body: "From scholarships earned to businesses launched and championships won — we track the outcomes that move lives forward.",
-    },
-  ];
+  useEffect(() => {
+    if (!embla) return;
+    const onSelect = () => {
+      setSelectedIndex(embla.selectedScrollSnap());
+      setSnapCount(embla.scrollSnapList().length);
+    };
+    onSelect();
+    embla.on("select", onSelect);
+    embla.on("reInit", onSelect);
+    return () => {
+      embla.off("select", onSelect);
+      embla.off("reInit", onSelect);
+    };
+  }, [embla]);
+
+  const scrollPrev = () => embla?.scrollPrev();
+  const scrollNext = () => embla?.scrollNext();
+  const scrollTo = (i: number) => embla?.scrollTo(i);
 
   return (
     <Section
@@ -599,49 +646,101 @@ function Stories() {
       className="bg-[var(--surface)]"
     >
       <div
-        className="relative mx-auto w-full overflow-hidden"
-        style={{ perspective: "1400px" }}
+        className="relative"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Community stories"
       >
-        <div className="flex items-end justify-center gap-3 px-2 py-10 md:gap-5 md:py-16">
-          {portraits.map((p, i) => {
-            const a = arc[i];
-            return (
-              <figure
-                key={p.name}
-                className="group relative shrink-0 transition-transform duration-500 ease-out hover:!translate-y-0 hover:!rotate-0 hover:!scale-105"
-                style={{
-                  transform: `translateY(${a.y}px) translateZ(${a.z}px) rotate(${a.rotate}deg) scale(${a.scale})`,
-                  opacity: a.opacity,
-                  transformOrigin: "center bottom",
-                }}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex -ml-4 md:-ml-6">
+            {stories.map((s, i) => (
+              <div
+                key={s.name}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} of ${stories.length}: ${s.name}`}
+                className="min-w-0 shrink-0 grow-0 basis-full pl-4 sm:basis-1/2 md:pl-6 lg:basis-1/3"
               >
-                <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px]"
-                    loading="lazy"
-                  />
-                </div>
-                <figcaption className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <div className="font-display text-base font-medium">{p.name}</div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    {p.role}
+                <article className="group flex h-full flex-col">
+                  <div className="overflow-hidden rounded-2xl bg-black/5">
+                    <img
+                      src={s.img}
+                      alt={`Portrait of ${s.name}`}
+                      width={768}
+                      height={1024}
+                      loading="lazy"
+                      className="aspect-[3/4] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                    />
                   </div>
-                </figcaption>
-              </figure>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
-        {features.map((f) => (
-          <div key={f.title}>
-            <h3 className="font-display text-xl font-medium">{f.title}</h3>
-            <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{f.body}</p>
+                  <div className="mt-6">
+                    <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                      {s.role}
+                    </div>
+                    <h3 className="mt-2 font-display text-2xl font-medium leading-snug">
+                      {s.name}
+                    </h3>
+                    <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+                      “{s.quote}”
+                    </p>
+                  </div>
+                </article>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Arrow controls */}
+        <div className="mt-10 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous story"
+              className="grid h-11 w-11 place-items-center rounded-full border border-foreground/15 bg-background text-foreground transition hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next story"
+              className="grid h-11 w-11 place-items-center rounded-full border border-foreground/15 bg-background text-foreground transition hover:bg-foreground hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Dots */}
+          <div
+            className="flex flex-1 items-center justify-center gap-2"
+            role="tablist"
+            aria-label="Select story"
+          >
+            {Array.from({ length: snapCount }).map((_, i) => {
+              const active = i === selectedIndex;
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  aria-label={`Go to story ${i + 1}`}
+                  onClick={() => scrollTo(i)}
+                  className={`h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    active ? "w-8 bg-foreground" : "w-2 bg-foreground/25 hover:bg-foreground/50"
+                  }`}
+                />
+              );
+            })}
+          </div>
+
+          <div
+            className="w-[104px] text-right text-xs tabular-nums uppercase tracking-[0.18em] text-muted-foreground"
+            aria-live="polite"
+          >
+            {String(selectedIndex + 1).padStart(2, "0")} / {String(stories.length).padStart(2, "0")}
+          </div>
+        </div>
       </div>
 
       <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
