@@ -588,7 +588,11 @@ function Stories() {
     };
   };
 
-  ...
+  const features = [
+    { title: "Real Community Voices", body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need." },
+    { title: "Long-Term Mentorship", body: "Our fellows and coaches stay with participants for years, not weeks. Relationships are the engine of lasting change." },
+    { title: "Measurable Impact", body: "From scholarships earned to businesses launched and championships won — we track the outcomes that move lives forward." },
+  ];
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const targetRef = useRef(0);
