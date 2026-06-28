@@ -1006,17 +1006,11 @@ function Volunteer() {
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-          >
+          <a href="#contact" className={BTN.primary}>
             <Users className="h-4 w-4" />
             Volunteer
           </a>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 rounded-full border border-primary/25 px-5 py-3 text-sm font-medium text-primary transition hover:bg-primary/5"
-          >
+          <a href="#contact" className={BTN.secondary}>
             <Globe2 className="h-4 w-4" />
             Partner With Us
           </a>
