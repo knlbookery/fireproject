@@ -143,7 +143,7 @@ function Header() {
           <a
             href="#donate"
             onClick={() => setOpen(false)}
-            className="mt-2 block rounded-full bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground"
+            className={`mt-2 flex w-full ${BTN.primary}`}
           >
             Donate
           </a>
