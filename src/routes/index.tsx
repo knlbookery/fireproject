@@ -29,7 +29,6 @@ import {
   X,
 } from "lucide-react";
 import { Atropos } from "atropos/react";
-// @ts-expect-error - atropos css has no type declarations
 import "atropos/css";
 
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
@@ -1196,7 +1195,7 @@ function Contact() {
           </p>
           <div className="mt-8 flex items-center gap-3 text-sm text-foreground/80">
             <Mail className="h-4 w-4 text-primary" />
-            hello@fire-nonprofit.org
+            info@freeinspiration.org
           </div>
         </div>
         <form
