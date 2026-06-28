@@ -623,9 +623,21 @@ function Stories() {
   ];
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const targetRef = useRef(0);
+  const posRef = useRef(0);            // authoritative fractional scroll position
+  const targetRef = useRef(0);         // where we want to settle (wheel/keyboard)
+  const velocityRef = useRef(0);       // px per frame, used for momentum
+  const modeRef = useRef<"idle" | "drag" | "momentum" | "tween">("idle");
   const rafRef = useRef<number | null>(null);
-  const dragState = useRef({ down: false, startX: 0, startLeft: 0, moved: false });
+  const lastTsRef = useRef<number>(0);
+  const dragState = useRef({
+    down: false,
+    startX: 0,
+    startPos: 0,
+    lastX: 0,
+    lastT: 0,
+    moved: false,
+    samples: [] as { x: number; t: number }[],
+  });
 
   // Apply an arc transform to every card based on its distance from the scroller's
   // horizontal center. This keeps the curve consistent regardless of scroll position.
@@ -654,29 +666,63 @@ function Stories() {
     const el = scrollerRef.current;
     if (!el) return;
     const copyWidth = el.scrollWidth / LOOP;
-    if (el.scrollLeft < copyWidth * 0.5) {
-      el.scrollLeft += copyWidth;
+    if (copyWidth <= 0) return;
+    if (posRef.current < copyWidth * 0.5) {
+      posRef.current += copyWidth;
       targetRef.current += copyWidth;
-      dragState.current.startLeft += copyWidth;
-    } else if (el.scrollLeft > copyWidth * 1.5) {
-      el.scrollLeft -= copyWidth;
+      dragState.current.startPos += copyWidth;
+      el.scrollLeft = posRef.current;
+    } else if (posRef.current > copyWidth * 1.5) {
+      posRef.current -= copyWidth;
       targetRef.current -= copyWidth;
-      dragState.current.startLeft -= copyWidth;
+      dragState.current.startPos -= copyWidth;
+      el.scrollLeft = posRef.current;
     }
   };
 
-  const animate = () => {
+  const ensureRaf = () => {
+    if (rafRef.current == null) {
+      lastTsRef.current = performance.now();
+      rafRef.current = requestAnimationFrame(step);
+    }
+  };
+
+  // iOS-style physics: exponential velocity decay for momentum,
+  // critically-damped easing for wheel/keyboard targets. Frame-rate independent.
+  const step = (ts: number) => {
     const el = scrollerRef.current;
     if (!el) { rafRef.current = null; return; }
-    const current = el.scrollLeft;
-    const diff = targetRef.current - current;
-    if (Math.abs(diff) < 0.5) {
-      el.scrollLeft = targetRef.current;
+    const dt = Math.min(64, ts - lastTsRef.current) || 16;
+    lastTsRef.current = ts;
+    const frames = dt / 16.6667;
+
+    if (modeRef.current === "momentum") {
+      // Decay factor per ms — gives that smooth iOS glide.
+      const decay = Math.pow(0.95, frames);
+      velocityRef.current *= decay;
+      posRef.current += velocityRef.current * frames;
+      if (Math.abs(velocityRef.current) < 0.05) {
+        velocityRef.current = 0;
+        modeRef.current = "idle";
+      }
+    } else if (modeRef.current === "tween") {
+      // Critically-damped lerp toward target for wheel input.
+      const diff = targetRef.current - posRef.current;
+      const ease = 1 - Math.pow(1 - 0.22, frames);
+      posRef.current += diff * ease;
+      if (Math.abs(diff) < 0.3) {
+        posRef.current = targetRef.current;
+        modeRef.current = "idle";
+      }
+    }
+
+    el.scrollLeft = posRef.current;
+
+    if (modeRef.current === "idle") {
       rafRef.current = null;
       return;
     }
-    el.scrollLeft = current + diff * 0.18;
-    rafRef.current = requestAnimationFrame(animate);
+    rafRef.current = requestAnimationFrame(step);
   };
 
   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -685,43 +731,88 @@ function Stories() {
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (delta === 0) return;
     e.preventDefault();
-    targetRef.current = targetRef.current + delta * 1.1;
-    if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
+    // If we were drifting from momentum, start fresh tween from current pos.
+    if (modeRef.current !== "tween") targetRef.current = posRef.current;
+    targetRef.current += delta;
+    modeRef.current = "tween";
+    velocityRef.current = 0;
+    ensureRaf();
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
-    if (rafRef.current != null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
-    dragState.current = { down: true, startX: e.clientX, startLeft: el.scrollLeft, moved: false };
-    targetRef.current = el.scrollLeft;
+    // Stop any in-flight animation immediately (iOS-like "catch")
+    velocityRef.current = 0;
+    modeRef.current = "idle";
+    posRef.current = el.scrollLeft;
+    targetRef.current = posRef.current;
+    const now = performance.now();
+    dragState.current = {
+      down: true,
+      startX: e.clientX,
+      startPos: posRef.current,
+      lastX: e.clientX,
+      lastT: now,
+      moved: false,
+      samples: [{ x: e.clientX, t: now }],
+    };
     el.setPointerCapture(e.pointerId);
   };
+
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
-    if (!el || !dragState.current.down) return;
-    const dx = e.clientX - dragState.current.startX;
-    if (Math.abs(dx) > 4) dragState.current.moved = true;
-    const next = dragState.current.startLeft - dx;
-    el.scrollLeft = next;
-    targetRef.current = next;
+    const d = dragState.current;
+    if (!el || !d.down) return;
+    const dx = e.clientX - d.startX;
+    if (Math.abs(dx) > 4) d.moved = true;
+    posRef.current = d.startPos - dx;
+    el.scrollLeft = posRef.current;
+    const now = performance.now();
+    d.samples.push({ x: e.clientX, t: now });
+    // Keep only ~80ms of samples for velocity calc
+    while (d.samples.length > 2 && now - d.samples[0].t > 80) d.samples.shift();
+    d.lastX = e.clientX;
+    d.lastT = now;
+    applyArc();
   };
+
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
+    const d = dragState.current;
     if (!el) return;
-    dragState.current.down = false;
+    d.down = false;
     try { el.releasePointerCapture(e.pointerId); } catch {}
+    // Compute fling velocity from recent samples
+    if (d.samples.length >= 2) {
+      const first = d.samples[0];
+      const last = d.samples[d.samples.length - 1];
+      const dt = Math.max(1, last.t - first.t);
+      const vxPxPerMs = (last.x - first.x) / dt;
+      // Convert to px per ~16ms frame, invert (drag right -> scroll left)
+      const vFrame = -vxPxPerMs * 16.6667;
+      if (Math.abs(vFrame) > 0.6) {
+        velocityRef.current = vFrame;
+        modeRef.current = "momentum";
+        ensureRaf();
+      }
+    }
   };
 
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
-    // Start in the middle copy so we can loop either direction
     const copyWidth = el.scrollWidth / LOOP;
     el.scrollLeft = copyWidth;
+    posRef.current = copyWidth;
     targetRef.current = copyWidth;
     applyArc();
     const onScroll = () => {
+      // External scroll source (e.g. trackpad fallback) — keep posRef synced
+      if (modeRef.current === "idle" && !dragState.current.down) {
+        posRef.current = el.scrollLeft;
+        targetRef.current = posRef.current;
+      }
       normalizeLoop();
       applyArc();
     };
@@ -729,6 +820,7 @@ function Stories() {
     const onResize = () => {
       const cw = el.scrollWidth / LOOP;
       el.scrollLeft = cw;
+      posRef.current = cw;
       targetRef.current = cw;
       applyArc();
     };
@@ -739,6 +831,7 @@ function Stories() {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
+
 
   return (
     <Section
