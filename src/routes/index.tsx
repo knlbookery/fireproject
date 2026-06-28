@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import ghanaAerial from "@/assets/ghana-aerial.jpg";
 import volunteers from "@/assets/volunteers.jpg";
-import impactAfrica from "@/assets/impact-africa.png.asset.json";
 import storyLab from "@/assets/story-lab.jpg";
 import storyLeadership from "@/assets/story-leadership.jpg";
 import storyBasketball from "@/assets/story-basketball.jpg";
@@ -521,11 +520,11 @@ function Impact() {
               Read the stories <ArrowRight className="h-4 w-4" />
             </a>
           </div>
-          <div className="relative flex items-center justify-center bg-gradient-to-br from-white via-[#f5f7ff] to-[#e8ecff] lg:col-span-7">
+          <div className="relative lg:col-span-7">
             <img
-              src={impactAfrica.url}
-              alt="Children of Ghana and the diaspora shaped within the African continent"
-              className="h-full max-h-[520px] w-full object-contain p-6 lg:p-10"
+              src={volunteers}
+              alt="Young people supported by F.I.R.E."
+              className="h-full max-h-[520px] w-full object-cover"
               loading="lazy"
             />
           </div>
