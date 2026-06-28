@@ -266,11 +266,11 @@ function Hero() {
             <span className="h-px w-8 bg-white/60" /> {SLIDES[idx].eyebrow}
           </span>
           {idx === 0 ? (
-            <h1 className="mt-5 font-display text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
               {SLIDES[idx].title}
             </h1>
           ) : (
-            <p className="mt-5 font-display text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <p className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
               {SLIDES[idx].title}
             </p>
           )}
