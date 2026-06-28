@@ -782,16 +782,10 @@ function Stories() {
       </div>
 
       <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-        <a
-          href="#volunteer"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:opacity-90"
-        >
+        <a href="#volunteer" className={BTN.primary}>
           Join the next chapter <ArrowRight className="h-4 w-4" />
         </a>
-        <a
-          href="#impact"
-          className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-6 py-3 text-sm font-medium transition hover:bg-foreground/5"
-        >
+        <a href="#impact" className={BTN.secondary}>
           See our impact
         </a>
       </div>
