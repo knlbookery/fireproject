@@ -554,49 +554,109 @@ function Impact() {
 
 /* ---------------------- Stories ---------------------- */
 function Stories() {
-  const items = [
+  const portraits = [
+    { img: portrait1, name: "Ama", role: "Entrepreneur · Accra" },
+    { img: storyLeadership, name: "Kojo", role: "Youth Leader · Kumasi" },
+    { img: portrait2, name: "Daniel", role: "Tech Fellow · Philadelphia" },
+    { img: portrait5, name: "Esi", role: "Scholar · Volta Region" },
+    { img: portrait3, name: "Akua", role: "Athlete · Accra" },
+    { img: portrait4, name: "Mr. Mensah", role: "Mentor · Tema" },
+    { img: storyBasketball, name: "Kwame", role: "Coach · Accra" },
+  ];
+
+  // Arc layout — center is forward, edges curve back and down
+  const arc = [
+    { rotate: -28, y: 64, z: -120, scale: 0.86, opacity: 0.85 },
+    { rotate: -18, y: 28, z: -60, scale: 0.92, opacity: 0.95 },
+    { rotate: -9, y: 8, z: -20, scale: 0.97, opacity: 1 },
+    { rotate: 0, y: 0, z: 0, scale: 1.04, opacity: 1 },
+    { rotate: 9, y: 8, z: -20, scale: 0.97, opacity: 1 },
+    { rotate: 18, y: 28, z: -60, scale: 0.92, opacity: 0.95 },
+    { rotate: 28, y: 64, z: -120, scale: 0.86, opacity: 0.85 },
+  ];
+
+  const features = [
     {
-      date: "May 10, 2024",
-      title: "A new computer lab opens in the Volta Region",
-      img: storyLab,
+      title: "Real Community Voices",
+      body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need.",
     },
     {
-      date: "Apr 28, 2024",
-      title: "F.I.R.E. youth excel in leadership workshop",
-      img: storyLeadership,
+      title: "Long-Term Mentorship",
+      body: "Our fellows and coaches stay with participants for years, not weeks. Relationships are the engine of lasting change.",
     },
     {
-      date: "Apr 15, 2024",
-      title: "Basketball brings communities together in Accra",
-      img: storyBasketball,
+      title: "Measurable Impact",
+      body: "From scholarships earned to businesses launched and championships won — we track the outcomes that move lives forward.",
     },
   ];
+
   return (
     <Section
       id="stories"
       eyebrow="Community Stories"
-      title="Voices from the field."
+      title="The people behind the spark."
+      kicker="Seven faces. Seven journeys. One shared belief — that opportunity, once unlocked, multiplies."
       className="bg-[var(--surface)]"
     >
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {items.map((s) => (
-          <article key={s.title} className="group">
-            <div className="overflow-hidden rounded-2xl">
-              <img
-                src={s.img}
-                alt={s.title}
-                className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-[1.03]"
-                loading="lazy"
-              />
-            </div>
-            <div className="mt-5">
-              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                {s.date}
-              </div>
-              <h3 className="mt-2 font-display text-xl font-medium leading-snug">{s.title}</h3>
-            </div>
-          </article>
+      <div
+        className="relative mx-auto w-full overflow-hidden"
+        style={{ perspective: "1400px" }}
+      >
+        <div className="flex items-end justify-center gap-3 px-2 py-10 md:gap-5 md:py-16">
+          {portraits.map((p, i) => {
+            const a = arc[i];
+            return (
+              <figure
+                key={p.name}
+                className="group relative shrink-0 transition-transform duration-500 ease-out hover:!translate-y-0 hover:!rotate-0 hover:!scale-105"
+                style={{
+                  transform: `translateY(${a.y}px) translateZ(${a.z}px) rotate(${a.rotate}deg) scale(${a.scale})`,
+                  opacity: a.opacity,
+                  transformOrigin: "center bottom",
+                }}
+              >
+                <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px]"
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="font-display text-base font-medium">{p.name}</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                    {p.role}
+                  </div>
+                </figcaption>
+              </figure>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
+        {features.map((f) => (
+          <div key={f.title}>
+            <h3 className="font-display text-xl font-medium">{f.title}</h3>
+            <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{f.body}</p>
+          </div>
         ))}
+      </div>
+
+      <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="#volunteer"
+          className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:opacity-90"
+        >
+          Join the next chapter <ArrowRight className="h-4 w-4" />
+        </a>
+        <a
+          href="#impact"
+          className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-6 py-3 text-sm font-medium transition hover:bg-foreground/5"
+        >
+          See our impact
+        </a>
       </div>
     </Section>
   );
