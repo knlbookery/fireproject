@@ -44,6 +44,7 @@ const progSports = U("1552674605-db6ffd4facb5"); // youth sports outdoor
 const progBiz = U("1556761175-5973dc0f32e7"); // entrepreneurship meeting
 const eventConference = U("1540575467063-178a50c2df87"); // conference
 const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
+import fireLogo from "@/assets/fire-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
