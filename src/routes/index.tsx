@@ -28,6 +28,8 @@ import {
   Check,
   X,
 } from "lucide-react";
+import { Atropos } from "atropos/react";
+import "atropos/css";
 
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
 const U = (id: string, w = 1600) =>
@@ -497,27 +499,45 @@ function Programs() {
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {PRIMARY_PILLARS.map((p) => (
-          <article
+          <Atropos
             key={p.title}
-            className="group relative overflow-hidden rounded-2xl bg-black"
+            shadow={false}
+            highlight={false}
+            rotateXMax={8}
+            rotateYMax={8}
+            className="rounded-2xl"
           >
-            <img
-              src={p.img}
-              alt={`${p.title} program at F.I.R.E.`}
-              className="aspect-[4/5] w-full object-cover opacity-80 transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            <div className="absolute inset-0 flex flex-col justify-end p-7 text-white">
-              <span className="grid h-11 w-11 place-items-center rounded-lg bg-white/15 backdrop-blur">
-                <p.icon className="h-5 w-5" />
-              </span>
-              <h3 className="mt-5 font-display text-3xl font-medium tracking-tight">{p.title}</h3>
-              <p className="mt-2 max-w-xs text-sm text-white/85">{p.desc}</p>
-            </div>
-          </article>
+            <article className="group relative overflow-hidden rounded-2xl bg-black">
+              <img
+                src={p.img}
+                alt={`${p.title} program at F.I.R.E.`}
+                data-atropos-offset="-4"
+                className="aspect-[4/5] w-full object-cover opacity-80 transition duration-700 group-hover:opacity-95"
+                loading="lazy"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+                data-atropos-offset="2"
+              />
+              <div
+                className="absolute inset-0 flex flex-col justify-end p-7 text-white"
+                data-atropos-offset="8"
+              >
+                <span className="grid h-11 w-11 place-items-center rounded-lg bg-white/15 backdrop-blur">
+                  <p.icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 font-display text-3xl font-medium tracking-tight" data-atropos-offset="12">
+                  {p.title}
+                </h3>
+                <p className="mt-2 max-w-xs text-sm text-white/85" data-atropos-offset="6">
+                  {p.desc}
+                </p>
+              </div>
+            </article>
+          </Atropos>
         ))}
       </div>
+
 
       <div className="mt-14 border-t border-black/10 pt-10">
         <div className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
