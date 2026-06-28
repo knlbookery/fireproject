@@ -447,43 +447,29 @@ function Programs() {
       intro="Sports, entrepreneurship, and community development drive our work — supported by programs in technology, education, leadership, youth development, and mentorship."
       className="bg-[var(--surface)]"
     >
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {PRIMARY_PILLARS.map((p) => (
           <article
             key={p.title}
-            className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.15)] ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-[0_20px_50px_-20px_rgba(0,0,0,0.25)]"
+            className="group relative overflow-hidden rounded-2xl bg-black"
           >
-            <div className="overflow-hidden">
-              <img
-                src={p.img}
-                alt={p.title}
-                className="aspect-[5/4] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-                loading="lazy"
-              />
-            </div>
-            <div className="flex flex-1 flex-col items-center px-8 pb-8 pt-8 text-center">
-              <span className="grid h-11 w-11 place-items-center rounded-full bg-primary/10 text-primary">
+            <img
+              src={p.img}
+              alt={p.title}
+              className="aspect-[4/5] w-full object-cover opacity-80 transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+            <div className="absolute inset-0 flex flex-col justify-end p-7 text-white">
+              <span className="grid h-11 w-11 place-items-center rounded-lg bg-white/15 backdrop-blur">
                 <p.icon className="h-5 w-5" />
               </span>
-              <h3 className="mt-5 font-display text-2xl font-medium tracking-tight text-foreground">
-                {p.title}
-              </h3>
-              <div className="mt-3 h-px w-10 bg-black/15" />
-              <p className="mt-4 max-w-[28ch] text-sm leading-relaxed text-muted-foreground">
-                {p.desc}
-              </p>
-              <a
-                href="#contact"
-                className="mt-7 inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-background transition hover:bg-foreground/85"
-              >
-                Learn More
-                <ArrowRight className="h-3.5 w-3.5" />
-              </a>
+              <h3 className="mt-5 font-display text-3xl font-medium tracking-tight">{p.title}</h3>
+              <p className="mt-2 max-w-xs text-sm text-white/85">{p.desc}</p>
             </div>
           </article>
         ))}
       </div>
-
 
       <div className="mt-14 border-t border-black/10 pt-10">
         <div className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
