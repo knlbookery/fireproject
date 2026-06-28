@@ -1033,9 +1033,8 @@ function Footer() {
     <footer className="border-t border-black/10 bg-[#0b1230] px-6 py-14 text-white lg:px-10">
       <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-8 md:flex-row md:items-center">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-foreground">
-            <Flame className="h-5 w-5" />
-          </span>
+          <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
+
           <div>
             <div className="font-display text-lg font-semibold tracking-tight">F.I.R.E.</div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-white/55">
