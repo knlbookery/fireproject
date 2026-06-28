@@ -242,7 +242,7 @@ function Hero() {
   const go = (n: number) => setIdx((n + SLIDES.length) % SLIDES.length);
 
   return (
-    <section id="top" className="relative h-[88vh] min-h-[600px] w-full overflow-hidden bg-black">
+    <section id="top" className="relative min-h-[760px] w-full overflow-hidden bg-black lg:h-screen">
       {SLIDES.map((s, i) => (
         <div
           key={s.title}
@@ -266,11 +266,11 @@ function Hero() {
             <span className="h-px w-8 bg-white/60" /> {SLIDES[idx].eyebrow}
           </span>
           {idx === 0 ? (
-            <h1 className="mt-5 font-display text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
               {SLIDES[idx].title}
             </h1>
           ) : (
-            <p className="mt-5 font-display text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <p className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
               {SLIDES[idx].title}
             </p>
           )}
