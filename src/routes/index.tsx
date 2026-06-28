@@ -103,8 +103,21 @@ const BTN = {
 /* ---------------------- Header ---------------------- */
 function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.85);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-black/5 bg-white/85 backdrop-blur">
+    <header
+      className={`fixed top-0 z-50 w-full border-b transition-all duration-500 ${
+        scrolled || open
+          ? "translate-y-0 border-black/5 bg-white/85 opacity-100 backdrop-blur"
+          : "pointer-events-none -translate-y-full border-transparent bg-transparent opacity-0"
+      }`}
+    >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
         <a href="#top" className="flex items-center gap-2.5">
           <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
