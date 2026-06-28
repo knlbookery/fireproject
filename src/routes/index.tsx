@@ -77,6 +77,22 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
+/* ---------------------- Button system (consistent across site) ---------------------- */
+const BTN_BASE =
+  "inline-flex items-center justify-center gap-2 rounded-[5px] px-6 py-3 text-sm font-medium transition-colors";
+const BTN = {
+  // Solid brand button on light surfaces
+  primary: `${BTN_BASE} bg-primary text-primary-foreground hover:bg-primary/90`,
+  // Outline button on light surfaces
+  secondary: `${BTN_BASE} border border-foreground/15 text-foreground hover:bg-foreground/5`,
+  // Solid dark button on light surfaces
+  dark: `${BTN_BASE} bg-foreground text-background hover:opacity-90`,
+  // Outline button on dark / image backgrounds
+  onDarkOutline: `${BTN_BASE} border border-white/30 text-white hover:bg-white/10`,
+  // Solid white button on dark / colored backgrounds
+  onDarkSolid: `${BTN_BASE} bg-white text-primary hover:bg-white/90`,
+} as const;
+
 /* ---------------------- Header ---------------------- */
 function Header() {
   const [open, setOpen] = useState(false);
@@ -98,7 +114,7 @@ function Header() {
         <div className="flex items-center gap-2">
           <a
             href="#donate"
-            className="hidden items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90 sm:inline-flex"
+            className={`hidden sm:inline-flex ${BTN.primary}`}
           >
             <Heart className="h-4 w-4" />
             Donate
@@ -127,7 +143,7 @@ function Header() {
           <a
             href="#donate"
             onClick={() => setOpen(false)}
-            className="mt-2 block rounded-full bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground"
+            className={`mt-2 flex w-full ${BTN.primary}`}
           >
             Donate
           </a>
@@ -244,11 +260,7 @@ function Hero() {
               <a
                 key={c.label}
                 href={c.href}
-                className={
-                  c.primary
-                    ? "group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-                    : "group inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
-                }
+                className={`group ${c.primary ? BTN.primary : BTN.onDarkOutline}`}
               >
                 {c.label}
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
@@ -529,7 +541,7 @@ function Impact() {
             </p>
             <a
               href="#stories"
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/25 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+              className={`mt-8 ${BTN.onDarkOutline}`}
             >
               Read the stories <ArrowRight className="h-4 w-4" />
             </a>
@@ -770,16 +782,10 @@ function Stories() {
       </div>
 
       <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-        <a
-          href="#volunteer"
-          className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:opacity-90"
-        >
+        <a href="#volunteer" className={BTN.primary}>
           Join the next chapter <ArrowRight className="h-4 w-4" />
         </a>
-        <a
-          href="#impact"
-          className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-6 py-3 text-sm font-medium transition hover:bg-foreground/5"
-        >
+        <a href="#impact" className={BTN.secondary}>
           See our impact
         </a>
       </div>
@@ -915,10 +921,7 @@ function Contact() {
             />
           </label>
           <div className="sm:col-span-2">
-            <button
-              type="submit"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-            >
+            <button type="submit" className={BTN.primary}>
               Send Inquiry <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -961,7 +964,7 @@ function Donate() {
               {tiers.map((t) => (
                 <button
                   key={t}
-                  className="rounded-xl border border-white/30 bg-white/10 px-4 py-5 text-left text-white backdrop-blur transition hover:bg-white/20"
+                  className="rounded-[5px] border border-white/30 bg-white/10 px-4 py-5 text-left text-white backdrop-blur transition-colors hover:bg-white/20"
                 >
                   <div className="font-display text-xl font-semibold">{t}</div>
                   <div className="mt-1 text-xs text-white/75">
@@ -970,10 +973,7 @@ function Donate() {
                 </button>
               ))}
             </div>
-            <a
-              href="#"
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-primary transition hover:bg-white/90"
-            >
+            <a href="#" className={`mt-5 w-full ${BTN.onDarkSolid}`}>
               <Heart className="h-4 w-4" />
               Donate Now
             </a>
@@ -1006,17 +1006,11 @@ function Volunteer() {
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-          >
+          <a href="#contact" className={BTN.primary}>
             <Users className="h-4 w-4" />
             Volunteer
           </a>
-          <a
-            href="#contact"
-            className="inline-flex items-center gap-2 rounded-full border border-primary/25 px-5 py-3 text-sm font-medium text-primary transition hover:bg-primary/5"
-          >
+          <a href="#contact" className={BTN.secondary}>
             <Globe2 className="h-4 w-4" />
             Partner With Us
           </a>
@@ -1179,10 +1173,7 @@ function Partners() {
             Join a coalition of changemakers funding scholarships, building courts, and launching founders.
           </p>
         </div>
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-2 rounded-[5px] bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        >
+        <a href="#contact" className={BTN.primary}>
           Partner with F.I.R.E. <ArrowRight className="h-4 w-4" />
         </a>
       </div>
