@@ -30,6 +30,11 @@ import portrait2 from "@/assets/story-portrait-2.jpg";
 import portrait3 from "@/assets/story-portrait-3.jpg";
 import portrait4 from "@/assets/story-portrait-4.jpg";
 import portrait5 from "@/assets/story-portrait-5.jpg";
+import portrait6 from "@/assets/story-portrait-6.jpg";
+import portrait7 from "@/assets/story-portrait-7.jpg";
+import portrait8 from "@/assets/story-portrait-8.jpg";
+import portrait9 from "@/assets/story-portrait-9.jpg";
+import portrait10 from "@/assets/story-portrait-10.jpg";
 import progTech from "@/assets/program-tech.jpg";
 import progYouth from "@/assets/program-youth.jpg";
 import progSports from "@/assets/program-sports.jpg";
@@ -557,41 +562,52 @@ function Stories() {
   const portraits = [
     { img: portrait1, name: "Ama", role: "Entrepreneur · Accra" },
     { img: storyLeadership, name: "Kojo", role: "Youth Leader · Kumasi" },
+    { img: portrait6, name: "Nana", role: "Software Engineer · Accra" },
     { img: portrait2, name: "Daniel", role: "Tech Fellow · Philadelphia" },
+    { img: portrait8, name: "Auntie Adwoa", role: "Teacher · Cape Coast" },
     { img: portrait5, name: "Esi", role: "Scholar · Volta Region" },
+    { img: portrait10, name: "Abena", role: "Student · Tamale" },
     { img: portrait3, name: "Akua", role: "Athlete · Accra" },
+    { img: portrait7, name: "Marcus", role: "Hooper · Philadelphia" },
+    { img: portrait9, name: "Yaw", role: "Founder · Kumasi" },
     { img: portrait4, name: "Mr. Mensah", role: "Mentor · Tema" },
     { img: storyBasketball, name: "Kwame", role: "Coach · Accra" },
   ];
 
-  // Arc layout — center is forward, edges curve back and down
-  const arc = [
-    { rotate: -28, y: 64, z: -120, scale: 0.86, opacity: 0.85 },
-    { rotate: -18, y: 28, z: -60, scale: 0.92, opacity: 0.95 },
-    { rotate: -9, y: 8, z: -20, scale: 0.97, opacity: 1 },
-    { rotate: 0, y: 0, z: 0, scale: 1.04, opacity: 1 },
-    { rotate: 9, y: 8, z: -20, scale: 0.97, opacity: 1 },
-    { rotate: 18, y: 28, z: -60, scale: 0.92, opacity: 0.95 },
-    { rotate: 28, y: 64, z: -120, scale: 0.86, opacity: 0.85 },
-  ];
+  // Arc layout — computed from index so it works for any count
+  const getArc = (i: number, total: number) => {
+    const center = (total - 1) / 2;
+    const t = (i - center) / center; // -1..1
+    const abs = Math.abs(t);
+    return {
+      rotate: t * 26,
+      y: abs * abs * 70,
+      z: -abs * abs * 140,
+      scale: 1.04 - abs * abs * 0.22,
+      opacity: 1 - abs * 0.18,
+    };
+  };
 
-  const features = [
-    {
-      title: "Real Community Voices",
-      body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need.",
-    },
-    {
-      title: "Long-Term Mentorship",
-      body: "Our fellows and coaches stay with participants for years, not weeks. Relationships are the engine of lasting change.",
-    },
-    {
-      title: "Measurable Impact",
-      body: "From scholarships earned to businesses launched and championships won — we track the outcomes that move lives forward.",
-    },
-  ];
+  ...
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const targetRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
   const dragState = useRef({ down: false, startX: 0, startLeft: 0, moved: false });
+
+  const animate = () => {
+    const el = scrollerRef.current;
+    if (!el) { rafRef.current = null; return; }
+    const current = el.scrollLeft;
+    const diff = targetRef.current - current;
+    if (Math.abs(diff) < 0.5) {
+      el.scrollLeft = targetRef.current;
+      rafRef.current = null;
+      return;
+    }
+    el.scrollLeft = current + diff * 0.18; // ease-out lerp
+    rafRef.current = requestAnimationFrame(animate);
+  };
 
   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
@@ -599,17 +615,17 @@ function Stories() {
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (delta === 0) return;
     const max = el.scrollWidth - el.clientWidth;
-    const next = el.scrollLeft + delta;
-    if ((delta > 0 && el.scrollLeft < max) || (delta < 0 && el.scrollLeft > 0)) {
-      e.preventDefault();
-      el.scrollLeft = next;
-    }
+    e.preventDefault();
+    targetRef.current = Math.max(0, Math.min(max, targetRef.current + delta * 1.1));
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
+    if (rafRef.current != null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
     dragState.current = { down: true, startX: e.clientX, startLeft: el.scrollLeft, moved: false };
+    targetRef.current = el.scrollLeft;
     el.setPointerCapture(e.pointerId);
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -617,7 +633,10 @@ function Stories() {
     if (!el || !dragState.current.down) return;
     const dx = e.clientX - dragState.current.startX;
     if (Math.abs(dx) > 4) dragState.current.moved = true;
-    el.scrollLeft = dragState.current.startLeft - dx;
+    const max = el.scrollWidth - el.clientWidth;
+    const next = Math.max(0, Math.min(max, dragState.current.startLeft - dx));
+    el.scrollLeft = next;
+    targetRef.current = next;
   };
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
@@ -626,12 +645,21 @@ function Stories() {
     try { el.releasePointerCapture(e.pointerId); } catch {}
   };
 
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    targetRef.current = el.scrollLeft;
+    return () => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   return (
     <Section
       id="stories"
       eyebrow="Community Stories"
       title="The people behind the spark."
-      intro="Seven faces. Seven journeys. One shared belief — that opportunity, once unlocked, multiplies."
+      intro="A dozen faces. A dozen journeys. One shared belief — that opportunity, once unlocked, multiplies."
       className="bg-[var(--surface)]"
     >
       <div
@@ -646,19 +674,18 @@ function Stories() {
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
           className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 lg:justify-center cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+          style={{ WebkitOverflowScrolling: "touch" }}
         >
           {portraits.map((p, i) => {
-            const a = arc[i];
+            const a = getArc(i, portraits.length);
             return (
               <figure
                 key={p.name}
-                className="group relative shrink-0 transition-transform duration-500 ease-out hover:!translate-y-0 hover:!rotate-0 hover:!scale-105"
+                className="group relative shrink-0 transition-transform duration-500 ease-out hover:!translate-y-0 hover:!rotate-0 hover:!scale-105 will-change-transform"
                 style={{
                   transform: `translateY(${a.y}px) translateZ(${a.z}px) rotate(${a.rotate}deg) scale(${a.scale})`,
                   opacity: a.opacity,
                   transformOrigin: "center bottom",
-                  scrollSnapAlign: "center",
                 }}
               >
                 <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
