@@ -1073,16 +1073,19 @@ import dtrConsultingLogo from "@/assets/dtr-consulting.png.asset.json";
 import atolatseLogo from "@/assets/atolatse.png.asset.json";
 import usGhanaChamberLogo from "@/assets/us-ghana-chamber.png.asset.json";
 import ejConsultingLogo from "@/assets/ej-consulting.png.asset.json";
+import mayorsFundLogo from "@/assets/mayors-fund-philadelphia.png.asset.json";
+import cityPhiladelphiaV2Logo from "@/assets/city-of-philadelphia-v2.png.asset.json";
+
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
 const PARTNERS: { name: string; logo: string }[] = [
   { name: "ExxonMobil", logo: exxonLogo.url },
   { name: "MacArthur Foundation", logo: macarthurLogo.url },
-  { name: "The Mayor's Fund for Philadelphia", logo: clearbit("mayorsfundphila.org") },
+  { name: "The Mayor's Fund for Philadelphia", logo: mayorsFundLogo.url },
   { name: "Urban Affairs Coalition", logo: urbanAffairsLogo.url },
   { name: "Feed The Children", logo: feedChildrenLogo.url },
-  { name: "City of Philadelphia", logo: philadelphiaLogo.url },
+  { name: "City of Philadelphia", logo: cityPhiladelphiaV2Logo.url },
   { name: "T-Mobile", logo: tmobileLogo.url },
   { name: "Network for Good", logo: networkForGoodLogo.url },
   { name: "Aulara", logo: clearbit("aulara.com") },
