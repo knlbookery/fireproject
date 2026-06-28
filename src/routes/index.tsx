@@ -1082,10 +1082,10 @@ const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 const PARTNERS: { name: string; logo: string }[] = [
   { name: "ExxonMobil", logo: exxonLogo.url },
   { name: "MacArthur Foundation", logo: macarthurLogo.url },
-  { name: "The Mayor's Fund for Philadelphia", logo: clearbit("mayorsfundphila.org") },
+  { name: "The Mayor's Fund for Philadelphia", logo: mayorsFundLogo.url },
   { name: "Urban Affairs Coalition", logo: urbanAffairsLogo.url },
   { name: "Feed The Children", logo: feedChildrenLogo.url },
-  { name: "City of Philadelphia", logo: philadelphiaLogo.url },
+  { name: "City of Philadelphia", logo: cityPhiladelphiaV2Logo.url },
   { name: "T-Mobile", logo: tmobileLogo.url },
   { name: "Network for Good", logo: networkForGoodLogo.url },
   { name: "Aulara", logo: clearbit("aulara.com") },
