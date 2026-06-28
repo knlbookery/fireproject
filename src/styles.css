@@ -42,7 +42,7 @@
 }
 
 :root {
-  --radius: 1.25rem;
+  --radius: 5px;
 
   --background: oklch(1 0 0);                /* #FFFFFF */
   --surface: oklch(0.984 0.012 250);         /* #F7FAFF */
