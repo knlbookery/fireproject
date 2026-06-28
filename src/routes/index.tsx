@@ -44,6 +44,7 @@ const progSports = U("1552674605-db6ffd4facb5"); // youth sports outdoor
 const progBiz = U("1556761175-5973dc0f32e7"); // entrepreneurship meeting
 const eventConference = U("1540575467063-178a50c2df87"); // conference
 const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
+import fireLogo from "@/assets/fire-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -83,10 +84,9 @@ function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-black/5 bg-white/85 backdrop-blur">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <Flame className="h-5 w-5" />
-          </span>
+          <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
           <span className="font-display text-lg font-semibold tracking-tight">F.I.R.E.</span>
+
         </a>
         <nav className="hidden items-center gap-8 text-sm text-foreground/80 md:flex">
           {NAV.map((i) => (
@@ -1033,9 +1033,8 @@ function Footer() {
     <footer className="border-t border-black/10 bg-[#0b1230] px-6 py-14 text-white lg:px-10">
       <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-8 md:flex-row md:items-center">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-foreground">
-            <Flame className="h-5 w-5" />
-          </span>
+          <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
+
           <div>
             <div className="font-display text-lg font-semibold tracking-tight">F.I.R.E.</div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-white/55">
