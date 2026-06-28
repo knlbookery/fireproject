@@ -516,8 +516,8 @@ function Programs() {
                 loading="lazy"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent"
-                data-atropos-offset="2"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-white via-white/95 to-transparent"
+                data-atropos-offset="0"
               />
               <div
                 className="absolute inset-0 flex flex-col justify-end p-7 text-foreground"
