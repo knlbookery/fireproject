@@ -19,6 +19,13 @@ import {
   Sparkles,
   UserPlus,
   Mail,
+  ShieldCheck,
+  Lock,
+  Award,
+  FileCheck,
+  Building2,
+  TrendingUp,
+  Check,
 } from "lucide-react";
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
 const U = (id: string, w = 1600) =>
