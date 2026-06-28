@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import ghanaAerial from "@/assets/ghana-aerial.jpg";
 import volunteers from "@/assets/volunteers.jpg";
+import impactAfrica from "@/assets/impact-africa.png.asset.json";
 import storyLab from "@/assets/story-lab.jpg";
 import storyLeadership from "@/assets/story-leadership.jpg";
 import storyBasketball from "@/assets/story-basketball.jpg";
