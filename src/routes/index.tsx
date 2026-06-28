@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import AutoplayPlugin from "embla-carousel-autoplay";
 import {
   ArrowRight,
   Users,
