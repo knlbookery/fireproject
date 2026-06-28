@@ -590,6 +590,42 @@ function Stories() {
     },
   ];
 
+  const scrollerRef = React.useRef<HTMLDivElement | null>(null);
+  const dragState = React.useRef({ down: false, startX: 0, startLeft: 0, moved: false });
+
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (delta === 0) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const next = el.scrollLeft + delta;
+    if ((delta > 0 && el.scrollLeft < max) || (delta < 0 && el.scrollLeft > 0)) {
+      e.preventDefault();
+      el.scrollLeft = next;
+    }
+  };
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    dragState.current = { down: true, startX: e.clientX, startLeft: el.scrollLeft, moved: false };
+    el.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el || !dragState.current.down) return;
+    const dx = e.clientX - dragState.current.startX;
+    if (Math.abs(dx) > 4) dragState.current.moved = true;
+    el.scrollLeft = dragState.current.startLeft - dx;
+  };
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    dragState.current.down = false;
+    try { el.releasePointerCapture(e.pointerId); } catch {}
+  };
+
   return (
     <Section
       id="stories"
@@ -599,10 +635,19 @@ function Stories() {
       className="bg-[var(--surface)]"
     >
       <div
-        className="relative mx-auto w-full overflow-hidden"
+        className="relative mx-auto w-full"
         style={{ perspective: "1400px" }}
       >
-        <div className="flex items-end justify-center gap-3 px-2 py-10 md:gap-5 md:py-16">
+        <div
+          ref={scrollerRef}
+          onWheel={onWheel}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 lg:justify-center cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+        >
           {portraits.map((p, i) => {
             const a = arc[i];
             return (
@@ -613,13 +658,15 @@ function Stories() {
                   transform: `translateY(${a.y}px) translateZ(${a.z}px) rotate(${a.rotate}deg) scale(${a.scale})`,
                   opacity: a.opacity,
                   transformOrigin: "center bottom",
+                  scrollSnapAlign: "center",
                 }}
               >
                 <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
                   <img
                     src={p.img}
                     alt={p.name}
-                    className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px]"
+                    draggable={false}
+                    className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px] pointer-events-none"
                     loading="lazy"
                   />
                 </div>
