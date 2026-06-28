@@ -595,7 +595,7 @@ function Stories() {
       id="stories"
       eyebrow="Community Stories"
       title="The people behind the spark."
-      kicker="Seven faces. Seven journeys. One shared belief — that opportunity, once unlocked, multiplies."
+      intro="Seven faces. Seven journeys. One shared belief — that opportunity, once unlocked, multiplies."
       className="bg-[var(--surface)]"
     >
       <div
