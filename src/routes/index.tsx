@@ -1061,55 +1061,44 @@ function Footer() {
 
 /* ---------------------- Partners ---------------------- */
 import exxonLogo from "@/assets/exxonmobil.png.asset.json";
+import macarthurLogo from "@/assets/macarthur.svg.asset.json";
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
-const PARTNERS: { name: string; tagline: string; logo: string; color: string }[] = [
-  { name: "ExxonMobil", tagline: "Energy Partner", logo: exxonLogo.url, color: "#E2231A" },
-  { name: "MacArthur Foundation", tagline: "Foundation", logo: clearbit("macfound.org"), color: "#1F3A6B" },
-  { name: "The Mayor's Fund for Philadelphia", tagline: "Civic Partner", logo: clearbit("mayorsfundphila.org"), color: "#0A4A7A" },
-  { name: "Urban Affairs Coalition", tagline: "Community", logo: clearbit("uac.org"), color: "#E89B2B" },
-  { name: "Feed The Children", tagline: "Help kids be kids", logo: clearbit("feedthechildren.org"), color: "#E63946" },
-  { name: "City of Philadelphia", tagline: "Municipal Partner", logo: clearbit("phila.gov"), color: "#D4A017" },
-  { name: "T-Mobile", tagline: "Technology", logo: clearbit("t-mobile.com"), color: "#E20074" },
-  { name: "Network for Good", tagline: "Giving Platform", logo: clearbit("networkforgood.com"), color: "#3B7DC4" },
-  { name: "Aulara", tagline: "Heritage Partner", logo: clearbit("aulara.com"), color: "#C9A24C" },
-  { name: "Raytheon Technologies", tagline: "Innovation", logo: clearbit("rtx.com"), color: "#D9272E" },
-  { name: "Get The Millions", tagline: "Empowerment", logo: clearbit("getthemillions.com"), color: "#C8102E" },
-  { name: "DTR Consulting", tagline: "Strategy", logo: clearbit("dtrconsulting.com"), color: "#FF4D00" },
-  { name: "US-Ghana Chamber of Commerce", tagline: "Global Trade", logo: clearbit("usghanachamber.org"), color: "#006B3F" },
-  { name: "EJ Consulting", tagline: "Advisory", logo: clearbit("ejconsultingfirm.com"), color: "#E11B22" },
+const PARTNERS: { name: string; logo: string }[] = [
+  { name: "ExxonMobil", logo: exxonLogo.url },
+  { name: "MacArthur Foundation", logo: macarthurLogo.url },
+  { name: "The Mayor's Fund for Philadelphia", logo: clearbit("mayorsfundphila.org") },
+  { name: "Urban Affairs Coalition", logo: clearbit("uac.org") },
+  { name: "Feed The Children", logo: clearbit("feedthechildren.org") },
+  { name: "City of Philadelphia", logo: clearbit("phila.gov") },
+  { name: "T-Mobile", logo: clearbit("t-mobile.com") },
+  { name: "Network for Good", logo: clearbit("networkforgood.com") },
+  { name: "Aulara", logo: clearbit("aulara.com") },
+  { name: "Raytheon Technologies", logo: clearbit("rtx.com") },
+  { name: "Get The Millions", logo: clearbit("getthemillions.com") },
+  { name: "DTR Consulting", logo: clearbit("dtrconsulting.com") },
+  { name: "US-Ghana Chamber of Commerce", logo: clearbit("usghanachamber.org") },
+  { name: "EJ Consulting", logo: clearbit("ejconsultingfirm.com") },
 ];
 
 function PartnerCard({ p }: { p: (typeof PARTNERS)[number] }) {
   const [failed, setFailed] = useState(false);
   return (
-    <div className="group relative flex h-44 w-72 shrink-0 flex-col overflow-hidden rounded-[5px] border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
-      <div
-        className="absolute inset-x-0 top-0 h-1 transition-all duration-500 group-hover:h-2"
-        style={{ background: p.color }}
-      />
-      <div className="flex flex-1 items-center justify-center">
-        {failed ? (
-          <div
-            className="text-center font-display text-xl font-semibold leading-tight tracking-tight"
-            style={{ color: p.color }}
-          >
-            {p.name}
-          </div>
-        ) : (
-          <img
-            src={p.logo}
-            alt={`${p.name} logo`}
-            loading="lazy"
-            onError={() => setFailed(true)}
-            className="max-h-16 max-w-[80%] object-contain grayscale transition-all duration-500 group-hover:grayscale-0"
-          />
-        )}
-      </div>
-      <div className="mt-3 border-t border-border pt-3 text-center text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-        {p.tagline}
-      </div>
+    <div className="flex h-28 w-56 shrink-0 items-center justify-center px-6 opacity-70 transition-all duration-500 hover:opacity-100">
+      {failed ? (
+        <div className="text-center font-display text-base font-semibold tracking-tight text-foreground">
+          {p.name}
+        </div>
+      ) : (
+        <img
+          src={p.logo}
+          alt={`${p.name} logo`}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className="max-h-14 max-w-full object-contain"
+        />
+      )}
     </div>
   );
 }
