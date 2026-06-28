@@ -964,7 +964,7 @@ function Donate() {
               {tiers.map((t) => (
                 <button
                   key={t}
-                  className="rounded-xl border border-white/30 bg-white/10 px-4 py-5 text-left text-white backdrop-blur transition hover:bg-white/20"
+                  className="rounded-[5px] border border-white/30 bg-white/10 px-4 py-5 text-left text-white backdrop-blur transition-colors hover:bg-white/20"
                 >
                   <div className="font-display text-xl font-semibold">{t}</div>
                   <div className="mt-1 text-xs text-white/75">
