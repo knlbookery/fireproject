@@ -77,6 +77,22 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
+/* ---------------------- Button system (consistent across site) ---------------------- */
+const BTN_BASE =
+  "inline-flex items-center justify-center gap-2 rounded-[5px] px-6 py-3 text-sm font-medium transition-colors";
+const BTN = {
+  // Solid brand button on light surfaces
+  primary: `${BTN_BASE} bg-primary text-primary-foreground hover:bg-primary/90`,
+  // Outline button on light surfaces
+  secondary: `${BTN_BASE} border border-foreground/15 text-foreground hover:bg-foreground/5`,
+  // Solid dark button on light surfaces
+  dark: `${BTN_BASE} bg-foreground text-background hover:opacity-90`,
+  // Outline button on dark / image backgrounds
+  onDarkOutline: `${BTN_BASE} border border-white/30 text-white hover:bg-white/10`,
+  // Solid white button on dark / colored backgrounds
+  onDarkSolid: `${BTN_BASE} bg-white text-primary hover:bg-white/90`,
+} as const;
+
 /* ---------------------- Header ---------------------- */
 function Header() {
   const [open, setOpen] = useState(false);
