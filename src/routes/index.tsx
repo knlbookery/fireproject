@@ -29,6 +29,7 @@ import {
   X,
 } from "lucide-react";
 import { Atropos } from "atropos/react";
+// @ts-expect-error - atropos css has no type declarations
 import "atropos/css";
 
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
