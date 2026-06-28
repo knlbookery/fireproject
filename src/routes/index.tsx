@@ -1059,6 +1059,138 @@ function Footer() {
   );
 }
 
+/* ---------------------- Partners ---------------------- */
+const PARTNERS: { name: string; tagline: string; color: string; accent: string }[] = [
+  { name: "ExxonMobil", tagline: "Energy Partner", color: "#E2231A", accent: "#0033A0" },
+  { name: "MacArthur Foundation", tagline: "Foundation", color: "#1F3A6B", accent: "#2E7D4F" },
+  { name: "The Mayor's Fund for Philadelphia", tagline: "Civic Partner", color: "#0A4A7A", accent: "#7FB3D5" },
+  { name: "Urban Affairs Coalition", tagline: "Community", color: "#E89B2B", accent: "#1A1A1A" },
+  { name: "Feed The Children", tagline: "Help kids be kids", color: "#E63946", accent: "#F4A261" },
+  { name: "City of Philadelphia", tagline: "Municipal Partner", color: "#D4A017", accent: "#0A2540" },
+  { name: "T-Mobile", tagline: "Technology", color: "#E20074", accent: "#1A1A1A" },
+  { name: "Network for Good", tagline: "Giving Platform", color: "#3B7DC4", accent: "#7FB342" },
+  { name: "Aulara", tagline: "Heritage Partner", color: "#C9A24C", accent: "#1A1A1A" },
+  { name: "Raytheon Technologies", tagline: "Innovation", color: "#D9272E", accent: "#1A1A1A" },
+  { name: "Get The Millions", tagline: "Empowerment", color: "#C8102E", accent: "#1A1A1A" },
+  { name: "DTR Consulting", tagline: "Strategy", color: "#FF4D00", accent: "#101828" },
+  { name: "US-Ghana Chamber of Commerce", tagline: "Global Trade", color: "#006B3F", accent: "#CE1126" },
+  { name: "EJ Consulting", tagline: "Advisory", color: "#E11B22", accent: "#1A1A1A" },
+];
+
+function PartnerCard({ p }: { p: (typeof PARTNERS)[number] }) {
+  return (
+    <div className="group relative flex h-44 w-72 shrink-0 flex-col justify-between overflow-hidden rounded-[5px] border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
+      <div
+        className="absolute inset-x-0 top-0 h-1 transition-all duration-500 group-hover:h-2"
+        style={{ background: `linear-gradient(90deg, ${p.color}, ${p.accent})` }}
+      />
+      <div className="flex h-12 items-center">
+        <span
+          className="inline-block h-3 w-3 rounded-full"
+          style={{ background: p.color, boxShadow: `0 0 0 4px ${p.color}22` }}
+        />
+        <span
+          className="ml-2 inline-block h-3 w-3 rounded-full"
+          style={{ background: p.accent, boxShadow: `0 0 0 4px ${p.accent}22` }}
+        />
+      </div>
+      <div>
+        <div
+          className="font-display text-2xl font-semibold leading-tight tracking-tight"
+          style={{ color: p.color }}
+        >
+          {p.name}
+        </div>
+        <div className="mt-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          {p.tagline}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Partners() {
+  const [paused, setPaused] = useState(false);
+  const rowA = PARTNERS.slice(0, Math.ceil(PARTNERS.length / 2));
+  const rowB = PARTNERS.slice(Math.ceil(PARTNERS.length / 2));
+
+  return (
+    <Section
+      id="partners"
+      eyebrow="Our Partners"
+      title="Built with bold partners."
+      intro="From global enterprises to civic leaders and grassroots foundations — these are the collaborators amplifying F.I.R.E.'s mission across Ghana and the United States."
+      className="bg-background"
+    >
+      <div
+        className="relative -mx-6 lg:-mx-10"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {/* fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent" />
+
+        <div className="overflow-hidden py-4">
+          <div
+            className="flex gap-6 w-max"
+            style={{
+              animation: "fire-marquee 50s linear infinite",
+              animationPlayState: paused ? "paused" : "running",
+            }}
+          >
+            {[...rowA, ...rowA].map((p, i) => (
+              <PartnerCard key={`a-${i}-${p.name}`} p={p} />
+            ))}
+          </div>
+        </div>
+
+        <div className="overflow-hidden py-4">
+          <div
+            className="flex gap-6 w-max"
+            style={{
+              animation: "fire-marquee-reverse 60s linear infinite",
+              animationPlayState: paused ? "paused" : "running",
+            }}
+          >
+            {[...rowB, ...rowB].map((p, i) => (
+              <PartnerCard key={`b-${i}-${p.name}`} p={p} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-border pt-10 md:flex-row md:items-center">
+        <div>
+          <div className="font-display text-2xl font-medium tracking-tight">
+            Become a partner.
+          </div>
+          <p className="mt-2 max-w-xl text-muted-foreground">
+            Join a coalition of changemakers funding scholarships, building courts, and launching founders.
+          </p>
+        </div>
+        <a
+          href="#contact"
+          className="inline-flex items-center gap-2 rounded-[5px] bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Partner with F.I.R.E. <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
+
+      <style>{`
+        @keyframes fire-marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes fire-marquee-reverse {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
+    </Section>
+  );
+}
+
 /* ---------------------- Page ---------------------- */
 function Landing() {
   return (
@@ -1069,6 +1201,7 @@ function Landing() {
       <Programs />
       <Impact />
       <Stories />
+      <Partners />
       <Events />
       <Contact />
       <Donate />
