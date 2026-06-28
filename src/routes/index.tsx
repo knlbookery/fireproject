@@ -1060,50 +1060,55 @@ function Footer() {
 }
 
 /* ---------------------- Partners ---------------------- */
-const PARTNERS: { name: string; tagline: string; color: string; accent: string }[] = [
-  { name: "ExxonMobil", tagline: "Energy Partner", color: "#E2231A", accent: "#0033A0" },
-  { name: "MacArthur Foundation", tagline: "Foundation", color: "#1F3A6B", accent: "#2E7D4F" },
-  { name: "The Mayor's Fund for Philadelphia", tagline: "Civic Partner", color: "#0A4A7A", accent: "#7FB3D5" },
-  { name: "Urban Affairs Coalition", tagline: "Community", color: "#E89B2B", accent: "#1A1A1A" },
-  { name: "Feed The Children", tagline: "Help kids be kids", color: "#E63946", accent: "#F4A261" },
-  { name: "City of Philadelphia", tagline: "Municipal Partner", color: "#D4A017", accent: "#0A2540" },
-  { name: "T-Mobile", tagline: "Technology", color: "#E20074", accent: "#1A1A1A" },
-  { name: "Network for Good", tagline: "Giving Platform", color: "#3B7DC4", accent: "#7FB342" },
-  { name: "Aulara", tagline: "Heritage Partner", color: "#C9A24C", accent: "#1A1A1A" },
-  { name: "Raytheon Technologies", tagline: "Innovation", color: "#D9272E", accent: "#1A1A1A" },
-  { name: "Get The Millions", tagline: "Empowerment", color: "#C8102E", accent: "#1A1A1A" },
-  { name: "DTR Consulting", tagline: "Strategy", color: "#FF4D00", accent: "#101828" },
-  { name: "US-Ghana Chamber of Commerce", tagline: "Global Trade", color: "#006B3F", accent: "#CE1126" },
-  { name: "EJ Consulting", tagline: "Advisory", color: "#E11B22", accent: "#1A1A1A" },
+import exxonLogo from "@/assets/exxonmobil.png.asset.json";
+
+const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
+
+const PARTNERS: { name: string; tagline: string; logo: string; color: string }[] = [
+  { name: "ExxonMobil", tagline: "Energy Partner", logo: exxonLogo.url, color: "#E2231A" },
+  { name: "MacArthur Foundation", tagline: "Foundation", logo: clearbit("macfound.org"), color: "#1F3A6B" },
+  { name: "The Mayor's Fund for Philadelphia", tagline: "Civic Partner", logo: clearbit("mayorsfundphila.org"), color: "#0A4A7A" },
+  { name: "Urban Affairs Coalition", tagline: "Community", logo: clearbit("uac.org"), color: "#E89B2B" },
+  { name: "Feed The Children", tagline: "Help kids be kids", logo: clearbit("feedthechildren.org"), color: "#E63946" },
+  { name: "City of Philadelphia", tagline: "Municipal Partner", logo: clearbit("phila.gov"), color: "#D4A017" },
+  { name: "T-Mobile", tagline: "Technology", logo: clearbit("t-mobile.com"), color: "#E20074" },
+  { name: "Network for Good", tagline: "Giving Platform", logo: clearbit("networkforgood.com"), color: "#3B7DC4" },
+  { name: "Aulara", tagline: "Heritage Partner", logo: clearbit("aulara.com"), color: "#C9A24C" },
+  { name: "Raytheon Technologies", tagline: "Innovation", logo: clearbit("rtx.com"), color: "#D9272E" },
+  { name: "Get The Millions", tagline: "Empowerment", logo: clearbit("getthemillions.com"), color: "#C8102E" },
+  { name: "DTR Consulting", tagline: "Strategy", logo: clearbit("dtrconsulting.com"), color: "#FF4D00" },
+  { name: "US-Ghana Chamber of Commerce", tagline: "Global Trade", logo: clearbit("usghanachamber.org"), color: "#006B3F" },
+  { name: "EJ Consulting", tagline: "Advisory", logo: clearbit("ejconsultingfirm.com"), color: "#E11B22" },
 ];
 
 function PartnerCard({ p }: { p: (typeof PARTNERS)[number] }) {
+  const [failed, setFailed] = useState(false);
   return (
-    <div className="group relative flex h-44 w-72 shrink-0 flex-col justify-between overflow-hidden rounded-[5px] border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group relative flex h-44 w-72 shrink-0 flex-col overflow-hidden rounded-[5px] border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
       <div
         className="absolute inset-x-0 top-0 h-1 transition-all duration-500 group-hover:h-2"
-        style={{ background: `linear-gradient(90deg, ${p.color}, ${p.accent})` }}
+        style={{ background: p.color }}
       />
-      <div className="flex h-12 items-center">
-        <span
-          className="inline-block h-3 w-3 rounded-full"
-          style={{ background: p.color, boxShadow: `0 0 0 4px ${p.color}22` }}
-        />
-        <span
-          className="ml-2 inline-block h-3 w-3 rounded-full"
-          style={{ background: p.accent, boxShadow: `0 0 0 4px ${p.accent}22` }}
-        />
+      <div className="flex flex-1 items-center justify-center">
+        {failed ? (
+          <div
+            className="text-center font-display text-xl font-semibold leading-tight tracking-tight"
+            style={{ color: p.color }}
+          >
+            {p.name}
+          </div>
+        ) : (
+          <img
+            src={p.logo}
+            alt={`${p.name} logo`}
+            loading="lazy"
+            onError={() => setFailed(true)}
+            className="max-h-16 max-w-[80%] object-contain grayscale transition-all duration-500 group-hover:grayscale-0"
+          />
+        )}
       </div>
-      <div>
-        <div
-          className="font-display text-2xl font-semibold leading-tight tracking-tight"
-          style={{ color: p.color }}
-        >
-          {p.name}
-        </div>
-        <div className="mt-2 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-          {p.tagline}
-        </div>
+      <div className="mt-3 border-t border-border pt-3 text-center text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+        {p.tagline}
       </div>
     </div>
   );
