@@ -596,26 +596,35 @@ function Impact() {
 }
 
 /* ---------------------- Stories ---------------------- */
+type Story = {
+  img: string;
+  name: string;
+  role: string;
+  location: string;
+  quote: string;
+  body: string;
+};
+
 function Stories() {
-  const portraits = [
-    { img: portrait1, name: "Ama", role: "Entrepreneur · Accra" },
-    { img: storyLeadership, name: "Kojo", role: "Youth Leader · Kumasi" },
-    { img: portrait6, name: "Nana", role: "Software Engineer · Accra" },
-    { img: portrait2, name: "Daniel", role: "Tech Fellow · Philadelphia" },
-    { img: portrait8, name: "Auntie Adwoa", role: "Teacher · Cape Coast" },
-    { img: portrait5, name: "Esi", role: "Scholar · Volta Region" },
-    { img: portrait10, name: "Abena", role: "Student · Tamale" },
-    { img: portrait3, name: "Akua", role: "Athlete · Accra" },
-    { img: portrait7, name: "Marcus", role: "Hooper · Philadelphia" },
-    { img: portrait9, name: "Yaw", role: "Founder · Kumasi" },
-    { img: portrait4, name: "Mr. Mensah", role: "Mentor · Tema" },
-    { img: storyBasketball, name: "Kwame", role: "Coach · Accra" },
+  const portraits: Story[] = [
+    { img: portrait1, name: "Ama", role: "Entrepreneur", location: "Accra, Ghana", quote: "F.I.R.E. didn't just teach me business — they believed in me before I did.", body: "Ama launched a small textile studio after completing the entrepreneurship cohort. Two years on, she employs four young women from her neighborhood." },
+    { img: storyLeadership, name: "Kojo", role: "Youth Leader", location: "Kumasi, Ghana", quote: "The mentors became the older brothers I never had.", body: "Kojo now runs weekend leadership circles for 30+ teens, using the same curriculum that changed his trajectory at 16." },
+    { img: portrait6, name: "Nana", role: "Software Engineer", location: "Accra, Ghana", quote: "I went from borrowing a laptop to writing code for a global team.", body: "After the tech fellowship, Nana joined a remote engineering team building fintech tools for African SMEs." },
+    { img: portrait2, name: "Daniel", role: "Tech Fellow", location: "Philadelphia, USA", quote: "F.I.R.E. showed me my zip code wasn't my ceiling.", body: "Daniel was the first in his family to graduate college. He now mentors high schoolers from his old block." },
+    { img: portrait8, name: "Auntie Adwoa", role: "Teacher", location: "Cape Coast, Ghana", quote: "When you invest in a teacher, you invest in a hundred children.", body: "Adwoa runs a F.I.R.E.-supported reading program serving over 200 students across two schools." },
+    { img: portrait5, name: "Esi", role: "Scholar", location: "Volta Region, Ghana", quote: "The scholarship gave me a chance. The community gave me belonging.", body: "Esi is studying public health on full scholarship and plans to return home to build maternal care programs." },
+    { img: portrait10, name: "Abena", role: "Student", location: "Tamale, Ghana", quote: "I want to be the doctor my village never had.", body: "Abena is a top of her class secondary student with her sights set on medical school — F.I.R.E. covers her boarding and books." },
+    { img: portrait3, name: "Akua", role: "Athlete", location: "Accra, Ghana", quote: "Sport gave me discipline. F.I.R.E. gave me a stage.", body: "Akua represented her region in two national tournaments and now coaches a girls' track squad after school." },
+    { img: portrait7, name: "Marcus", role: "Hooper", location: "Philadelphia, USA", quote: "The court is where I learned to lead.", body: "Marcus runs the summer hoops league F.I.R.E. sponsors in West Philly — over 180 kids played last season." },
+    { img: portrait9, name: "Yaw", role: "Founder", location: "Kumasi, Ghana", quote: "We don't need handouts. We need a runway — F.I.R.E. built mine.", body: "Yaw founded a logistics startup connecting rural farmers to urban markets, now serving 12 districts." },
+    { img: portrait4, name: "Mr. Mensah", role: "Mentor", location: "Tema, Ghana", quote: "Mentorship is the long game. I'm proud to play it.", body: "A retired engineer, Mr. Mensah has personally mentored 40+ F.I.R.E. tech fellows over the last six years." },
+    { img: storyBasketball, name: "Kwame", role: "Coach", location: "Accra, Ghana", quote: "Every kid deserves a coach who shows up — every single week.", body: "Kwame's after-school program has kept hundreds of teens off the streets and on the court since 2019." },
   ];
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
   const LOOP = 3;
   const looped = Array.from({ length: LOOP }).flatMap((_, copy) =>
-    portraits.map((p, i) => ({ ...p, _key: `${copy}-${i}` }))
+    portraits.map((p, i) => ({ ...p, _key: `${copy}-${i}`, _origIndex: i }))
   );
 
   const features = [
@@ -625,9 +634,9 @@ function Stories() {
   ];
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
-  const posRef = useRef(0);            // authoritative fractional scroll position
-  const targetRef = useRef(0);         // where we want to settle (wheel/keyboard)
-  const velocityRef = useRef(0);       // px per frame, used for momentum
+  const posRef = useRef(0);
+  const targetRef = useRef(0);
+  const velocityRef = useRef(0);
   const modeRef = useRef<"idle" | "drag" | "momentum" | "tween">("idle");
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
@@ -641,16 +650,42 @@ function Stories() {
     samples: [] as { x: number; t: number }[],
   });
 
-  // Apply an arc transform to every card based on its distance from the scroller's
-  // horizontal center. This keeps the curve consistent regardless of scroll position.
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [openStory, setOpenStory] = useState<Story | null>(null);
+
+  // Detect prefers-reduced-motion
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
+
+  // Apply arc transform based on distance from scroller center.
+  // In reduced-motion mode, we skip all 3D transforms and just keep cards upright.
   const applyArc = () => {
     const el = scrollerRef.current;
     if (!el) return;
     const center = el.scrollLeft + el.clientWidth / 2;
     const radius = el.clientWidth / 2;
     const cards = el.querySelectorAll<HTMLElement>("[data-card]");
+    let closestDist = Infinity;
+    let closestIdx = 0;
     cards.forEach((card) => {
       const mid = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(mid - center);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = Number(card.dataset.origIndex || 0);
+      }
+      if (reducedMotion) {
+        card.style.transform = "";
+        card.style.opacity = "1";
+        return;
+      }
       const t = Math.max(-1.2, Math.min(1.2, (mid - center) / radius));
       const abs = Math.abs(t);
       const rotate = t * 26;
@@ -661,9 +696,9 @@ function Stories() {
       card.style.transform = `translateY(${y}px) translateZ(${z}px) rotate(${rotate}deg) scale(${scale})`;
       card.style.opacity = String(opacity);
     });
+    setActiveIndex((prev) => (prev === closestIdx ? prev : closestIdx));
   };
 
-  // Keep the scroll position inside the middle copy so it can loop forever
   const normalizeLoop = () => {
     const el = scrollerRef.current;
     if (!el) return;
@@ -689,8 +724,6 @@ function Stories() {
     }
   };
 
-  // iOS-style physics: exponential velocity decay for momentum,
-  // critically-damped easing for wheel/keyboard targets. Frame-rate independent.
   const step = (ts: number) => {
     const el = scrollerRef.current;
     if (!el) { rafRef.current = null; return; }
@@ -699,8 +732,9 @@ function Stories() {
     const frames = dt / 16.6667;
 
     if (modeRef.current === "momentum") {
-      // Decay factor per ms — gives that smooth iOS glide.
-      const decay = Math.pow(0.95, frames);
+      // Stronger friction in reduced-motion mode → settles almost immediately
+      const decayBase = reducedMotion ? 0.7 : 0.95;
+      const decay = Math.pow(decayBase, frames);
       velocityRef.current *= decay;
       posRef.current += velocityRef.current * frames;
       if (Math.abs(velocityRef.current) < 0.05) {
@@ -708,9 +742,9 @@ function Stories() {
         modeRef.current = "idle";
       }
     } else if (modeRef.current === "tween") {
-      // Critically-damped lerp toward target for wheel input.
       const diff = targetRef.current - posRef.current;
-      const ease = 1 - Math.pow(1 - 0.22, frames);
+      const easeBase = reducedMotion ? 0.5 : 0.22;
+      const ease = 1 - Math.pow(1 - easeBase, frames);
       posRef.current += diff * ease;
       if (Math.abs(diff) < 0.3) {
         posRef.current = targetRef.current;
@@ -733,7 +767,6 @@ function Stories() {
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (delta === 0) return;
     e.preventDefault();
-    // If we were drifting from momentum, start fresh tween from current pos.
     if (modeRef.current !== "tween") targetRef.current = posRef.current;
     targetRef.current += delta;
     modeRef.current = "tween";
@@ -744,7 +777,6 @@ function Stories() {
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
-    // Stop any in-flight animation immediately (iOS-like "catch")
     velocityRef.current = 0;
     modeRef.current = "idle";
     posRef.current = el.scrollLeft;
@@ -772,7 +804,6 @@ function Stories() {
     el.scrollLeft = posRef.current;
     const now = performance.now();
     d.samples.push({ x: e.clientX, t: now });
-    // Keep only ~80ms of samples for velocity calc
     while (d.samples.length > 2 && now - d.samples[0].t > 80) d.samples.shift();
     d.lastX = e.clientX;
     d.lastT = now;
@@ -783,15 +814,14 @@ function Stories() {
     const el = scrollerRef.current;
     const d = dragState.current;
     if (!el) return;
+    const wasMoved = d.moved;
     d.down = false;
     try { el.releasePointerCapture(e.pointerId); } catch {}
-    // Compute fling velocity from recent samples
-    if (d.samples.length >= 2) {
+    if (d.samples.length >= 2 && !reducedMotion) {
       const first = d.samples[0];
       const last = d.samples[d.samples.length - 1];
       const dt = Math.max(1, last.t - first.t);
       const vxPxPerMs = (last.x - first.x) / dt;
-      // Convert to px per ~16ms frame, invert (drag right -> scroll left)
       const vFrame = -vxPxPerMs * 16.6667;
       if (Math.abs(vFrame) > 0.6) {
         velocityRef.current = vFrame;
@@ -799,6 +829,39 @@ function Stories() {
         ensureRaf();
       }
     }
+    // Suppress the click that follows a drag
+    if (wasMoved) {
+      const swallow = (ev: Event) => { ev.stopPropagation(); ev.preventDefault(); };
+      el.addEventListener("click", swallow, { capture: true, once: true });
+    }
+  };
+
+  // Jump to a specific portrait (by original index) — used by pagination dots.
+  const scrollToIndex = (idx: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const cards = el.querySelectorAll<HTMLElement>("[data-card]");
+    // Find a card in the middle copy matching this index
+    let target: HTMLElement | null = null;
+    cards.forEach((c) => {
+      if (Number(c.dataset.origIndex) === idx && Number(c.dataset.copy) === 1) {
+        target = c;
+      }
+    });
+    if (!target) return;
+    const mid = (target as HTMLElement).offsetLeft + (target as HTMLElement).offsetWidth / 2;
+    const next = mid - el.clientWidth / 2;
+    if (reducedMotion) {
+      posRef.current = next;
+      targetRef.current = next;
+      el.scrollLeft = next;
+      applyArc();
+      return;
+    }
+    targetRef.current = next;
+    modeRef.current = "tween";
+    velocityRef.current = 0;
+    ensureRaf();
   };
 
   useEffect(() => {
@@ -810,7 +873,6 @@ function Stories() {
     targetRef.current = copyWidth;
     applyArc();
     const onScroll = () => {
-      // External scroll source (e.g. trackpad fallback) — keep posRef synced
       if (modeRef.current === "idle" && !dragState.current.down) {
         posRef.current = el.scrollLeft;
         targetRef.current = posRef.current;
@@ -832,8 +894,20 @@ function Stories() {
       window.removeEventListener("resize", onResize);
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [reducedMotion]);
 
+  // Close modal on Escape
+  useEffect(() => {
+    if (!openStory) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenStory(null); };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [openStory]);
 
   return (
     <Section
@@ -845,7 +919,7 @@ function Stories() {
     >
       <div
         className="relative mx-auto w-full"
-        style={{ perspective: "1400px" }}
+        style={{ perspective: reducedMotion ? undefined : "1400px" }}
       >
         <div
           ref={scrollerRef}
@@ -855,16 +929,24 @@ function Stories() {
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
           className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          style={{ WebkitOverflowScrolling: "touch" }}
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+          role="region"
+          aria-label="Community story portraits — swipe or drag to browse"
         >
           {looped.map((p) => (
-            <figure
+            <button
+              type="button"
               key={p._key}
               data-card
-              className="group relative shrink-0 transition-[opacity] duration-200 hover:!translate-y-0 hover:!rotate-0 hover:!scale-105 will-change-transform"
-              style={{
-                transformOrigin: "center bottom",
+              data-orig-index={p._origIndex}
+              data-copy={p._key.split("-")[0]}
+              onClick={() => {
+                if (dragState.current.moved) return;
+                setOpenStory(p);
               }}
+              className="group relative shrink-0 cursor-pointer bg-transparent p-0 transition-[opacity] duration-200 hover:!translate-y-0 hover:!rotate-0 hover:!scale-105 will-change-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] rounded-[140px]"
+              style={{ transformOrigin: "center bottom" }}
+              aria-label={`Open story: ${p.name}, ${p.role}`}
             >
               <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
                 <img
@@ -881,8 +963,33 @@ function Stories() {
                   {p.role}
                 </div>
               </figcaption>
-            </figure>
+            </button>
           ))}
+        </div>
+
+        {/* Pagination dots + active indicator */}
+        <div className="mt-10 flex flex-col items-center gap-3">
+          <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+            <span className="font-medium text-foreground">{portraits[activeIndex]?.name}</span>
+            <span className="mx-2 opacity-40">·</span>
+            <span>{portraits[activeIndex]?.role} — {portraits[activeIndex]?.location}</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2" role="tablist" aria-label="Jump to story">
+            {portraits.map((p, i) => {
+              const active = i === activeIndex;
+              return (
+                <button
+                  key={p.name}
+                  type="button"
+                  onClick={() => scrollToIndex(i)}
+                  role="tab"
+                  aria-selected={active}
+                  aria-label={`Go to ${p.name}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${active ? "w-8 bg-primary" : "w-2 bg-black/20 hover:bg-black/40"}`}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -904,7 +1011,80 @@ function Stories() {
           See our impact
         </a>
       </div>
+
+      {/* Story detail modal */}
+      {openStory && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="story-modal-title"
+        >
+          <div
+            className={`absolute inset-0 bg-black/70 backdrop-blur-sm ${reducedMotion ? "" : "animate-fade-in"}`}
+            onClick={() => setOpenStory(null)}
+          />
+          <div
+            className={`relative z-10 w-full max-w-3xl overflow-hidden rounded-[20px] bg-white shadow-2xl ${reducedMotion ? "" : "animate-scale-in"}`}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenStory(null)}
+              className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur transition hover:bg-black"
+              aria-label="Close story"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="aspect-[4/5] md:aspect-auto md:min-h-[460px]">
+                <img
+                  src={openStory.img}
+                  alt={openStory.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col gap-5 p-6 sm:p-8 md:p-10">
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.22em] text-primary">
+                    Community Story
+                  </div>
+                  <h3 id="story-modal-title" className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">
+                    {openStory.name}
+                  </h3>
+                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>{openStory.role}</span>
+                    <span className="opacity-40">·</span>
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="h-3.5 w-3.5" />
+                      {openStory.location}
+                    </span>
+                  </div>
+                </div>
+                <blockquote className="border-l-2 border-primary pl-4 font-display text-lg italic leading-snug text-foreground sm:text-xl">
+                  “{openStory.quote}”
+                </blockquote>
+                <p className="text-[15px] leading-relaxed text-muted-foreground">
+                  {openStory.body}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-3">
+                  <a href="#volunteer" className={BTN.primary} onClick={() => setOpenStory(null)}>
+                    Support more stories <ArrowRight className="h-4 w-4" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setOpenStory(null)}
+                    className={BTN.secondary}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Section>
+
   );
 }
 
