@@ -507,29 +507,29 @@ function Programs() {
             rotateYMax={8}
             className="rounded-2xl"
           >
-            <article className="group relative overflow-hidden rounded-2xl bg-black">
+            <article className="group relative overflow-hidden rounded-2xl bg-white ring-1 ring-black/5 shadow-sm">
               <img
                 src={p.img}
                 alt={`${p.title} program at F.I.R.E.`}
                 data-atropos-offset="-4"
-                className="aspect-[4/5] w-full object-cover opacity-80 transition duration-700 group-hover:opacity-95"
+                className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-[1.02]"
                 loading="lazy"
               />
               <div
-                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent"
                 data-atropos-offset="2"
               />
               <div
-                className="absolute inset-0 flex flex-col justify-end p-7 text-white"
+                className="absolute inset-0 flex flex-col justify-end p-7 text-foreground"
                 data-atropos-offset="8"
               >
-                <span className="grid h-11 w-11 place-items-center rounded-lg bg-white/15 backdrop-blur">
+                <span className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary backdrop-blur">
                   <p.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-5 font-display text-3xl font-medium tracking-tight" data-atropos-offset="12">
+                <h3 className="mt-5 font-display text-3xl font-medium tracking-tight text-foreground" data-atropos-offset="12">
                   {p.title}
                 </h3>
-                <p className="mt-2 max-w-xs text-sm text-white/85" data-atropos-offset="6">
+                <p className="mt-2 max-w-xs text-sm text-foreground/70" data-atropos-offset="6">
                   {p.desc}
                 </p>
               </div>
