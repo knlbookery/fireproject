@@ -242,7 +242,7 @@ function Hero() {
   const go = (n: number) => setIdx((n + SLIDES.length) % SLIDES.length);
 
   return (
-    <section id="top" className="relative h-[88vh] min-h-[600px] w-full overflow-hidden bg-black">
+    <section id="top" className="relative min-h-[760px] w-full overflow-hidden bg-black lg:h-screen">
       {SLIDES.map((s, i) => (
         <div
           key={s.title}
