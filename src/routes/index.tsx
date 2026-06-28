@@ -574,19 +574,11 @@ function Stories() {
     { img: storyBasketball, name: "Kwame", role: "Coach · Accra" },
   ];
 
-  // Arc layout — computed from index so it works for any count
-  const getArc = (i: number, total: number) => {
-    const center = (total - 1) / 2;
-    const t = (i - center) / center; // -1..1
-    const abs = Math.abs(t);
-    return {
-      rotate: t * 26,
-      y: abs * abs * 70,
-      z: -abs * abs * 140,
-      scale: 1.04 - abs * abs * 0.22,
-      opacity: 1 - abs * 0.18,
-    };
-  };
+  // Triple the list so we can seamlessly loop by jumping between identical copies
+  const LOOP = 3;
+  const looped = Array.from({ length: LOOP }).flatMap((_, copy) =>
+    portraits.map((p, i) => ({ ...p, _key: `${copy}-${i}` }))
+  );
 
   const features = [
     { title: "Real Community Voices", body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need." },
@@ -599,6 +591,44 @@ function Stories() {
   const rafRef = useRef<number | null>(null);
   const dragState = useRef({ down: false, startX: 0, startLeft: 0, moved: false });
 
+  // Apply an arc transform to every card based on its distance from the scroller's
+  // horizontal center. This keeps the curve consistent regardless of scroll position.
+  const applyArc = () => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const center = el.scrollLeft + el.clientWidth / 2;
+    const radius = el.clientWidth / 2;
+    const cards = el.querySelectorAll<HTMLElement>("[data-card]");
+    cards.forEach((card) => {
+      const mid = card.offsetLeft + card.offsetWidth / 2;
+      const t = Math.max(-1.2, Math.min(1.2, (mid - center) / radius));
+      const abs = Math.abs(t);
+      const rotate = t * 26;
+      const y = abs * abs * 70;
+      const z = -abs * abs * 140;
+      const scale = 1.04 - abs * abs * 0.22;
+      const opacity = Math.max(0, 1 - abs * 0.35);
+      card.style.transform = `translateY(${y}px) translateZ(${z}px) rotate(${rotate}deg) scale(${scale})`;
+      card.style.opacity = String(opacity);
+    });
+  };
+
+  // Keep the scroll position inside the middle copy so it can loop forever
+  const normalizeLoop = () => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const copyWidth = el.scrollWidth / LOOP;
+    if (el.scrollLeft < copyWidth * 0.5) {
+      el.scrollLeft += copyWidth;
+      targetRef.current += copyWidth;
+      dragState.current.startLeft += copyWidth;
+    } else if (el.scrollLeft > copyWidth * 1.5) {
+      el.scrollLeft -= copyWidth;
+      targetRef.current -= copyWidth;
+      dragState.current.startLeft -= copyWidth;
+    }
+  };
+
   const animate = () => {
     const el = scrollerRef.current;
     if (!el) { rafRef.current = null; return; }
@@ -609,7 +639,7 @@ function Stories() {
       rafRef.current = null;
       return;
     }
-    el.scrollLeft = current + diff * 0.18; // ease-out lerp
+    el.scrollLeft = current + diff * 0.18;
     rafRef.current = requestAnimationFrame(animate);
   };
 
@@ -618,9 +648,8 @@ function Stories() {
     if (!el) return;
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     if (delta === 0) return;
-    const max = el.scrollWidth - el.clientWidth;
     e.preventDefault();
-    targetRef.current = Math.max(0, Math.min(max, targetRef.current + delta * 1.1));
+    targetRef.current = targetRef.current + delta * 1.1;
     if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
   };
 
@@ -637,8 +666,7 @@ function Stories() {
     if (!el || !dragState.current.down) return;
     const dx = e.clientX - dragState.current.startX;
     if (Math.abs(dx) > 4) dragState.current.moved = true;
-    const max = el.scrollWidth - el.clientWidth;
-    const next = Math.max(0, Math.min(max, dragState.current.startLeft - dx));
+    const next = dragState.current.startLeft - dx;
     el.scrollLeft = next;
     targetRef.current = next;
   };
@@ -652,8 +680,26 @@ function Stories() {
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
-    targetRef.current = el.scrollLeft;
+    // Start in the middle copy so we can loop either direction
+    const copyWidth = el.scrollWidth / LOOP;
+    el.scrollLeft = copyWidth;
+    targetRef.current = copyWidth;
+    applyArc();
+    const onScroll = () => {
+      normalizeLoop();
+      applyArc();
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    const onResize = () => {
+      const cw = el.scrollWidth / LOOP;
+      el.scrollLeft = cw;
+      targetRef.current = cw;
+      applyArc();
+    };
+    window.addEventListener("resize", onResize);
     return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -677,41 +723,38 @@ function Stories() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
-          className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 lg:justify-center cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
-          {portraits.map((p, i) => {
-            const a = getArc(i, portraits.length);
-            return (
-              <figure
-                key={p.name}
-                className="group relative shrink-0 transition-transform duration-500 ease-out hover:!translate-y-0 hover:!rotate-0 hover:!scale-105 will-change-transform"
-                style={{
-                  transform: `translateY(${a.y}px) translateZ(${a.z}px) rotate(${a.rotate}deg) scale(${a.scale})`,
-                  opacity: a.opacity,
-                  transformOrigin: "center bottom",
-                }}
-              >
-                <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    draggable={false}
-                    className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px] pointer-events-none"
-                    loading="lazy"
-                  />
+          {looped.map((p) => (
+            <figure
+              key={p._key}
+              data-card
+              className="group relative shrink-0 transition-[opacity] duration-200 hover:!translate-y-0 hover:!rotate-0 hover:!scale-105 will-change-transform"
+              style={{
+                transformOrigin: "center bottom",
+              }}
+            >
+              <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
+                <img
+                  src={p.img}
+                  alt={p.name}
+                  draggable={false}
+                  className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px] pointer-events-none"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="font-display text-base font-medium">{p.name}</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  {p.role}
                 </div>
-                <figcaption className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <div className="font-display text-base font-medium">{p.name}</div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    {p.role}
-                  </div>
-                </figcaption>
-              </figure>
-            );
-          })}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </div>
+
 
       <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
         {features.map((f) => (
