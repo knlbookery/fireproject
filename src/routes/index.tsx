@@ -590,8 +590,8 @@ function Stories() {
     },
   ];
 
-  const scrollerRef = React.useRef<HTMLDivElement | null>(null);
-  const dragState = React.useRef({ down: false, startX: 0, startLeft: 0, moved: false });
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const dragState = useRef({ down: false, startX: 0, startLeft: 0, moved: false });
 
   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
