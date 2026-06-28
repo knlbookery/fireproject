@@ -194,7 +194,7 @@ const SLIDES: Slide[] = [
     image: volunteers,
     alt: "F.I.R.E. community gathering",
     cta: [
-      { label: "Learn More", href: "#mission", primary: true },
+      { label: "Learn more about our mission", href: "#mission", primary: true },
       { label: "Donate", href: "#donate" },
     ],
   },
@@ -503,7 +503,7 @@ function Programs() {
           >
             <img
               src={p.img}
-              alt={p.title}
+              alt={`${p.title} program at F.I.R.E.`}
               className="aspect-[4/5] w-full object-cover opacity-80 transition duration-700 group-hover:scale-[1.03] group-hover:opacity-90"
               loading="lazy"
             />
@@ -951,7 +951,7 @@ function Stories() {
               <div className="overflow-hidden rounded-[140px] bg-black/5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
                 <img
                   src={p.img}
-                  alt={p.name}
+                  alt={`Portrait of ${p.name}, ${p.role}`}
                   draggable={false}
                   className="h-[260px] w-[120px] object-cover sm:h-[320px] sm:w-[150px] md:h-[400px] md:w-[180px] lg:h-[460px] lg:w-[210px] pointer-events-none"
                   loading="lazy"
@@ -1039,7 +1039,7 @@ function Stories() {
               <div className="aspect-[4/5] md:aspect-auto md:min-h-[460px]">
                 <img
                   src={openStory.img}
-                  alt={openStory.name}
+                  alt={`Portrait of ${openStory.name}, ${openStory.role}`}
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -1127,7 +1127,7 @@ function Events() {
           >
             <img
               src={e.img}
-              alt={e.title}
+              alt={`${e.title} F.I.R.E. event`}
               className="aspect-[4/3] w-full object-cover opacity-85 transition duration-700 group-hover:scale-[1.03]"
               loading="lazy"
             />

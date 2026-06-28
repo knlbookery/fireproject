@@ -1,0 +1,8 @@
+# F.I.R.E. — Free Inspiration Reaching Everyone
+
+> F.I.R.E. is a nonprofit creating opportunity through education, technology, sports, entrepreneurship, and community development across Ghana and the United States.
+
+## Pages
+
+- [Home](/): Mission overview, programs, impact, stories, events, and ways to support F.I.R.E.
+- [Youth Empowerment Guide](/youth-empowerment-guide): How to start and sustain community-led youth empowerment programs, based on F.I.R.E.'s frameworks.
