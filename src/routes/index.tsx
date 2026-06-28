@@ -260,11 +260,7 @@ function Hero() {
               <a
                 key={c.label}
                 href={c.href}
-                className={
-                  c.primary
-                    ? "group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-                    : "group inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/15"
-                }
+                className={`group ${c.primary ? BTN.primary : BTN.onDarkOutline}`}
               >
                 {c.label}
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
