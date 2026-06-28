@@ -71,6 +71,7 @@ const NAV = [
   { label: "Programs", href: "#programs" },
   { label: "Impact", href: "#impact" },
   { label: "Stories", href: "#stories" },
+  { label: "Partners", href: "#partners" },
   { label: "Events", href: "#events" },
   { label: "Contact", href: "#contact" },
 ];
