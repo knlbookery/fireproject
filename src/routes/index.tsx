@@ -1073,6 +1073,9 @@ import dtrConsultingLogo from "@/assets/dtr-consulting.png.asset.json";
 import atolatseLogo from "@/assets/atolatse.png.asset.json";
 import usGhanaChamberLogo from "@/assets/us-ghana-chamber.png.asset.json";
 import ejConsultingLogo from "@/assets/ej-consulting.png.asset.json";
+import mayorsFundLogo from "@/assets/mayors-fund-philadelphia.png.asset.json";
+import cityPhiladelphiaV2Logo from "@/assets/city-of-philadelphia-v2.png.asset.json";
+
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
