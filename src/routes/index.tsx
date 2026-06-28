@@ -1062,6 +1062,7 @@ function Footer() {
 /* ---------------------- Partners ---------------------- */
 import exxonLogo from "@/assets/exxonmobil.png.asset.json";
 import macarthurLogo from "@/assets/macarthur.svg.asset.json";
+import urbanAffairsLogo from "@/assets/urban-affairs-coalition.png.asset.json";
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
@@ -1069,7 +1070,7 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "ExxonMobil", logo: exxonLogo.url },
   { name: "MacArthur Foundation", logo: macarthurLogo.url },
   { name: "The Mayor's Fund for Philadelphia", logo: clearbit("mayorsfundphila.org") },
-  { name: "Urban Affairs Coalition", logo: clearbit("uac.org") },
+  { name: "Urban Affairs Coalition", logo: urbanAffairsLogo.url },
   { name: "Feed The Children", logo: clearbit("feedthechildren.org") },
   { name: "City of Philadelphia", logo: clearbit("phila.gov") },
   { name: "T-Mobile", logo: clearbit("t-mobile.com") },
