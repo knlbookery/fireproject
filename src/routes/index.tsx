@@ -84,10 +84,9 @@ function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-black/5 bg-white/85 backdrop-blur">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">
-            <Flame className="h-5 w-5" />
-          </span>
+          <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
           <span className="font-display text-lg font-semibold tracking-tight">F.I.R.E.</span>
+
         </a>
         <nav className="hidden items-center gap-8 text-sm text-foreground/80 md:flex">
           {NAV.map((i) => (
