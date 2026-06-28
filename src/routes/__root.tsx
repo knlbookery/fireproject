@@ -99,6 +99,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "NGO",
+          name: "F.I.R.E.",
+          alternateName: "Free Inspiration Reaching Everyone",
+          url: "https://fireproject.lovable.app",
+          logo: "https://fireproject.lovable.app/favicon.ico",
+          description:
+            "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, and community development across Ghana and the United States.",
+          areaServed: ["Ghana", "United States"],
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
