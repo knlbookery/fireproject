@@ -541,7 +541,7 @@ function Impact() {
             </p>
             <a
               href="#stories"
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/25 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+              className={`mt-8 ${BTN.onDarkOutline}`}
             >
               Read the stories <ArrowRight className="h-4 w-4" />
             </a>
