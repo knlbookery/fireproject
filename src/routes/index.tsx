@@ -940,53 +940,210 @@ function Contact() {
 
 /* ---------------------- Donate ---------------------- */
 function Donate() {
-  const tiers = ["$25", "$50", "$100", "Custom"];
+  const tiers = [
+    {
+      amount: "$25",
+      label: "Spark",
+      impact: "Provides school supplies for one student for a month.",
+    },
+    {
+      amount: "$50",
+      label: "Kindle",
+      impact: "Funds a week of after-school mentorship for a youth athlete.",
+    },
+    {
+      amount: "$100",
+      label: "Ignite",
+      impact: "Sponsors entrepreneurship training for a community member.",
+      featured: true,
+    },
+    {
+      amount: "Custom",
+      label: "Blaze",
+      impact: "Choose your own gift — every dollar reaches the field.",
+    },
+  ];
+
+  const allocation = [
+    { label: "Programs", pct: 82, color: "bg-primary" },
+    { label: "Community Events", pct: 12, color: "bg-accent" },
+    { label: "Operations", pct: 6, color: "bg-foreground/40" },
+  ];
+
+  const trust = [
+    { icon: ShieldCheck, label: "501(c)(3) Nonprofit", sub: "EIN on request" },
+    { icon: FileCheck, label: "Tax-Deductible", sub: "Receipt emailed instantly" },
+    { icon: Lock, label: "Secure Checkout", sub: "256-bit SSL · PCI compliant" },
+    { icon: Award, label: "Audited Annually", sub: "Independent CPA review" },
+  ];
+
   return (
     <section id="donate" className="px-6 py-28 lg:px-10 lg:py-36">
-      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-3xl">
-        <img
-          src={progYouth}
-          alt="Children at a F.I.R.E. program"
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/60" />
-        <div className="relative grid grid-cols-1 gap-12 p-10 text-white lg:grid-cols-12 lg:p-16">
-          <div className="lg:col-span-7">
-            <div className="text-xs font-medium uppercase tracking-[0.22em] text-white/80">
+      <div className="mx-auto max-w-[1400px]">
+        {/* Header */}
+        <div className="mb-12 flex flex-col items-start justify-between gap-6 lg:mb-16 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
+            <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
               Donate
             </div>
-            <h2 className="mt-4 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-              Fuel a program.
+            <h2 className="mt-4 font-display text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              Give with confidence.
               <br />
-              Transform a community.
+              <span className="text-foreground/60">Watch it become impact.</span>
             </h2>
-            <p className="mt-5 max-w-md text-white/85">
-              Your gift funds programs, resources, events, and mentorship that move people from
-              potential to opportunity.
-            </p>
           </div>
-          <div className="lg:col-span-5">
-            <div className="grid grid-cols-2 gap-3">
-              {tiers.map((t) => (
-                <button
-                  key={t}
-                  className="rounded-[5px] border border-white/30 bg-white/10 px-4 py-5 text-left text-white backdrop-blur transition-colors hover:bg-white/20"
-                >
-                  <div className="font-display text-xl font-semibold">{t}</div>
-                  <div className="mt-1 text-xs text-white/75">
-                    {t === "Custom" ? "Choose amount" : "One-time gift"}
-                  </div>
-                </button>
-              ))}
+          <div className="flex flex-wrap items-center gap-3 text-xs text-foreground/70">
+            <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+              Verified Nonprofit
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
+              <Lock className="h-3.5 w-3.5 text-primary" />
+              Encrypted Giving
+            </span>
+          </div>
+        </div>
+
+        {/* Main grid */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          {/* Left: tiers */}
+          <div className="lg:col-span-8">
+            <div className="rounded-2xl border border-foreground/10 bg-white p-6 sm:p-8 lg:p-10">
+              <div className="mb-6 flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-medium text-foreground">Choose your gift</div>
+                  <div className="text-xs text-foreground/60">One-time · Monthly available at checkout</div>
+                </div>
+                <div className="hidden items-center gap-2 text-xs text-foreground/60 sm:flex">
+                  <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>2,400+ donors this year</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {tiers.map((t) => (
+                  <button
+                    key={t.amount}
+                    className={`group relative rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+                      t.featured
+                        ? "border-primary bg-primary text-white shadow-md"
+                        : "border-foreground/10 bg-white text-foreground hover:border-primary/40"
+                    }`}
+                  >
+                    {t.featured && (
+                      <span className="absolute -top-2 right-3 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
+                        Most given
+                      </span>
+                    )}
+                    <div className="font-display text-2xl font-semibold">{t.amount}</div>
+                    <div
+                      className={`mt-0.5 text-[11px] font-medium uppercase tracking-wider ${
+                        t.featured ? "text-white/80" : "text-primary"
+                      }`}
+                    >
+                      {t.label}
+                    </div>
+                    <div
+                      className={`mt-3 text-xs leading-snug ${
+                        t.featured ? "text-white/90" : "text-foreground/70"
+                      }`}
+                    >
+                      {t.impact}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Allocation bar */}
+              <div className="mt-8 border-t border-foreground/10 pt-6">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="text-sm font-medium text-foreground">Where every dollar goes</div>
+                  <div className="text-xs text-foreground/60">FY 2025 · Audited</div>
+                </div>
+                <div className="flex h-3 w-full overflow-hidden rounded-full bg-foreground/5">
+                  {allocation.map((a) => (
+                    <div
+                      key={a.label}
+                      className={`${a.color} h-full`}
+                      style={{ width: `${a.pct}%` }}
+                    />
+                  ))}
+                </div>
+                <div className="mt-3 flex flex-wrap gap-4 text-xs text-foreground/70">
+                  {allocation.map((a) => (
+                    <div key={a.label} className="flex items-center gap-2">
+                      <span className={`h-2.5 w-2.5 rounded-sm ${a.color}`} />
+                      <span className="font-medium text-foreground">{a.pct}%</span>
+                      <span>{a.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <a href="#" className={`flex-1 ${BTN.primary}`}>
+                  <Heart className="h-4 w-4" />
+                  Donate Now
+                </a>
+                <a href="#contact" className={`flex-1 ${BTN.secondary}`}>
+                  <Building2 className="h-4 w-4" />
+                  Corporate Giving
+                </a>
+              </div>
+              <p className="mt-4 text-center text-xs text-foreground/60">
+                Powered by Stripe & Network for Good · Your information is never shared.
+              </p>
             </div>
-            <a href="#" className={`mt-5 w-full ${BTN.onDarkSolid}`}>
-              <Heart className="h-4 w-4" />
-              Donate Now
-            </a>
-            <p className="mt-3 text-center text-xs text-white/70">
-              Secure donations powered by our partners.
-            </p>
+          </div>
+
+          {/* Right: trust + corporate */}
+          <div className="lg:col-span-4">
+            <div className="grid h-full grid-rows-[auto_1fr] gap-6">
+              {/* Trust badges */}
+              <div className="rounded-2xl border border-foreground/10 bg-white p-6">
+                <div className="mb-4 text-sm font-medium text-foreground">Trusted & accountable</div>
+                <ul className="space-y-4">
+                  {trust.map((t) => (
+                    <li key={t.label} className="flex items-start gap-3">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <t.icon className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-foreground">{t.label}</div>
+                        <div className="text-xs text-foreground/60">{t.sub}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Corporate CTA */}
+              <div className="relative overflow-hidden rounded-2xl bg-foreground p-6 text-white">
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/30 blur-2xl" />
+                <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-accent/30 blur-2xl" />
+                <div className="relative">
+                  <Building2 className="h-6 w-6 text-accent" />
+                  <h3 className="mt-4 font-display text-xl font-medium leading-tight">
+                    Partner with F.I.R.E.
+                  </h3>
+                  <p className="mt-2 text-sm text-white/75">
+                    Workplace giving, matching gifts, and program sponsorships for purpose-led companies.
+                  </p>
+                  <ul className="mt-4 space-y-2 text-sm">
+                    {["Custom impact reports", "Brand co-marketing", "Employee volunteer days"].map((i) => (
+                      <li key={i} className="flex items-center gap-2 text-white/85">
+                        <Check className="h-4 w-4 text-accent" />
+                        {i}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href="#contact" className={`mt-5 ${BTN.onDarkSolid}`}>
+                    Become a sponsor
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
