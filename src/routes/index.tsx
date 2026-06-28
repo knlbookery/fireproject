@@ -1069,6 +1069,10 @@ import tmobileLogo from "@/assets/tmobile.png.asset.json";
 import networkForGoodLogo from "@/assets/network-for-good.png.asset.json";
 import raytheonLogo from "@/assets/raytheon.png.asset.json";
 import getTheMillionsLogo from "@/assets/get-the-millions.png.asset.json";
+import dtrConsultingLogo from "@/assets/dtr-consulting.png.asset.json";
+import atolatseLogo from "@/assets/atolatse.png.asset.json";
+import usGhanaChamberLogo from "@/assets/us-ghana-chamber.png.asset.json";
+import ejConsultingLogo from "@/assets/ej-consulting.png.asset.json";
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
@@ -1084,10 +1088,12 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "Aulara", logo: clearbit("aulara.com") },
   { name: "Raytheon Technologies", logo: raytheonLogo.url },
   { name: "Get The Millions", logo: getTheMillionsLogo.url },
-  { name: "DTR Consulting", logo: clearbit("dtrconsulting.com") },
-  { name: "US-Ghana Chamber of Commerce", logo: clearbit("usghanachamber.org") },
-  { name: "EJ Consulting", logo: clearbit("ejconsultingfirm.com") },
+  { name: "DTR Consulting", logo: dtrConsultingLogo.url },
+  { name: "Atolatse", logo: atolatseLogo.url },
+  { name: "US-Ghana Chamber of Commerce", logo: usGhanaChamberLogo.url },
+  { name: "EJ Consulting", logo: ejConsultingLogo.url },
 ];
+
 
 
 function PartnerCard({ p }: { p: (typeof PARTNERS)[number] }) {
