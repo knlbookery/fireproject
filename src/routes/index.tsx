@@ -1064,6 +1064,11 @@ import exxonLogo from "@/assets/exxonmobil.png.asset.json";
 import macarthurLogo from "@/assets/macarthur.svg.asset.json";
 import urbanAffairsLogo from "@/assets/urban-affairs-coalition.png.asset.json";
 import feedChildrenLogo from "@/assets/feed-the-children.png.asset.json";
+import philadelphiaLogo from "@/assets/city-of-philadelphia.png.asset.json";
+import tmobileLogo from "@/assets/tmobile.png.asset.json";
+import networkForGoodLogo from "@/assets/network-for-good.png.asset.json";
+import raytheonLogo from "@/assets/raytheon.png.asset.json";
+import getTheMillionsLogo from "@/assets/get-the-millions.png.asset.json";
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
@@ -1073,16 +1078,17 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "The Mayor's Fund for Philadelphia", logo: clearbit("mayorsfundphila.org") },
   { name: "Urban Affairs Coalition", logo: urbanAffairsLogo.url },
   { name: "Feed The Children", logo: feedChildrenLogo.url },
-  { name: "City of Philadelphia", logo: clearbit("phila.gov") },
-  { name: "T-Mobile", logo: clearbit("t-mobile.com") },
-  { name: "Network for Good", logo: clearbit("networkforgood.com") },
+  { name: "City of Philadelphia", logo: philadelphiaLogo.url },
+  { name: "T-Mobile", logo: tmobileLogo.url },
+  { name: "Network for Good", logo: networkForGoodLogo.url },
   { name: "Aulara", logo: clearbit("aulara.com") },
-  { name: "Raytheon Technologies", logo: clearbit("rtx.com") },
-  { name: "Get The Millions", logo: clearbit("getthemillions.com") },
+  { name: "Raytheon Technologies", logo: raytheonLogo.url },
+  { name: "Get The Millions", logo: getTheMillionsLogo.url },
   { name: "DTR Consulting", logo: clearbit("dtrconsulting.com") },
   { name: "US-Ghana Chamber of Commerce", logo: clearbit("usghanachamber.org") },
   { name: "EJ Consulting", logo: clearbit("ejconsultingfirm.com") },
 ];
+
 
 function PartnerCard({ p }: { p: (typeof PARTNERS)[number] }) {
   const [failed, setFailed] = useState(false);
