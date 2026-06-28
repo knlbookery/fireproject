@@ -316,7 +316,65 @@ function Section({
   );
 }
 
+/* ---------------------- Capsule Collage ---------------------- */
+function CapsuleCollage() {
+  const capsules = [
+    { img: storyLeadership, left: "6%", top: "8%", rotate: -22, delay: "0s" },
+    { img: progYouth, left: "30%", top: "0%", rotate: -22, delay: "0.15s" },
+    { img: storyBasketball, left: "54%", top: "6%", rotate: -22, delay: "0.3s" },
+    { img: progSports, left: "18%", top: "38%", rotate: -22, delay: "0.45s" },
+    { img: volunteers, left: "42%", top: "32%", rotate: -22, delay: "0.6s" },
+  ];
+  const dots = [
+    { left: "2%", top: "20%", size: 14, color: "bg-primary" },
+    { left: "8%", top: "78%", size: 22, color: "bg-accent" },
+    { left: "92%", top: "12%", size: 18, color: "bg-accent" },
+    { left: "96%", top: "44%", size: 10, color: "bg-primary" },
+    { left: "88%", top: "82%", size: 26, color: "bg-primary" },
+    { left: "48%", top: "92%", size: 12, color: "bg-accent" },
+    { left: "70%", top: "88%", size: 8, color: "bg-emerald-500" },
+    { left: "0%", top: "50%", size: 8, color: "bg-rose-500" },
+    { left: "82%", top: "2%", size: 10, color: "bg-emerald-500" },
+  ];
+  return (
+    <div className="relative mx-auto aspect-[5/4] w-full max-w-[720px]">
+      {dots.map((d, i) => (
+        <span
+          key={`d-${i}`}
+          className={`absolute rounded-full ${d.color}`}
+          style={{
+            left: d.left,
+            top: d.top,
+            width: d.size,
+            height: d.size,
+          }}
+        />
+      ))}
+      {capsules.map((c, i) => (
+        <div
+          key={`c-${i}`}
+          className="absolute h-[58%] w-[22%] overflow-hidden rounded-full shadow-xl ring-1 ring-black/5"
+          style={{
+            left: c.left,
+            top: c.top,
+            transform: `rotate(${c.rotate}deg)`,
+          }}
+        >
+          <img
+            src={c.img}
+            alt=""
+            className="h-full w-full object-cover"
+            style={{ transform: `rotate(${-c.rotate}deg) scale(1.4)` }}
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ---------------------- Mission ---------------------- */
+
 function Mission() {
   return (
     <section id="mission" className="px-6 py-28 lg:px-10 lg:py-36">
@@ -342,15 +400,9 @@ function Mission() {
           </a>
         </div>
         <div className="lg:col-span-7">
-          <div className="overflow-hidden rounded-2xl">
-            <img
-              src={storyLeadership}
-              alt="A young leader speaking at a F.I.R.E. community event"
-              className="aspect-[5/4] w-full object-cover"
-              loading="lazy"
-            />
-          </div>
+          <CapsuleCollage />
         </div>
+
       </div>
     </section>
   );
