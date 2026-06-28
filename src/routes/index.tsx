@@ -1173,10 +1173,7 @@ function Partners() {
             Join a coalition of changemakers funding scholarships, building courts, and launching founders.
           </p>
         </div>
-        <a
-          href="#contact"
-          className="inline-flex items-center gap-2 rounded-[5px] bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        >
+        <a href="#contact" className={BTN.primary}>
           Partner with F.I.R.E. <ArrowRight className="h-4 w-4" />
         </a>
       </div>
