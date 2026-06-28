@@ -1088,7 +1088,7 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "City of Philadelphia", logo: cityPhiladelphiaV2Logo.url },
   { name: "T-Mobile", logo: tmobileLogo.url },
   { name: "Network for Good", logo: networkForGoodLogo.url },
-  { name: "Aulara", logo: clearbit("aulara.com") },
+  
   { name: "Raytheon Technologies", logo: raytheonLogo.url },
   { name: "Get The Millions", logo: getTheMillionsLogo.url },
   { name: "DTR Consulting", logo: dtrConsultingLogo.url },
