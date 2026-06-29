@@ -1663,19 +1663,20 @@ function Partners() {
         </div>
       </div>
 
-      <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-border pt-10 md:flex-row md:items-center">
+      <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl bg-gradient-to-br from-[#0b1230] via-[#0b1230] to-[#1a2a6b] px-8 py-10 text-white md:flex-row md:items-center md:px-12">
         <div>
-          <div className="font-display text-2xl font-medium tracking-tight">
+          <div className="font-display text-2xl font-medium tracking-tight text-white">
             Become a partner.
           </div>
-          <p className="mt-2 max-w-xl text-muted-foreground">
+          <p className="mt-2 max-w-xl text-white/70">
             Join a coalition of changemakers funding scholarships, building courts, and launching founders.
           </p>
         </div>
-        <a href="#contact" className={BTN.primary}>
+        <a href="#contact" className={`${BTN_BASE} bg-accent text-foreground hover:bg-accent/90`}>
           Partner with F.I.R.E. <ArrowRight className="h-4 w-4" />
         </a>
       </div>
+
 
       <style>{`
         @keyframes fire-marquee {
