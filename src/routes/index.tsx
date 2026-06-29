@@ -912,6 +912,8 @@ function Stories() {
     posRef.current = copyWidth;
     targetRef.current = copyWidth;
     applyArc();
+    // Kick off auto-scroll
+    ensureRaf();
     const onScroll = () => {
       if (modeRef.current === "idle" && !dragState.current.down) {
         posRef.current = el.scrollLeft;
