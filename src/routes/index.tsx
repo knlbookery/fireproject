@@ -427,7 +427,7 @@ function CapsuleCollage() {
 
 function Mission() {
   return (
-    <section id="mission" className="px-6 py-28 lg:px-10 lg:py-36">
+    <section id="mission" className="px-6 py-16 lg:px-10 lg:py-20">
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-20">
         <div className="lg:col-span-5">
           <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
