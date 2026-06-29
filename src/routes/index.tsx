@@ -775,9 +775,23 @@ function Stories() {
       }
     }
 
+    // Auto-scroll drift when idle, not paused, and no modal open
+    const now = performance.now();
+    const canAuto =
+      modeRef.current === "idle" &&
+      !reducedMotion &&
+      !openStoryRef.current &&
+      !hoverPausedRef.current &&
+      !dragState.current.down &&
+      now >= pauseUntilRef.current;
+    if (canAuto) {
+      posRef.current += AUTO_SPEED * frames;
+      targetRef.current = posRef.current;
+    }
+
     el.scrollLeft = posRef.current;
 
-    if (modeRef.current === "idle") {
+    if (modeRef.current === "idle" && !canAuto) {
       rafRef.current = null;
       return;
     }
