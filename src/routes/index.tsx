@@ -807,9 +807,17 @@ function Stories() {
     if (delta === 0) return;
     e.preventDefault();
     if (modeRef.current !== "tween") targetRef.current = posRef.current;
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (delta === 0) return;
+    e.preventDefault();
+    if (modeRef.current !== "tween") targetRef.current = posRef.current;
     targetRef.current += delta;
     modeRef.current = "tween";
     velocityRef.current = 0;
+    pauseUntilRef.current = performance.now() + 2500;
     ensureRaf();
   };
 
