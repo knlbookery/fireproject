@@ -1275,11 +1275,76 @@ function Events() {
 }
 
 /* ---------------------- Contact ---------------------- */
+const contactSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, { message: "Please enter your name" })
+    .max(100, { message: "Name must be less than 100 characters" }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Please enter a valid email address" })
+    .max(255, { message: "Email must be less than 255 characters" }),
+  organization: z
+    .string()
+    .trim()
+    .max(120, { message: "Organization must be less than 120 characters" })
+    .optional()
+    .or(z.literal("")),
+  message: z
+    .string()
+    .trim()
+    .min(10, { message: "Please share at least a sentence (10+ chars)" })
+    .max(1000, { message: "Message must be less than 1000 characters" }),
+});
+type ContactValues = z.infer<typeof contactSchema>;
+type ContactErrors = Partial<Record<keyof ContactValues, string>>;
+
 function Contact() {
+  const [values, setValues] = useState<ContactValues>({
+    name: "",
+    email: "",
+    organization: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState<ContactErrors>({});
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  const set = <K extends keyof ContactValues>(key: K, v: ContactValues[K]) => {
+    setValues((prev) => ({ ...prev, [key]: v }));
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+  };
+
+  const inputBase =
+    "mt-1.5 w-full rounded-lg border bg-white px-3 py-2.5 text-sm outline-none transition focus:border-primary";
+  const inputCls = (k: keyof ContactValues) =>
+    `${inputBase} ${errors[k] ? "border-red-500 focus:border-red-500" : "border-black/10"}`;
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = contactSchema.safeParse(values);
+    if (!parsed.success) {
+      const fieldErrors: ContactErrors = {};
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0] as keyof ContactValues | undefined;
+        if (k && !fieldErrors[k]) fieldErrors[k] = issue.message;
+      }
+      setErrors(fieldErrors);
+      setStatus("error");
+      return;
+    }
+    setErrors({});
+    setStatus("submitting");
+    // Simulate network call — wire to backend in next phase.
+    await new Promise((r) => setTimeout(r, 900));
+    setStatus("success");
+    setValues({ name: "", email: "", organization: "", message: "" });
+  };
+
   return (
     <section id="contact" className="px-6 py-6 lg:px-10 lg:py-8">
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-14 rounded-3xl bg-[#f3f5fb] px-6 py-12 lg:grid-cols-12 lg:gap-20 lg:px-12 lg:py-16">
-
         <div className="lg:col-span-5">
           <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
             Inquire
@@ -1287,62 +1352,131 @@ function Contact() {
           <h2 className="mt-4 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl">
             Let&apos;s start the conversation.
           </h2>
-          <p className="mt-5 max-w-md text-muted-foreground">
+          <p className="mt-5 max-w-md text-foreground/70">
             Interested in sponsoring an event, volunteering, partnering with F.I.R.E., or learning
             more? Send us a note and our team will follow up.
           </p>
-          <div className="mt-8 flex items-center gap-3 text-sm text-foreground/80">
+          <a
+            href="mailto:info@freeinspiration.org"
+            className="mt-8 inline-flex items-center gap-3 text-sm text-foreground/80 transition hover:text-primary"
+          >
             <Mail className="h-4 w-4 text-primary" />
             info@freeinspiration.org
-          </div>
+          </a>
         </div>
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={onSubmit}
+          noValidate
+          aria-busy={status === "submitting"}
           className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] sm:grid-cols-2 lg:col-span-7 lg:p-8"
         >
+          {status === "success" && (
+            <div
+              role="status"
+              className="sm:col-span-2 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
+            >
+              <Check className="mt-0.5 h-4 w-4 shrink-0" />
+              <div>
+                <div className="font-medium">Thanks — your message is in.</div>
+                <div className="text-emerald-700/80">
+                  We&apos;ll be in touch at the email you provided within 1–2 business days.
+                </div>
+              </div>
+            </div>
+          )}
+
           <label className="text-sm">
             <span className="text-foreground/80">Full name</span>
             <input
-              required
-              className="mt-1.5 w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-primary"
+              className={inputCls("name")}
               placeholder="Your name"
+              value={values.name}
+              onChange={(e) => set("name", e.target.value)}
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "contact-name-err" : undefined}
+              maxLength={100}
+              autoComplete="name"
             />
+            {errors.name && (
+              <span id="contact-name-err" className="mt-1 block text-xs text-red-600">
+                {errors.name}
+              </span>
+            )}
           </label>
           <label className="text-sm">
             <span className="text-foreground/80">Email address</span>
             <input
-              required
               type="email"
-              className="mt-1.5 w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-primary"
+              className={inputCls("email")}
               placeholder="you@example.com"
+              value={values.email}
+              onChange={(e) => set("email", e.target.value)}
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "contact-email-err" : undefined}
+              maxLength={255}
+              autoComplete="email"
             />
+            {errors.email && (
+              <span id="contact-email-err" className="mt-1 block text-xs text-red-600">
+                {errors.email}
+              </span>
+            )}
           </label>
           <label className="text-sm sm:col-span-2">
             <span className="text-foreground/80">Organization (optional)</span>
             <input
-              className="mt-1.5 w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-primary"
+              className={inputCls("organization")}
               placeholder="Company or organization"
+              value={values.organization}
+              onChange={(e) => set("organization", e.target.value)}
+              maxLength={120}
+              autoComplete="organization"
             />
+            {errors.organization && (
+              <span className="mt-1 block text-xs text-red-600">{errors.organization}</span>
+            )}
           </label>
           <label className="text-sm sm:col-span-2">
             <span className="text-foreground/80">How can we help?</span>
             <textarea
-              required
               rows={4}
-              className="mt-1.5 w-full rounded-lg border border-black/10 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-primary"
+              className={inputCls("message")}
               placeholder="Tell us about your interest — sponsorship, volunteering, partnership…"
+              value={values.message}
+              onChange={(e) => set("message", e.target.value)}
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? "contact-message-err" : undefined}
+              maxLength={1000}
             />
+            <div className="mt-1 flex items-center justify-between text-xs">
+              {errors.message ? (
+                <span id="contact-message-err" className="text-red-600">
+                  {errors.message}
+                </span>
+              ) : (
+                <span className="text-foreground/50">Minimum 10 characters</span>
+              )}
+              <span className="text-foreground/40">{values.message.length}/1000</span>
+            </div>
           </label>
-          <div className="sm:col-span-2">
-            <button type="submit" className={BTN.primary}>
-              Send Inquiry <ArrowRight className="h-4 w-4" />
+          <div className="sm:col-span-2 flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={status === "submitting"}
+              className={`${BTN.primary} disabled:cursor-not-allowed disabled:opacity-60`}
+            >
+              {status === "submitting" ? "Sending…" : (<>Send Inquiry <ArrowRight className="h-4 w-4" /></>)}
             </button>
+            {status === "error" && Object.keys(errors).length > 0 && (
+              <span className="text-xs text-red-600">Please fix the highlighted fields.</span>
+            )}
           </div>
         </form>
       </div>
     </section>
   );
 }
+
 
 /* ---------------------- Donate ---------------------- */
 function Donate() {
