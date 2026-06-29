@@ -1512,7 +1512,7 @@ function Contact() {
                   {errors.message}
                 </span>
               ) : (
-                <span className="text-foreground/50">Minimum 10 characters</span>
+                <span className="text-foreground/50">Minimum 20 characters</span>
               )}
               <span className="text-foreground/40">{values.message.length}/1000</span>
             </div>
