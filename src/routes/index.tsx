@@ -951,6 +951,9 @@ function Stories() {
     };
   }, [openStory]);
 
+  // Resume auto-scroll when modal closes
+  useEffect(() => { if (!openStory) ensureRaf(); }, [openStory]);
+
   return (
     <Section
       id="stories"
