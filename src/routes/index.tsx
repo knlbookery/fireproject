@@ -970,6 +970,8 @@ function Stories() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
+          onMouseEnter={() => { hoverPausedRef.current = true; }}
+          onMouseLeave={() => { hoverPausedRef.current = false; ensureRaf(); }}
           className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           role="region"
