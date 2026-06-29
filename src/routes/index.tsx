@@ -114,23 +114,23 @@ function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  const onHero = !scrolled && !open;
   return (
     <header
       className={`fixed top-0 z-50 w-full border-b transition-all duration-500 ${
-        scrolled || open
-          ? "translate-y-0 border-black/5 bg-white/85 opacity-100 backdrop-blur"
-          : "pointer-events-none -translate-y-full border-transparent bg-transparent opacity-0"
+        onHero
+          ? "border-transparent bg-transparent"
+          : "border-black/5 bg-white/85 backdrop-blur"
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
         <a href="#top" className="flex items-center gap-2.5">
-          <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
-          <span className="font-display text-lg font-semibold tracking-tight">F.I.R.E.</span>
-
+          <img src={fireLogo.url} alt="F.I.R.E. logo" className={`h-10 w-10 object-contain transition ${onHero ? "brightness-0 invert" : ""}`} />
+          <span className={`font-display text-lg font-semibold tracking-tight ${onHero ? "text-white" : ""}`}>F.I.R.E.</span>
         </a>
-        <nav className="hidden items-center gap-8 text-sm text-foreground/80 md:flex">
+        <nav className={`hidden items-center gap-8 text-sm md:flex ${onHero ? "text-white/90" : "text-foreground/80"}`}>
           {NAV.map((i) => (
-            <a key={i.href} href={i.href} className="transition-colors hover:text-primary">
+            <a key={i.href} href={i.href} className={`transition-colors ${onHero ? "hover:text-white" : "hover:text-primary"}`}>
               {i.label}
             </a>
           ))}
@@ -138,7 +138,7 @@ function Header() {
         <div className="flex items-center gap-2">
           <a
             href="#donate"
-            className={`hidden sm:inline-flex ${BTN.primary}`}
+            className={`hidden sm:inline-flex ${onHero ? `${BTN_BASE} bg-white text-primary hover:bg-white/90` : BTN.primary}`}
           >
             <Heart className="h-4 w-4" />
             Donate
@@ -146,12 +146,13 @@ function Header() {
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((o) => !o)}
-            className="grid h-9 w-9 place-items-center rounded-lg border border-black/10 md:hidden"
+            className={`grid h-9 w-9 place-items-center rounded-lg border md:hidden ${onHero ? "border-white/40 text-white" : "border-black/10"}`}
           >
             <span className="text-lg">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </div>
+
       {open && (
         <nav className="border-t border-black/5 bg-white px-6 py-3 md:hidden">
           {NAV.map((i) => (
