@@ -153,24 +153,45 @@ function Header() {
     return () => io.disconnect();
   }, []);
 
-  const onHero = false; // nav is always in solid/pill state for consistent visibility
+  const onHero = progress < 0.5;
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4 sm:px-4">
       <div
-        className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full border border-black/5 bg-white/85 px-4 py-2.5 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.18)] backdrop-blur-md backdrop-saturate-150 sm:px-5"
+        className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full px-4 py-2.5 transition-all duration-300 sm:px-5"
+        style={{
+          backgroundColor: `rgba(255,255,255,${progress * 0.85})`,
+          backdropFilter: progress > 0.05 ? "blur(12px) saturate(150%)" : "none",
+          WebkitBackdropFilter: progress > 0.05 ? "blur(12px) saturate(150%)" : "none",
+          borderColor: `rgba(0,0,0,${progress * 0.05})`,
+          borderWidth: 1,
+          borderStyle: "solid",
+          boxShadow: progress > 0.05 ? `0 8px 30px -12px rgba(15,23,42,${progress * 0.18})` : "none",
+        }}
       >
-        {/* Logo */}
-        <a href="#top" className="flex items-center gap-2.5">
+        {/* Logo — center on hero, slide to left on scroll */}
+        <a
+          href="#top"
+          className="flex items-center gap-2.5 transition-transform duration-500 ease-out"
+          style={{
+            transform: `translateX(calc((50vw - 100%) * ${1 - progress} * 0.5))`,
+          }}
+        >
           <img
             src={fireLogo.url}
             alt="F.I.R.E. logo"
             className="h-8 w-8 object-contain md:h-9 md:w-9"
           />
-          <span className="hidden font-display text-base font-semibold tracking-tight text-foreground sm:inline">
+          <span
+            className="hidden font-display text-base font-semibold tracking-tight transition-colors sm:inline"
+            style={{ color: onHero ? "#ffffff" : "hsl(var(--foreground))" }}
+          >
             F.I.R.E.
           </span>
         </a>
-        <nav className="hidden items-center gap-6 text-sm text-foreground/75 md:flex">
+        <nav
+          className="hidden items-center gap-6 text-sm transition-opacity duration-300 md:flex"
+          style={{ opacity: progress, pointerEvents: progress > 0.5 ? "auto" : "none" }}
+        >
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -179,7 +200,7 @@ function Header() {
                 key={i.href}
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative py-1 transition-colors hover:text-primary ${active ? "text-primary" : ""}`}
+                className={`relative py-1 transition-colors hover:text-primary ${active ? "text-primary" : "text-foreground/75"}`}
               >
                 {i.label}
                 <span
@@ -191,8 +212,11 @@ function Header() {
             );
           })}
         </nav>
-        <div className="flex items-center gap-2">
-          <a href="#donate" className={`hidden sm:inline-flex ${BTN.primary}`}>
+        <div
+          className="flex items-center gap-2 transition-opacity duration-300"
+          style={{ opacity: Math.max(progress, 0.001) }}
+        >
+          <a href="#donate" className={`hidden sm:inline-flex ${BTN.primary}`} style={{ pointerEvents: progress > 0.5 ? "auto" : "none" }}>
             <Heart className="h-4 w-4" />
             Donate
           </a>
