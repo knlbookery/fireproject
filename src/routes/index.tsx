@@ -1316,7 +1316,7 @@ const contactSchema = z.object({
   message: z
     .string()
     .trim()
-    .min(10, { message: "Please share at least a sentence (10+ chars)" })
+    .min(20, { message: "Please share at least 20 characters about your inquiry" })
     .max(1000, { message: "Message must be less than 1000 characters" }),
 });
 type ContactValues = z.infer<typeof contactSchema>;
