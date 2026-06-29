@@ -1531,6 +1531,49 @@ function Contact() {
           </div>
         </form>
       </div>
+
+      {/* Success / Error modals */}
+      <Dialog open={modal !== null} onOpenChange={(o) => !o && setModal(null)}>
+        <DialogContent>
+          {modal === "success" ? (
+            <>
+              <DialogHeader>
+                <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+                <DialogTitle className="text-center">Message sent</DialogTitle>
+                <DialogDescription className="text-center">
+                  Thanks for reaching out. Our team will follow up at the email you provided within
+                  1–2 business days.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="sm:justify-center">
+                <button className={BTN.primary} onClick={() => setModal(null)}>
+                  Close
+                </button>
+              </DialogFooter>
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-full bg-red-100 text-red-600">
+                  <AlertTriangle className="h-6 w-6" />
+                </div>
+                <DialogTitle className="text-center">Something went wrong</DialogTitle>
+                <DialogDescription className="text-center">
+                  {errorDetail ||
+                    "We couldn't send your message. Please check your connection and try again."}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="sm:justify-center">
+                <button className={BTN.primary} onClick={() => setModal(null)}>
+                  Try again
+                </button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
