@@ -107,33 +107,95 @@ const BTN = {
 /* ---------------------- Header ---------------------- */
 function Header() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0); // 0 = on hero, 1 = solid
+  const [activeId, setActiveId] = useState<string>("top");
+
+  // Smooth transparent -> solid transition based on scroll (first ~160px)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => {
+      const start = 40;
+      const end = 160;
+      const p = Math.min(1, Math.max(0, (window.scrollY - start) / (end - start)));
+      setProgress(p);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const onHero = !scrolled && !open;
+
+  // Active section tracking for nav indicator
+  useEffect(() => {
+    const ids = NAV.map((n) => n.href.replace("#", ""));
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el);
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActiveId(visible[0].target.id);
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  const onHero = progress < 0.5 && !open;
   return (
     <header
-      className={`fixed top-0 z-50 w-full border-b transition-all duration-500 ${
-        onHero
-          ? "border-transparent bg-transparent"
-          : "border-black/5 bg-white/85 backdrop-blur"
-      }`}
+      className="fixed top-0 z-50 w-full transition-colors duration-300"
+      style={{
+        backgroundColor: `rgba(255,255,255,${progress * 0.9})`,
+        backdropFilter: progress > 0.05 ? `saturate(140%) blur(${progress * 10}px)` : "none",
+        WebkitBackdropFilter: progress > 0.05 ? `saturate(140%) blur(${progress * 10}px)` : "none",
+        borderBottom: `1px solid rgba(0,0,0,${progress * 0.06})`,
+        boxShadow: progress > 0.6 ? "0 6px 24px -18px rgba(15,23,42,0.25)" : "none",
+      }}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
         <a href="#top" className="flex items-center gap-2.5">
-          <img src={fireLogo.url} alt="F.I.R.E. logo" className={`h-10 w-10 object-contain transition ${onHero ? "brightness-0 invert" : ""}`} />
-          <span className={`font-display text-lg font-semibold tracking-tight ${onHero ? "text-white" : ""}`}>F.I.R.E.</span>
+          <img
+            src={fireLogo.url}
+            alt="F.I.R.E. logo"
+            className={`h-10 w-10 object-contain transition duration-300 ${onHero ? "brightness-0 invert" : ""}`}
+          />
+          <span
+            className={`font-display text-lg font-semibold tracking-tight transition-colors duration-300 ${
+              onHero ? "text-white" : "text-foreground"
+            }`}
+          >
+            F.I.R.E.
+          </span>
         </a>
-        <nav className={`hidden items-center gap-8 text-sm md:flex ${onHero ? "text-white/90" : "text-foreground/80"}`}>
-          {NAV.map((i) => (
-            <a key={i.href} href={i.href} className={`transition-colors ${onHero ? "hover:text-white" : "hover:text-primary"}`}>
-              {i.label}
-            </a>
-          ))}
+        <nav
+          className={`hidden items-center gap-7 text-sm md:flex transition-colors duration-300 ${
+            onHero ? "text-white/90" : "text-foreground/75"
+          }`}
+        >
+          {NAV.map((i) => {
+            const id = i.href.replace("#", "");
+            const active = activeId === id;
+            return (
+              <a
+                key={i.href}
+                href={i.href}
+                aria-current={active ? "page" : undefined}
+                className={`relative py-1 transition-colors ${
+                  onHero ? "hover:text-white" : "hover:text-primary"
+                } ${active ? (onHero ? "text-white" : "text-primary") : ""}`}
+              >
+                {i.label}
+                <span
+                  className={`pointer-events-none absolute -bottom-0.5 left-0 h-[2px] rounded-full transition-all duration-300 ${
+                    onHero ? "bg-white" : "bg-primary"
+                  } ${active ? "w-full opacity-100" : "w-0 opacity-0"}`}
+                />
+              </a>
+            );
+          })}
         </nav>
         <div className="flex items-center gap-2">
           <a
@@ -145,26 +207,33 @@ function Header() {
           </a>
           <button
             aria-label="Toggle menu"
+            aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
-            className={`grid h-9 w-9 place-items-center rounded-lg border md:hidden ${onHero ? "border-white/40 text-white" : "border-black/10"}`}
+            className={`grid h-9 w-9 place-items-center rounded-lg border transition-colors md:hidden ${
+              onHero ? "border-white/40 text-white" : "border-black/10 text-foreground"
+            }`}
           >
-            <span className="text-lg">{open ? "×" : "≡"}</span>
+            <span className="text-lg leading-none">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </div>
 
       {open && (
         <nav className="border-t border-black/5 bg-white px-6 py-3 md:hidden">
-          {NAV.map((i) => (
-            <a
-              key={i.href}
-              href={i.href}
-              onClick={() => setOpen(false)}
-              className="block py-2 text-sm text-foreground/80"
-            >
-              {i.label}
-            </a>
-          ))}
+          {NAV.map((i) => {
+            const id = i.href.replace("#", "");
+            const active = activeId === id;
+            return (
+              <a
+                key={i.href}
+                href={i.href}
+                onClick={() => setOpen(false)}
+                className={`block py-2 text-sm ${active ? "text-primary font-medium" : "text-foreground/80"}`}
+              >
+                {i.label}
+              </a>
+            );
+          })}
           <a
             href="#donate"
             onClick={() => setOpen(false)}
