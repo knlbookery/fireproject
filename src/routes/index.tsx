@@ -156,25 +156,36 @@ function Header() {
         boxShadow: progress > 0.6 ? "0 6px 24px -18px rgba(15,23,42,0.25)" : "none",
       }}
     >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
-        <a href="#top" className="flex items-center gap-2.5">
+      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
+        {/* Logo — animates from centered (on hero) to left (on scroll) */}
+        <a
+          href="#top"
+          className="absolute top-1/2 left-6 z-10 flex items-center gap-2.5 lg:left-10"
+          style={{
+            transform: `translate(${(1 - progress) * 50}vw, -50%) translateX(${(1 - progress) * -50}%)`,
+            transition: "transform 200ms ease-out",
+          }}
+        >
           <img
             src={fireLogo.url}
             alt="F.I.R.E. logo"
-            className={`h-10 w-10 object-contain transition duration-300 ${onHero ? "brightness-0 invert" : ""}`}
+            className={`h-10 w-10 object-contain transition duration-300 md:h-10 md:w-10 ${onHero ? "brightness-0 invert" : ""}`}
           />
           <span
-            className={`font-display text-lg font-semibold tracking-tight transition-colors duration-300 ${
+            className={`hidden font-display text-lg font-semibold tracking-tight transition-colors duration-300 sm:inline ${
               onHero ? "text-white" : "text-foreground"
             }`}
           >
             F.I.R.E.
           </span>
         </a>
+        {/* Spacer to preserve layout height */}
+        <div className="h-10 w-10" aria-hidden="true" />
         <nav
-          className={`hidden items-center gap-7 text-sm md:flex transition-colors duration-300 ${
+          className={`hidden items-center gap-7 text-sm md:flex transition-all duration-300 ${
             onHero ? "text-white/90" : "text-foreground/75"
           }`}
+          style={{ opacity: Math.max(0, (progress - 0.25) / 0.75) }}
         >
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
