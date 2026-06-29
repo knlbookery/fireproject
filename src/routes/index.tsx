@@ -343,7 +343,7 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`px-6 py-16 lg:px-10 lg:py-20 ${className}`}>
+    <section id={id} className={`px-6 py-14 lg:px-10 lg:py-14 ${className}`}>
       <div className="mx-auto max-w-[1400px]">
         {(eyebrow || title) && (
           <div className="mb-16 max-w-3xl">
