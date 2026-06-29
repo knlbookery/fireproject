@@ -1665,39 +1665,78 @@ function Donate() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {tiers.map((t) => (
+              {/* Frequency toggle */}
+              <div className="mb-4 inline-flex rounded-full border border-foreground/10 bg-foreground/[0.03] p-1 text-xs font-medium">
+                {(["one-time", "monthly"] as const).map((f) => (
                   <button
-                    key={t.amount}
-                    className={`group relative rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-                      t.featured
-                        ? "border-primary bg-primary text-white shadow-md"
-                        : "border-foreground/10 bg-white text-foreground hover:border-primary/40"
+                    key={f}
+                    type="button"
+                    onClick={() => setFrequency(f)}
+                    className={`rounded-full px-4 py-1.5 capitalize transition ${
+                      frequency === f ? "bg-white text-foreground shadow-sm" : "text-foreground/60 hover:text-foreground"
                     }`}
                   >
-                    {t.featured && (
-                      <span className="absolute -top-2 right-3 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
-                        Most given
-                      </span>
-                    )}
-                    <div className="font-display text-2xl font-semibold">{t.amount}</div>
-                    <div
-                      className={`mt-0.5 text-[11px] font-medium uppercase tracking-wider ${
-                        t.featured ? "text-white/80" : "text-primary"
-                      }`}
-                    >
-                      {t.label}
-                    </div>
-                    <div
-                      className={`mt-3 text-xs leading-snug ${
-                        t.featured ? "text-white/90" : "text-foreground/70"
-                      }`}
-                    >
-                      {t.impact}
-                    </div>
+                    {f === "one-time" ? "One-time" : "Monthly"}
                   </button>
                 ))}
               </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {tiers.map((t, i) => {
+                  const isSelected = selectedIdx === i;
+                  return (
+                    <button
+                      key={t.label}
+                      type="button"
+                      onClick={() => { setSelectedIdx(i); setErrorMsg(""); }}
+                      aria-pressed={isSelected}
+                      className={`group relative rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+                        isSelected
+                          ? "border-primary bg-primary text-white shadow-md ring-2 ring-primary/30"
+                          : "border-foreground/10 bg-white text-foreground hover:border-primary/40"
+                      }`}
+                    >
+                      {t.featured && (
+                        <span className="absolute -top-2 right-3 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
+                          Most given
+                        </span>
+                      )}
+                      <div className="font-display text-2xl font-semibold">
+                        {t.amount === null ? "Custom" : `$${t.amount}`}
+                      </div>
+                      <div className={`mt-0.5 text-[11px] font-medium uppercase tracking-wider ${isSelected ? "text-white/80" : "text-primary"}`}>
+                        {t.label}
+                      </div>
+                      <div className={`mt-3 text-xs leading-snug ${isSelected ? "text-white/90" : "text-foreground/70"}`}>
+                        {t.impact}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom amount input */}
+              {isCustom && (
+                <div className="mt-4">
+                  <label htmlFor="custom-amount" className="mb-1 block text-xs font-medium text-foreground/70">
+                    Enter your gift amount (USD)
+                  </label>
+                  <div className="relative max-w-xs">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/60">$</span>
+                    <input
+                      id="custom-amount"
+                      type="number"
+                      min="1"
+                      step="1"
+                      inputMode="numeric"
+                      value={customAmount}
+                      onChange={(e) => { setCustomAmount(e.target.value); setErrorMsg(""); }}
+                      placeholder="250"
+                      className="w-full rounded-full border border-foreground/15 bg-white py-2 pl-7 pr-4 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Allocation bar */}
               <div className="mt-8 border-t border-foreground/10 pt-6">
@@ -1707,11 +1746,7 @@ function Donate() {
                 </div>
                 <div className="flex h-3 w-full overflow-hidden rounded-full bg-foreground/5">
                   {allocation.map((a) => (
-                    <div
-                      key={a.label}
-                      className={`${a.color} h-full`}
-                      style={{ width: `${a.pct}%` }}
-                    />
+                    <div key={a.label} className={`${a.color} h-full`} style={{ width: `${a.pct}%` }} />
                   ))}
                 </div>
                 <div className="mt-3 flex flex-wrap gap-4 text-xs text-foreground/70">
@@ -1725,11 +1760,18 @@ function Donate() {
                 </div>
               </div>
 
+              {errorMsg && (
+                <div className="mt-6 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  <span>{errorMsg}</span>
+                </div>
+              )}
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <a href="#" className={`flex-1 ${BTN.primary}`}>
+                <button type="button" onClick={handleDonate} className={`flex-1 ${BTN.primary}`}>
                   <Heart className="h-4 w-4" />
-                  Donate Now
-                </a>
+                  {amountValid ? `Donate $${effectiveAmount}${frequency === "monthly" ? "/mo" : ""}` : "Donate Now"}
+                </button>
                 <a href="#contact" className={`flex-1 ${BTN.secondary}`}>
                   <Building2 className="h-4 w-4" />
                   Corporate Giving
@@ -1740,6 +1782,7 @@ function Donate() {
               </p>
             </div>
           </div>
+
 
           {/* Right: trust + corporate */}
           <div className="lg:col-span-4">
