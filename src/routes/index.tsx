@@ -209,7 +209,7 @@ function Header() {
 
 
       {open && (
-        <nav className="border-t border-black/5 bg-white px-6 py-3 md:hidden">
+        <nav className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -233,6 +233,7 @@ function Header() {
           </a>
         </nav>
       )}
+
     </header>
   );
 }
