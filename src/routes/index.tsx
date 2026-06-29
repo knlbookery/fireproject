@@ -660,6 +660,9 @@ function Stories() {
   const modeRef = useRef<"idle" | "drag" | "momentum" | "tween">("idle");
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
+  const hoverPausedRef = useRef(false);
+  const pauseUntilRef = useRef(0);
+  const AUTO_SPEED = 0.35; // px per ~16ms frame
   const dragState = useRef({
     down: false,
     startX: 0,
