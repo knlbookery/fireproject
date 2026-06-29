@@ -1331,6 +1331,14 @@ function Contact() {
   });
   const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [modal, setModal] = useState<null | "success" | "error">(null);
+  const [errorDetail, setErrorDetail] = useState<string>("");
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const mountTimeRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    mountTimeRef.current = Date.now();
+  }, []);
 
   const set = <K extends keyof ContactValues>(key: K, v: ContactValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: v }));
@@ -1344,6 +1352,23 @@ function Contact() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Honeypot: silently "succeed" without doing anything if filled by a bot
+    if (honeypotRef.current && honeypotRef.current.value.trim() !== "") {
+      setStatus("success");
+      setValues({ name: "", email: "", organization: "", message: "" });
+      setModal("success");
+      return;
+    }
+
+    // Submit-time delay check: reject suspiciously fast submissions
+    if (Date.now() - mountTimeRef.current < 2000) {
+      setStatus("success");
+      setValues({ name: "", email: "", organization: "", message: "" });
+      setModal("success");
+      return;
+    }
+
     const parsed = contactSchema.safeParse(values);
     if (!parsed.success) {
       const fieldErrors: ContactErrors = {};
@@ -1357,10 +1382,17 @@ function Contact() {
     }
     setErrors({});
     setStatus("submitting");
-    // Simulate network call — wire to backend in next phase.
-    await new Promise((r) => setTimeout(r, 900));
-    setStatus("success");
-    setValues({ name: "", email: "", organization: "", message: "" });
+    try {
+      // Simulate network call — wire to backend in next phase.
+      await new Promise((r) => setTimeout(r, 900));
+      setStatus("success");
+      setValues({ name: "", email: "", organization: "", message: "" });
+      setModal("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorDetail(err instanceof Error ? err.message : "An unexpected error occurred.");
+      setModal("error");
+    }
   };
 
   return (
