@@ -1207,8 +1207,9 @@ function Events() {
 /* ---------------------- Contact ---------------------- */
 function Contact() {
   return (
-    <section id="contact" className="px-6 py-10 lg:px-10 lg:py-10">
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-20">
+    <section id="contact" className="px-6 py-6 lg:px-10 lg:py-8">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-14 rounded-3xl bg-[#f3f5fb] px-6 py-12 lg:grid-cols-12 lg:gap-20 lg:px-12 lg:py-16">
+
         <div className="lg:col-span-5">
           <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
             Inquire
