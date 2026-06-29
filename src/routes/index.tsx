@@ -2,6 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import {
   ArrowRight,
   Users,
   Globe2,
@@ -156,25 +165,36 @@ function Header() {
         boxShadow: progress > 0.6 ? "0 6px 24px -18px rgba(15,23,42,0.25)" : "none",
       }}
     >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
-        <a href="#top" className="flex items-center gap-2.5">
+      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
+        {/* Logo — animates from centered (on hero) to left (on scroll) */}
+        <a
+          href="#top"
+          className="absolute top-1/2 left-6 z-10 flex items-center gap-2.5 lg:left-10"
+          style={{
+            transform: `translate(${(1 - progress) * 50}vw, -50%) translateX(${(1 - progress) * -50}%)`,
+            transition: "transform 200ms ease-out",
+          }}
+        >
           <img
             src={fireLogo.url}
             alt="F.I.R.E. logo"
-            className={`h-10 w-10 object-contain transition duration-300 ${onHero ? "brightness-0 invert" : ""}`}
+            className={`h-10 w-10 object-contain transition duration-300 md:h-10 md:w-10 ${onHero ? "brightness-0 invert" : ""}`}
           />
           <span
-            className={`font-display text-lg font-semibold tracking-tight transition-colors duration-300 ${
+            className={`hidden font-display text-lg font-semibold tracking-tight transition-colors duration-300 sm:inline ${
               onHero ? "text-white" : "text-foreground"
             }`}
           >
             F.I.R.E.
           </span>
         </a>
+        {/* Spacer to preserve layout height */}
+        <div className="h-10 w-10" aria-hidden="true" />
         <nav
-          className={`hidden items-center gap-7 text-sm md:flex transition-colors duration-300 ${
+          className={`hidden items-center gap-7 text-sm md:flex transition-all duration-300 ${
             onHero ? "text-white/90" : "text-foreground/75"
           }`}
+          style={{ opacity: Math.max(0, (progress - 0.25) / 0.75) }}
         >
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
@@ -1296,7 +1316,7 @@ const contactSchema = z.object({
   message: z
     .string()
     .trim()
-    .min(10, { message: "Please share at least a sentence (10+ chars)" })
+    .min(20, { message: "Please share at least 20 characters about your inquiry" })
     .max(1000, { message: "Message must be less than 1000 characters" }),
 });
 type ContactValues = z.infer<typeof contactSchema>;
@@ -1311,6 +1331,14 @@ function Contact() {
   });
   const [errors, setErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [modal, setModal] = useState<null | "success" | "error">(null);
+  const [errorDetail, setErrorDetail] = useState<string>("");
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const mountTimeRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    mountTimeRef.current = Date.now();
+  }, []);
 
   const set = <K extends keyof ContactValues>(key: K, v: ContactValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: v }));
@@ -1324,6 +1352,23 @@ function Contact() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Honeypot: silently "succeed" without doing anything if filled by a bot
+    if (honeypotRef.current && honeypotRef.current.value.trim() !== "") {
+      setStatus("success");
+      setValues({ name: "", email: "", organization: "", message: "" });
+      setModal("success");
+      return;
+    }
+
+    // Submit-time delay check: reject suspiciously fast submissions
+    if (Date.now() - mountTimeRef.current < 2000) {
+      setStatus("success");
+      setValues({ name: "", email: "", organization: "", message: "" });
+      setModal("success");
+      return;
+    }
+
     const parsed = contactSchema.safeParse(values);
     if (!parsed.success) {
       const fieldErrors: ContactErrors = {};
@@ -1337,10 +1382,17 @@ function Contact() {
     }
     setErrors({});
     setStatus("submitting");
-    // Simulate network call — wire to backend in next phase.
-    await new Promise((r) => setTimeout(r, 900));
-    setStatus("success");
-    setValues({ name: "", email: "", organization: "", message: "" });
+    try {
+      // Simulate network call — wire to backend in next phase.
+      await new Promise((r) => setTimeout(r, 900));
+      setStatus("success");
+      setValues({ name: "", email: "", organization: "", message: "" });
+      setModal("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorDetail(err instanceof Error ? err.message : "An unexpected error occurred.");
+      setModal("error");
+    }
   };
 
   return (
@@ -1371,20 +1423,25 @@ function Contact() {
           aria-busy={status === "submitting"}
           className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] sm:grid-cols-2 lg:col-span-7 lg:p-8"
         >
-          {status === "success" && (
-            <div
-              role="status"
-              className="sm:col-span-2 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
-            >
-              <Check className="mt-0.5 h-4 w-4 shrink-0" />
-              <div>
-                <div className="font-medium">Thanks — your message is in.</div>
-                <div className="text-emerald-700/80">
-                  We&apos;ll be in touch at the email you provided within 1–2 business days.
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Honeypot field — hidden from real users, catches bots */}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
+          >
+            <label>
+              Website
+              <input
+                ref={honeypotRef}
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue=""
+              />
+            </label>
+          </div>
+
+
 
           <label className="text-sm">
             <span className="text-foreground/80">Full name</span>
@@ -1455,7 +1512,7 @@ function Contact() {
                   {errors.message}
                 </span>
               ) : (
-                <span className="text-foreground/50">Minimum 10 characters</span>
+                <span className="text-foreground/50">Minimum 20 characters</span>
               )}
               <span className="text-foreground/40">{values.message.length}/1000</span>
             </div>
@@ -1474,6 +1531,49 @@ function Contact() {
           </div>
         </form>
       </div>
+
+      {/* Success / Error modals */}
+      <Dialog open={modal !== null} onOpenChange={(o) => !o && setModal(null)}>
+        <DialogContent>
+          {modal === "success" ? (
+            <>
+              <DialogHeader>
+                <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-full bg-emerald-100 text-emerald-600">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+                <DialogTitle className="text-center">Message sent</DialogTitle>
+                <DialogDescription className="text-center">
+                  Thanks for reaching out. Our team will follow up at the email you provided within
+                  1–2 business days.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="sm:justify-center">
+                <button className={BTN.primary} onClick={() => setModal(null)}>
+                  Close
+                </button>
+              </DialogFooter>
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-full bg-red-100 text-red-600">
+                  <AlertTriangle className="h-6 w-6" />
+                </div>
+                <DialogTitle className="text-center">Something went wrong</DialogTitle>
+                <DialogDescription className="text-center">
+                  {errorDetail ||
+                    "We couldn't send your message. Please check your connection and try again."}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="sm:justify-center">
+                <button className={BTN.primary} onClick={() => setModal(null)}>
+                  Try again
+                </button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
