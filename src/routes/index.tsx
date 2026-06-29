@@ -660,6 +660,9 @@ function Stories() {
   const modeRef = useRef<"idle" | "drag" | "momentum" | "tween">("idle");
   const rafRef = useRef<number | null>(null);
   const lastTsRef = useRef<number>(0);
+  const hoverPausedRef = useRef(false);
+  const pauseUntilRef = useRef(0);
+  const AUTO_SPEED = 0.35; // px per ~16ms frame
   const dragState = useRef({
     down: false,
     startX: 0,
@@ -673,6 +676,8 @@ function Stories() {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [openStory, setOpenStory] = useState<Story | null>(null);
+  const openStoryRef = useRef<Story | null>(null);
+  useEffect(() => { openStoryRef.current = openStory; }, [openStory]);
 
   // Detect prefers-reduced-motion
   useEffect(() => {
@@ -772,9 +777,23 @@ function Stories() {
       }
     }
 
+    // Auto-scroll drift when idle, not paused, and no modal open
+    const now = performance.now();
+    const canAuto =
+      modeRef.current === "idle" &&
+      !reducedMotion &&
+      !openStoryRef.current &&
+      !hoverPausedRef.current &&
+      !dragState.current.down &&
+      now >= pauseUntilRef.current;
+    if (canAuto) {
+      posRef.current += AUTO_SPEED * frames;
+      targetRef.current = posRef.current;
+    }
+
     el.scrollLeft = posRef.current;
 
-    if (modeRef.current === "idle") {
+    if (modeRef.current === "idle" && !canAuto) {
       rafRef.current = null;
       return;
     }
@@ -791,6 +810,7 @@ function Stories() {
     targetRef.current += delta;
     modeRef.current = "tween";
     velocityRef.current = 0;
+    pauseUntilRef.current = performance.now() + 2500;
     ensureRaf();
   };
 
@@ -892,6 +912,8 @@ function Stories() {
     posRef.current = copyWidth;
     targetRef.current = copyWidth;
     applyArc();
+    // Kick off auto-scroll
+    ensureRaf();
     const onScroll = () => {
       if (modeRef.current === "idle" && !dragState.current.down) {
         posRef.current = el.scrollLeft;
@@ -929,6 +951,9 @@ function Stories() {
     };
   }, [openStory]);
 
+  // Resume auto-scroll when modal closes
+  useEffect(() => { if (!openStory) ensureRaf(); }, [openStory]);
+
   return (
     <Section
       id="stories"
@@ -948,6 +973,8 @@ function Stories() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
+          onMouseEnter={() => { hoverPausedRef.current = true; }}
+          onMouseLeave={() => { hoverPausedRef.current = false; ensureRaf(); }}
           className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           role="region"
