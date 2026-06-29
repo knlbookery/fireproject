@@ -1582,28 +1582,31 @@ function Contact() {
 /* ---------------------- Donate ---------------------- */
 function Donate() {
   const tiers = [
-    {
-      amount: "$25",
-      label: "Spark",
-      impact: "Provides school supplies for one student for a month.",
-    },
-    {
-      amount: "$50",
-      label: "Kindle",
-      impact: "Funds a week of after-school mentorship for a youth athlete.",
-    },
-    {
-      amount: "$100",
-      label: "Ignite",
-      impact: "Sponsors entrepreneurship training for a community member.",
-      featured: true,
-    },
-    {
-      amount: "Custom",
-      label: "Blaze",
-      impact: "Choose your own gift — every dollar reaches the field.",
-    },
+    { amount: 25, label: "Spark", impact: "Provides school supplies for one student for a month." },
+    { amount: 50, label: "Kindle", impact: "Funds a week of after-school mentorship for a youth athlete." },
+    { amount: 100, label: "Ignite", impact: "Sponsors entrepreneurship training for a community member.", featured: true },
+    { amount: null as number | null, label: "Blaze", impact: "Choose your own gift — every dollar reaches the field." },
   ];
+
+  const [selectedIdx, setSelectedIdx] = useState<number>(2);
+  const [customAmount, setCustomAmount] = useState<string>("");
+  const [frequency, setFrequency] = useState<"one-time" | "monthly">("one-time");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
+  const selected = tiers[selectedIdx];
+  const isCustom = selected.amount === null;
+  const effectiveAmount = isCustom ? Number(customAmount) : (selected.amount as number);
+  const amountValid = Number.isFinite(effectiveAmount) && effectiveAmount >= 1;
+
+  const handleDonate = () => {
+    setErrorMsg("");
+    if (!amountValid) {
+      setErrorMsg(isCustom ? "Enter a custom amount of $1 or more." : "Please select a gift amount.");
+      return;
+    }
+    setConfirmOpen(true);
+  };
 
   const allocation = [
     { label: "Programs", pct: 82, color: "bg-primary" },
@@ -1617,6 +1620,7 @@ function Donate() {
     { icon: Lock, label: "Secure Checkout", sub: "256-bit SSL · PCI compliant" },
     { icon: Award, label: "Audited Annually", sub: "Independent CPA review" },
   ];
+
 
   return (
     <section id="donate" className="px-6 py-10 lg:px-10 lg:py-10">
