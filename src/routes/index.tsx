@@ -676,6 +676,8 @@ function Stories() {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [openStory, setOpenStory] = useState<Story | null>(null);
+  const openStoryRef = useRef<Story | null>(null);
+  useEffect(() => { openStoryRef.current = openStory; }, [openStory]);
 
   // Detect prefers-reduced-motion
   useEffect(() => {
