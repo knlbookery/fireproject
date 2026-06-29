@@ -1228,7 +1228,7 @@ function Contact() {
         </div>
         <form
           onSubmit={(e) => e.preventDefault()}
-          className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 sm:grid-cols-2 lg:col-span-7 lg:p-8"
+          className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] sm:grid-cols-2 lg:col-span-7 lg:p-8"
         >
           <label className="text-sm">
             <span className="text-foreground/80">Full name</span>
