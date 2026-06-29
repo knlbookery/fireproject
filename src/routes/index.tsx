@@ -1835,9 +1835,54 @@ function Donate() {
           </div>
         </div>
       </div>
+
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-display text-2xl">
+              <Heart className="h-5 w-5 text-primary" />
+              Confirm your gift
+            </DialogTitle>
+            <DialogDescription>
+              You're about to give a {frequency === "monthly" ? "monthly recurring" : "one-time"} gift to F.I.R.E.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="rounded-xl border border-foreground/10 bg-foreground/[0.03] p-4">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs uppercase tracking-wider text-foreground/60">{selected.label}</span>
+              <span className="font-display text-3xl font-semibold text-foreground">
+                ${effectiveAmount}{frequency === "monthly" && <span className="text-base text-foreground/60">/mo</span>}
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-foreground/70">{selected.impact}</p>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => setConfirmOpen(false)}
+              className={`flex-1 ${BTN.secondary}`}
+            >
+              Cancel
+            </button>
+            <a
+              href={`https://www.networkforgood.com/donation/MakeDonation10.aspx?ORGID2=&amount=${effectiveAmount}&frequency=${frequency}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex-1 ${BTN.primary}`}
+            >
+              Continue to checkout
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+          <p className="text-center text-[11px] text-foreground/55">
+            Secure checkout · Tax-deductible receipt emailed instantly.
+          </p>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
+
 
 /* ---------------------- Volunteer ---------------------- */
 function Volunteer() {
