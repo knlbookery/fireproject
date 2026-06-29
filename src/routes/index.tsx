@@ -1322,7 +1322,7 @@ function Contact() {
   const inputCls = (k: keyof ContactValues) =>
     `${inputBase} ${errors[k] ? "border-red-500 focus:border-red-500" : "border-black/10"}`;
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const parsed = contactSchema.safeParse(values);
     if (!parsed.success) {
