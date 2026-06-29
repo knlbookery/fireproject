@@ -1207,8 +1207,9 @@ function Events() {
 /* ---------------------- Contact ---------------------- */
 function Contact() {
   return (
-    <section id="contact" className="px-6 py-10 lg:px-10 lg:py-10">
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-20">
+    <section id="contact" className="px-6 py-6 lg:px-10 lg:py-8">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-14 rounded-3xl bg-[#f3f5fb] px-6 py-12 lg:grid-cols-12 lg:gap-20 lg:px-12 lg:py-16">
+
         <div className="lg:col-span-5">
           <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
             Inquire
@@ -1227,7 +1228,7 @@ function Contact() {
         </div>
         <form
           onSubmit={(e) => e.preventDefault()}
-          className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 sm:grid-cols-2 lg:col-span-7 lg:p-8"
+          className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] sm:grid-cols-2 lg:col-span-7 lg:p-8"
         >
           <label className="text-sm">
             <span className="text-foreground/80">Full name</span>
