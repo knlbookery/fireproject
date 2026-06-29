@@ -153,49 +153,24 @@ function Header() {
     return () => io.disconnect();
   }, []);
 
-  const onHero = progress < 0.5 && !open;
+  const onHero = false; // nav is always in solid/pill state for consistent visibility
   return (
-    <header
-      className="fixed top-0 z-50 w-full transition-colors duration-300"
-      style={{
-        backgroundColor: `rgba(255,255,255,${progress * 0.9})`,
-        backdropFilter: progress > 0.05 ? `saturate(140%) blur(${progress * 10}px)` : "none",
-        WebkitBackdropFilter: progress > 0.05 ? `saturate(140%) blur(${progress * 10}px)` : "none",
-        borderBottom: `1px solid rgba(0,0,0,${progress * 0.06})`,
-        boxShadow: progress > 0.6 ? "0 6px 24px -18px rgba(15,23,42,0.25)" : "none",
-      }}
-    >
-      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 lg:px-10">
-        {/* Logo — animates from centered (on hero) to left (on scroll) */}
-        <a
-          href="#top"
-          className="absolute top-1/2 left-6 z-10 flex items-center gap-2.5 lg:left-10"
-          style={{
-            transform: `translate(${(1 - progress) * 50}vw, -50%) translateX(${(1 - progress) * -50}%)`,
-            transition: "transform 200ms ease-out",
-          }}
-        >
+    <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4 sm:px-4">
+      <div
+        className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full border border-black/5 bg-white/85 px-4 py-2.5 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.18)] backdrop-blur-md backdrop-saturate-150 sm:px-5"
+      >
+        {/* Logo */}
+        <a href="#top" className="flex items-center gap-2.5">
           <img
             src={fireLogo.url}
             alt="F.I.R.E. logo"
-            className={`h-10 w-10 object-contain transition duration-300 md:h-10 md:w-10 ${onHero ? "brightness-0 invert" : ""}`}
+            className="h-8 w-8 object-contain md:h-9 md:w-9"
           />
-          <span
-            className={`hidden font-display text-lg font-semibold tracking-tight transition-colors duration-300 sm:inline ${
-              onHero ? "text-white" : "text-foreground"
-            }`}
-          >
+          <span className="hidden font-display text-base font-semibold tracking-tight text-foreground sm:inline">
             F.I.R.E.
           </span>
         </a>
-        {/* Spacer to preserve layout height */}
-        <div className="h-10 w-10" aria-hidden="true" />
-        <nav
-          className={`hidden items-center gap-7 text-sm md:flex transition-all duration-300 ${
-            onHero ? "text-white/90" : "text-foreground/75"
-          }`}
-          style={{ opacity: Math.max(0, (progress - 0.25) / 0.75) }}
-        >
+        <nav className="hidden items-center gap-6 text-sm text-foreground/75 md:flex">
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -204,25 +179,20 @@ function Header() {
                 key={i.href}
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative py-1 transition-colors ${
-                  onHero ? "hover:text-white" : "hover:text-primary"
-                } ${active ? (onHero ? "text-white" : "text-primary") : ""}`}
+                className={`relative py-1 transition-colors hover:text-primary ${active ? "text-primary" : ""}`}
               >
                 {i.label}
                 <span
-                  className={`pointer-events-none absolute -bottom-0.5 left-0 h-[2px] rounded-full transition-all duration-300 ${
-                    onHero ? "bg-white" : "bg-primary"
-                  } ${active ? "w-full opacity-100" : "w-0 opacity-0"}`}
+                  className={`pointer-events-none absolute -bottom-0.5 left-0 h-[2px] rounded-full bg-primary transition-all duration-300 ${
+                    active ? "w-full opacity-100" : "w-0 opacity-0"
+                  }`}
                 />
               </a>
             );
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <a
-            href="#donate"
-            className={`hidden sm:inline-flex ${onHero ? `${BTN_BASE} bg-white text-primary hover:bg-white/90` : BTN.primary}`}
-          >
+          <a href="#donate" className={`hidden sm:inline-flex ${BTN.primary}`}>
             <Heart className="h-4 w-4" />
             Donate
           </a>
@@ -230,17 +200,16 @@ function Header() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((o) => !o)}
-            className={`grid h-9 w-9 place-items-center rounded-lg border transition-colors md:hidden ${
-              onHero ? "border-white/40 text-white" : "border-black/10 text-foreground"
-            }`}
+            className="grid h-9 w-9 place-items-center rounded-full border border-black/10 text-foreground transition-colors md:hidden"
           >
             <span className="text-lg leading-none">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </div>
 
+
       {open && (
-        <nav className="border-t border-black/5 bg-white px-6 py-3 md:hidden">
+        <nav className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -264,6 +233,7 @@ function Header() {
           </a>
         </nav>
       )}
+
     </header>
   );
 }
