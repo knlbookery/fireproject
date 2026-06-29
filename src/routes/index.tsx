@@ -1423,20 +1423,25 @@ function Contact() {
           aria-busy={status === "submitting"}
           className="grid grid-cols-1 gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] sm:grid-cols-2 lg:col-span-7 lg:p-8"
         >
-          {status === "success" && (
-            <div
-              role="status"
-              className="sm:col-span-2 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
-            >
-              <Check className="mt-0.5 h-4 w-4 shrink-0" />
-              <div>
-                <div className="font-medium">Thanks — your message is in.</div>
-                <div className="text-emerald-700/80">
-                  We&apos;ll be in touch at the email you provided within 1–2 business days.
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Honeypot field — hidden from real users, catches bots */}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
+          >
+            <label>
+              Website
+              <input
+                ref={honeypotRef}
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue=""
+              />
+            </label>
+          </div>
+
+
 
           <label className="text-sm">
             <span className="text-foreground/80">Full name</span>
