@@ -472,25 +472,25 @@ function Section({
 /* ---------------------- Capsule Collage ---------------------- */
 function CapsuleCollage() {
   const capsules = [
-    { img: storyLeadership, left: "6%", top: "8%", rotate: -22, delay: "0s" },
-    { img: progYouth, left: "30%", top: "0%", rotate: -22, delay: "0.15s" },
-    { img: storyBasketball, left: "54%", top: "6%", rotate: -22, delay: "0.3s" },
-    { img: progSports, left: "18%", top: "38%", rotate: -22, delay: "0.45s" },
-    { img: volunteers, left: "42%", top: "32%", rotate: -22, delay: "0.6s" },
+    { img: storyLeadership, left: "3%", top: "6%", rotate: -22, delay: "0s" },
+    { img: progYouth, left: "32%", top: "-2%", rotate: -22, delay: "0.15s" },
+    { img: storyBasketball, left: "61%", top: "6%", rotate: -22, delay: "0.3s" },
+    { img: progSports, left: "17%", top: "44%", rotate: -22, delay: "0.45s" },
+    { img: volunteers, left: "47%", top: "40%", rotate: -22, delay: "0.6s" },
   ];
   const dots = [
-    { left: "2%", top: "20%", size: 14, color: "bg-primary" },
-    { left: "8%", top: "78%", size: 22, color: "bg-accent" },
-    { left: "92%", top: "12%", size: 18, color: "bg-accent" },
-    { left: "96%", top: "44%", size: 10, color: "bg-primary" },
-    { left: "88%", top: "82%", size: 26, color: "bg-primary" },
-    { left: "48%", top: "92%", size: 12, color: "bg-accent" },
-    { left: "70%", top: "88%", size: 8, color: "bg-emerald-500" },
-    { left: "0%", top: "50%", size: 8, color: "bg-rose-500" },
-    { left: "82%", top: "2%", size: 10, color: "bg-emerald-500" },
+    { left: "2%", top: "22%", size: 14, color: "bg-primary" },
+    { left: "6%", top: "82%", size: 22, color: "bg-accent" },
+    { left: "94%", top: "12%", size: 18, color: "bg-accent" },
+    { left: "97%", top: "48%", size: 10, color: "bg-primary" },
+    { left: "90%", top: "86%", size: 26, color: "bg-primary" },
+    { left: "50%", top: "96%", size: 12, color: "bg-accent" },
+    { left: "74%", top: "92%", size: 8, color: "bg-emerald-500" },
+    { left: "0%", top: "52%", size: 8, color: "bg-rose-500" },
+    { left: "84%", top: "0%", size: 10, color: "bg-emerald-500" },
   ];
   return (
-    <div className="relative mx-auto aspect-[5/4] w-full max-w-[720px]">
+    <div className="relative mx-auto aspect-[5/4] w-full max-w-[760px]">
       {dots.map((d, i) => (
         <span
           key={`d-${i}`}
@@ -506,7 +506,7 @@ function CapsuleCollage() {
       {capsules.map((c, i) => (
         <div
           key={`c-${i}`}
-          className="absolute h-[58%] w-[22%] overflow-hidden rounded-full shadow-xl ring-1 ring-black/5"
+          className="absolute h-[54%] w-[20%] overflow-hidden rounded-full shadow-xl ring-1 ring-black/5"
           style={{
             left: c.left,
             top: c.top,
