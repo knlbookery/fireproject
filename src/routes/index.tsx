@@ -173,6 +173,7 @@ function Header() {
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4 sm:px-4">
       <div
+        ref={headerRef}
         className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full px-4 py-2.5 transition-all duration-300 sm:px-5"
         style={{
           backgroundColor: `rgba(255,255,255,${progress * 0.85})`,
@@ -186,10 +187,11 @@ function Header() {
       >
         {/* Logo — center on hero, slide to left on scroll */}
         <a
+          ref={logoRef}
           href="#top"
           className="flex items-center gap-2.5 transition-transform duration-500 ease-out"
           style={{
-            transform: `translateX(calc((50vw - 100%) * ${1 - progress} * 0.5))`,
+            transform: `translateX(${logoOffset * (1 - progress)}px)`,
           }}
         >
           <img
