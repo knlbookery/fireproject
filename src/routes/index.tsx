@@ -245,12 +245,13 @@ function Header() {
             Donate
           </a>
           <button
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-black/10 text-foreground transition-colors md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full border border-black/10 text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
           >
-            <span className="text-lg leading-none">{open ? "×" : "≡"}</span>
+            <span className="text-lg leading-none" aria-hidden="true">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </div>
