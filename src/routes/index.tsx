@@ -220,7 +220,7 @@ function Header() {
                 key={i.href}
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative py-1 transition-colors hover:text-primary ${active ? "text-primary" : "text-foreground/75"}`}
+                className={`relative py-1 transition-colors rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:text-primary ${active ? "text-primary" : "text-foreground/75"}`}
               >
                 {i.label}
                 <span
