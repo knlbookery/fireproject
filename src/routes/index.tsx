@@ -119,6 +119,9 @@ function Header() {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0); // 0 = on hero, 1 = solid
   const [activeId, setActiveId] = useState<string>("top");
+  const [logoOffset, setLogoOffset] = useState(0);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
 
   // Smooth transparent -> solid transition based on scroll (first ~160px)
   useEffect(() => {
@@ -131,6 +134,19 @@ function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Measure logo offset so it can animate to true viewport center on hero
+  useEffect(() => {
+    const measure = () => {
+      if (!headerRef.current || !logoRef.current) return;
+      const headerLeft = headerRef.current.getBoundingClientRect().left;
+      const restCenter = headerLeft + logoRef.current.offsetLeft + logoRef.current.offsetWidth / 2;
+      setLogoOffset(window.innerWidth / 2 - restCenter);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   // Active section tracking for nav indicator
@@ -157,6 +173,7 @@ function Header() {
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4 sm:px-4">
       <div
+        ref={headerRef}
         className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full px-4 py-2.5 transition-all duration-300 sm:px-5"
         style={{
           backgroundColor: `rgba(255,255,255,${progress * 0.85})`,
@@ -170,10 +187,11 @@ function Header() {
       >
         {/* Logo — center on hero, slide to left on scroll */}
         <a
+          ref={logoRef}
           href="#top"
           className="flex items-center gap-2.5 transition-transform duration-500 ease-out"
           style={{
-            transform: `translateX(calc((50vw - 100%) * ${1 - progress} * 0.5))`,
+            transform: `translateX(${logoOffset * (1 - progress)}px)`,
           }}
         >
           <img
@@ -454,25 +472,25 @@ function Section({
 /* ---------------------- Capsule Collage ---------------------- */
 function CapsuleCollage() {
   const capsules = [
-    { img: storyLeadership, left: "6%", top: "8%", rotate: -22, delay: "0s" },
-    { img: progYouth, left: "30%", top: "0%", rotate: -22, delay: "0.15s" },
-    { img: storyBasketball, left: "54%", top: "6%", rotate: -22, delay: "0.3s" },
-    { img: progSports, left: "18%", top: "38%", rotate: -22, delay: "0.45s" },
-    { img: volunteers, left: "42%", top: "32%", rotate: -22, delay: "0.6s" },
+    { img: storyLeadership, left: "3%", top: "6%", rotate: -22, delay: "0s" },
+    { img: progYouth, left: "32%", top: "-2%", rotate: -22, delay: "0.15s" },
+    { img: storyBasketball, left: "61%", top: "6%", rotate: -22, delay: "0.3s" },
+    { img: progSports, left: "17%", top: "44%", rotate: -22, delay: "0.45s" },
+    { img: volunteers, left: "47%", top: "40%", rotate: -22, delay: "0.6s" },
   ];
   const dots = [
-    { left: "2%", top: "20%", size: 14, color: "bg-primary" },
-    { left: "8%", top: "78%", size: 22, color: "bg-accent" },
-    { left: "92%", top: "12%", size: 18, color: "bg-accent" },
-    { left: "96%", top: "44%", size: 10, color: "bg-primary" },
-    { left: "88%", top: "82%", size: 26, color: "bg-primary" },
-    { left: "48%", top: "92%", size: 12, color: "bg-accent" },
-    { left: "70%", top: "88%", size: 8, color: "bg-emerald-500" },
-    { left: "0%", top: "50%", size: 8, color: "bg-rose-500" },
-    { left: "82%", top: "2%", size: 10, color: "bg-emerald-500" },
+    { left: "2%", top: "22%", size: 14, color: "bg-primary" },
+    { left: "6%", top: "82%", size: 22, color: "bg-accent" },
+    { left: "94%", top: "12%", size: 18, color: "bg-accent" },
+    { left: "97%", top: "48%", size: 10, color: "bg-primary" },
+    { left: "90%", top: "86%", size: 26, color: "bg-primary" },
+    { left: "50%", top: "96%", size: 12, color: "bg-accent" },
+    { left: "74%", top: "92%", size: 8, color: "bg-emerald-500" },
+    { left: "0%", top: "52%", size: 8, color: "bg-rose-500" },
+    { left: "84%", top: "0%", size: 10, color: "bg-emerald-500" },
   ];
   return (
-    <div className="relative mx-auto aspect-[5/4] w-full max-w-[720px]">
+    <div className="relative mx-auto aspect-[5/4] w-full max-w-[760px]">
       {dots.map((d, i) => (
         <span
           key={`d-${i}`}
@@ -488,7 +506,7 @@ function CapsuleCollage() {
       {capsules.map((c, i) => (
         <div
           key={`c-${i}`}
-          className="absolute h-[58%] w-[22%] overflow-hidden rounded-full shadow-xl ring-1 ring-black/5"
+          className="absolute h-[54%] w-[20%] overflow-hidden rounded-full shadow-xl ring-1 ring-black/5"
           style={{
             left: c.left,
             top: c.top,
