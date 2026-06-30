@@ -18,9 +18,7 @@ export const Route = createFileRoute("/youth-empowerment-guide")({
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://fireproject.lovable.app/youth-empowerment-guide" },
     ],
-    links: [
-      { rel: "canonical", href: "https://fireproject.lovable.app/youth-empowerment-guide" },
-    ],
+    links: [{ rel: "canonical", href: "https://fireproject.lovable.app/youth-empowerment-guide" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -51,8 +49,8 @@ function GuidePage() {
       </h1>
       <p className="mt-6 text-lg text-muted-foreground">
         A practical, field-tested framework drawn from F.I.R.E.'s work in Ghana and the United
-        States — for educators, community leaders, and organizers ready to launch their own
-        youth empowerment program.
+        States — for educators, community leaders, and organizers ready to launch their own youth
+        empowerment program.
       </p>
 
       <section className="prose prose-neutral mt-12 max-w-none">
@@ -85,10 +83,9 @@ function GuidePage() {
 
         <h2>4. Find a free or low-cost venue</h2>
         <p>
-          Schools, libraries, community centers, faith spaces, and parks are usually willing to
-          host youth programs at no cost in exchange for a clear schedule and clean handoffs. Lock
-          in a recurring time slot — same day, same hour, every week — so families can plan
-          around it.
+          Schools, libraries, community centers, faith spaces, and parks are usually willing to host
+          youth programs at no cost in exchange for a clear schedule and clean handoffs. Lock in a
+          recurring time slot — same day, same hour, every week — so families can plan around it.
         </p>
 
         <h2>5. Measure what matters</h2>
@@ -101,8 +98,8 @@ function GuidePage() {
 
         <h2>6. Sustain it with shared ownership</h2>
         <p>
-          Programs that depend on one founder collapse when that founder steps back. From month
-          one, train a second leader, recruit a parent advisory group, and document your weekly
+          Programs that depend on one founder collapse when that founder steps back. From month one,
+          train a second leader, recruit a parent advisory group, and document your weekly
           run-of-show so anyone can pick it up. Sustainability is a leadership pipeline, not a
           grant.
         </p>
