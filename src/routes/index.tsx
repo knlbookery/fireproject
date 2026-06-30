@@ -347,20 +347,54 @@ const SLIDES: Slide[] = [
 
 function Hero() {
   const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const regionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (paused || prefersReducedMotion) return;
     const t = setInterval(() => setIdx((i) => (i + 1) % SLIDES.length), 6500);
     return () => clearInterval(t);
-  }, []);
+  }, [paused]);
+
   const go = (n: number) => setIdx((n + SLIDES.length) % SLIDES.length);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      go(idx - 1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      go(idx + 1);
+    }
+  };
 
   return (
     <section
       id="top"
-      className="relative min-h-[760px] w-full overflow-hidden bg-black lg:h-screen"
+      ref={regionRef}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="F.I.R.E. mission highlights"
+      tabIndex={-1}
+      onKeyDown={onKeyDown}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+      className="relative min-h-[760px] w-full overflow-hidden bg-black focus:outline-none lg:h-screen"
     >
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        Slide {idx + 1} of {SLIDES.length}: {SLIDES[idx].title}
+      </div>
       {SLIDES.map((s, i) => (
         <div
           key={s.title}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${i + 1} of ${SLIDES.length}: ${s.eyebrow}`}
           aria-hidden={i !== idx}
           className={`absolute inset-0 transition-opacity duration-1000 ${i === idx ? "opacity-100" : "opacity-0"}`}
         >
@@ -378,7 +412,7 @@ function Hero() {
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-32 pt-40 text-white sm:pt-48 lg:px-10 lg:pb-40 lg:pt-56">
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85">
-            <span className="h-px w-8 bg-white/60" /> {SLIDES[idx].eyebrow}
+            <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[idx].eyebrow}
           </span>
           {idx === 0 ? (
             <h1 className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
@@ -398,37 +432,42 @@ function Hero() {
                 className={`group ${c.primary ? BTN.primary : BTN.onDarkOutline}`}
               >
                 {c.label}
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" />
               </a>
             ))}
           </div>
         </div>
 
         <div className="mt-12 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            {SLIDES.map((_, i) => (
+          <div className="flex items-center gap-2" role="tablist" aria-label="Select slide">
+            {SLIDES.map((s, i) => (
               <button
                 key={i}
-                aria-label={`Go to slide ${i + 1}`}
+                type="button"
+                role="tab"
+                aria-selected={i === idx}
+                aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className={`h-1.5 rounded-full transition-all ${i === idx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
+                className={`h-1.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === idx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
               />
             ))}
           </div>
           <div className="flex items-center gap-2">
             <button
+              type="button"
               aria-label="Previous slide"
               onClick={() => go(idx - 1)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
             <button
+              type="button"
               aria-label="Next slide"
               onClick={() => go(idx + 1)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
         </div>
