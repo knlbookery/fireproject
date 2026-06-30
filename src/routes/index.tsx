@@ -208,6 +208,7 @@ function Header() {
           </span>
         </a>
         <nav
+          aria-label="Primary"
           className="hidden items-center gap-6 text-sm transition-opacity duration-300 md:flex"
           style={{ opacity: progress, pointerEvents: progress > 0.5 ? "auto" : "none" }}
         >
