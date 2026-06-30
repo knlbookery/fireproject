@@ -100,7 +100,7 @@ const NAV = [
 
 /* ---------------------- Button system (consistent across site) ---------------------- */
 const BTN_BASE =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors";
+  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 const BTN = {
   // Solid brand button on light surfaces
   primary: `${BTN_BASE} bg-primary text-primary-foreground hover:bg-primary/90`,
@@ -208,6 +208,7 @@ function Header() {
           </span>
         </a>
         <nav
+          aria-label="Primary"
           className="hidden items-center gap-6 text-sm transition-opacity duration-300 md:flex"
           style={{ opacity: progress, pointerEvents: progress > 0.5 ? "auto" : "none" }}
         >
@@ -219,7 +220,7 @@ function Header() {
                 key={i.href}
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative py-1 transition-colors hover:text-primary ${active ? "text-primary" : "text-foreground/75"}`}
+                className={`relative py-1 transition-colors rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:text-primary ${active ? "text-primary" : "text-foreground/75"}`}
               >
                 {i.label}
                 <span
@@ -244,18 +245,19 @@ function Header() {
             Donate
           </a>
           <button
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-black/10 text-foreground transition-colors md:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full border border-black/10 text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
           >
-            <span className="text-lg leading-none">{open ? "×" : "≡"}</span>
+            <span className="text-lg leading-none" aria-hidden="true">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </div>
 
       {open && (
-        <nav className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
+        <nav id="mobile-nav" aria-label="Mobile" className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -345,20 +347,54 @@ const SLIDES: Slide[] = [
 
 function Hero() {
   const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const regionRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (paused || prefersReducedMotion) return;
     const t = setInterval(() => setIdx((i) => (i + 1) % SLIDES.length), 6500);
     return () => clearInterval(t);
-  }, []);
+  }, [paused]);
+
   const go = (n: number) => setIdx((n + SLIDES.length) % SLIDES.length);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      go(idx - 1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      go(idx + 1);
+    }
+  };
 
   return (
     <section
       id="top"
-      className="relative min-h-[760px] w-full overflow-hidden bg-black lg:h-screen"
+      ref={regionRef}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="F.I.R.E. mission highlights"
+      tabIndex={-1}
+      onKeyDown={onKeyDown}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+      className="relative min-h-[760px] w-full overflow-hidden bg-black focus:outline-none lg:h-screen"
     >
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        Slide {idx + 1} of {SLIDES.length}: {SLIDES[idx].title}
+      </div>
       {SLIDES.map((s, i) => (
         <div
           key={s.title}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${i + 1} of ${SLIDES.length}: ${s.eyebrow}`}
           aria-hidden={i !== idx}
           className={`absolute inset-0 transition-opacity duration-1000 ${i === idx ? "opacity-100" : "opacity-0"}`}
         >
@@ -376,7 +412,7 @@ function Hero() {
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-32 pt-40 text-white sm:pt-48 lg:px-10 lg:pb-40 lg:pt-56">
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85">
-            <span className="h-px w-8 bg-white/60" /> {SLIDES[idx].eyebrow}
+            <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[idx].eyebrow}
           </span>
           {idx === 0 ? (
             <h1 className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
@@ -396,37 +432,42 @@ function Hero() {
                 className={`group ${c.primary ? BTN.primary : BTN.onDarkOutline}`}
               >
                 {c.label}
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" />
               </a>
             ))}
           </div>
         </div>
 
         <div className="mt-12 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            {SLIDES.map((_, i) => (
+          <div className="flex items-center gap-2" role="tablist" aria-label="Select slide">
+            {SLIDES.map((s, i) => (
               <button
                 key={i}
-                aria-label={`Go to slide ${i + 1}`}
+                type="button"
+                role="tab"
+                aria-selected={i === idx}
+                aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className={`h-1.5 rounded-full transition-all ${i === idx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
+                className={`h-1.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === idx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
               />
             ))}
           </div>
           <div className="flex items-center gap-2">
             <button
+              type="button"
               aria-label="Previous slide"
               onClick={() => go(idx - 1)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
             <button
+              type="button"
               aria-label="Next slide"
               onClick={() => go(idx + 1)}
-              className="grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -2124,9 +2165,9 @@ function Footer() {
             </div>
           </div>
         </a>
-        <nav className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80">
+        <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="transition hover:text-white">
+            <a key={l.href} href={l.href} className="rounded-sm transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1230]">
               {l.label}
             </a>
           ))}
@@ -2213,8 +2254,12 @@ function Partners() {
     >
       <div
         className="relative -mx-6 lg:-mx-10"
+        role="region"
+        aria-label="Partner organizations"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
       >
         {/* fade edges */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
@@ -2281,19 +2326,27 @@ function Partners() {
 /* ---------------------- Page ---------------------- */
 function Landing() {
   return (
-    <main>
+    <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
       <Header />
-      <Hero />
-      <Mission />
-      <Programs />
-      <Impact />
-      <Stories />
-      <Partners />
-      <Events />
-      <Contact />
-      <Donate />
-      <Volunteer />
+      <main id="main-content">
+        <Hero />
+        <Mission />
+        <Programs />
+        <Impact />
+        <Stories />
+        <Partners />
+        <Events />
+        <Contact />
+        <Donate />
+        <Volunteer />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
