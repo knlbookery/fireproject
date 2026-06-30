@@ -2165,7 +2165,7 @@ function Footer() {
             </div>
           </div>
         </a>
-        <nav className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80">
+        <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80">
           {links.map((l) => (
             <a key={l.href} href={l.href} className="transition hover:text-white">
               {l.label}
