@@ -78,17 +78,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
-      { name: "description", content: "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, and community development across Ghana and the United States." },
+      {
+        name: "description",
+        content:
+          "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, and community development across Ghana and the United States.",
+      },
       { name: "author", content: "F.I.R.E." },
       { property: "og:title", content: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
-      { property: "og:description", content: "Creating opportunity through education, technology, sports, and community development in Ghana and the US." },
+      {
+        property: "og:description",
+        content:
+          "Creating opportunity through education, technology, sports, and community development in Ghana and the US.",
+      },
       { property: "og:site_name", content: "F.I.R.E." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
-      { name: "twitter:description", content: "Creating opportunity through education, technology, sports, and community development in Ghana and the US." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9a18bd54-7e2a-4811-a465-878023ea8c65/id-preview-ee652be3--d4dbc668-1f42-4990-9b22-efe9c850e51a.lovable.app-1782667702795.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9a18bd54-7e2a-4811-a465-878023ea8c65/id-preview-ee652be3--d4dbc668-1f42-4990-9b22-efe9c850e51a.lovable.app-1782667702795.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Creating opportunity through education, technology, sports, and community development in Ghana and the US.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9a18bd54-7e2a-4811-a465-878023ea8c65/id-preview-ee652be3--d4dbc668-1f42-4990-9b22-efe9c850e51a.lovable.app-1782667702795.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9a18bd54-7e2a-4811-a465-878023ea8c65/id-preview-ee652be3--d4dbc668-1f42-4990-9b22-efe9c850e51a.lovable.app-1782667702795.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

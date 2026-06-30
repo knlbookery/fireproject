@@ -182,7 +182,8 @@ function Header() {
           borderColor: `rgba(0,0,0,${progress * 0.05})`,
           borderWidth: 1,
           borderStyle: "solid",
-          boxShadow: progress > 0.05 ? `0 8px 30px -12px rgba(15,23,42,${progress * 0.18})` : "none",
+          boxShadow:
+            progress > 0.05 ? `0 8px 30px -12px rgba(15,23,42,${progress * 0.18})` : "none",
         }}
       >
         {/* Logo — center on hero, slide to left on scroll */}
@@ -234,7 +235,11 @@ function Header() {
           className="flex items-center gap-2 transition-opacity duration-300"
           style={{ opacity: Math.max(progress, 0.001) }}
         >
-          <a href="#donate" className={`hidden sm:inline-flex ${BTN.primary}`} style={{ pointerEvents: progress > 0.5 ? "auto" : "none" }}>
+          <a
+            href="#donate"
+            className={`hidden sm:inline-flex ${BTN.primary}`}
+            style={{ pointerEvents: progress > 0.5 ? "auto" : "none" }}
+          >
             <Heart className="h-4 w-4" />
             Donate
           </a>
@@ -248,7 +253,6 @@ function Header() {
           </button>
         </div>
       </div>
-
 
       {open && (
         <nav className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
@@ -275,7 +279,6 @@ function Header() {
           </a>
         </nav>
       )}
-
     </header>
   );
 }
@@ -349,7 +352,10 @@ function Hero() {
   const go = (n: number) => setIdx((n + SLIDES.length) % SLIDES.length);
 
   return (
-    <section id="top" className="relative min-h-[760px] w-full overflow-hidden bg-black lg:h-screen">
+    <section
+      id="top"
+      className="relative min-h-[760px] w-full overflow-hidden bg-black lg:h-screen"
+    >
       {SLIDES.map((s, i) => (
         <div
           key={s.title}
@@ -555,7 +561,6 @@ function Mission() {
         <div className="lg:col-span-7">
           <CapsuleCollage />
         </div>
-
       </div>
     </section>
   );
@@ -629,7 +634,10 @@ function Programs() {
                 <span className="grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary backdrop-blur">
                   <p.icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-5 font-display text-3xl font-medium tracking-tight text-foreground" data-atropos-offset="12">
+                <h3
+                  className="mt-5 font-display text-3xl font-medium tracking-tight text-foreground"
+                  data-atropos-offset="12"
+                >
                   {p.title}
                 </h3>
                 <p className="mt-2 max-w-xs text-sm text-foreground/70" data-atropos-offset="6">
@@ -640,7 +648,6 @@ function Programs() {
           </Atropos>
         ))}
       </div>
-
 
       <div className="mt-14 border-t border-black/10 pt-10">
         <div className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
@@ -684,10 +691,7 @@ function Impact() {
               From education access to youth sports and entrepreneurship support, we meet
               communities where they are — and build forward together.
             </p>
-            <a
-              href="#stories"
-              className={`mt-8 ${BTN.onDarkOutline}`}
-            >
+            <a href="#stories" className={`mt-8 ${BTN.onDarkOutline}`}>
               Read the stories <ArrowRight className="h-4 w-4" />
             </a>
           </div>
@@ -730,30 +734,123 @@ type Story = {
 
 function Stories() {
   const portraits: Story[] = [
-    { img: portrait1, name: "Ama", role: "Entrepreneur", location: "Accra, Ghana", quote: "F.I.R.E. didn't just teach me business — they believed in me before I did.", body: "Ama launched a small textile studio after completing the entrepreneurship cohort. Two years on, she employs four young women from her neighborhood." },
-    { img: storyLeadership, name: "Kojo", role: "Youth Leader", location: "Kumasi, Ghana", quote: "The mentors became the older brothers I never had.", body: "Kojo now runs weekend leadership circles for 30+ teens, using the same curriculum that changed his trajectory at 16." },
-    { img: portrait6, name: "Nana", role: "Software Engineer", location: "Accra, Ghana", quote: "I went from borrowing a laptop to writing code for a global team.", body: "After the tech fellowship, Nana joined a remote engineering team building fintech tools for African SMEs." },
-    { img: portrait2, name: "Daniel", role: "Tech Fellow", location: "Philadelphia, USA", quote: "F.I.R.E. showed me my zip code wasn't my ceiling.", body: "Daniel was the first in his family to graduate college. He now mentors high schoolers from his old block." },
-    { img: portrait8, name: "Auntie Adwoa", role: "Teacher", location: "Cape Coast, Ghana", quote: "When you invest in a teacher, you invest in a hundred children.", body: "Adwoa runs a F.I.R.E.-supported reading program serving over 200 students across two schools." },
-    { img: portrait5, name: "Esi", role: "Scholar", location: "Volta Region, Ghana", quote: "The scholarship gave me a chance. The community gave me belonging.", body: "Esi is studying public health on full scholarship and plans to return home to build maternal care programs." },
-    { img: portrait10, name: "Abena", role: "Student", location: "Tamale, Ghana", quote: "I want to be the doctor my village never had.", body: "Abena is a top of her class secondary student with her sights set on medical school — F.I.R.E. covers her boarding and books." },
-    { img: portrait3, name: "Akua", role: "Athlete", location: "Accra, Ghana", quote: "Sport gave me discipline. F.I.R.E. gave me a stage.", body: "Akua represented her region in two national tournaments and now coaches a girls' track squad after school." },
-    { img: portrait7, name: "Marcus", role: "Hooper", location: "Philadelphia, USA", quote: "The court is where I learned to lead.", body: "Marcus runs the summer hoops league F.I.R.E. sponsors in West Philly — over 180 kids played last season." },
-    { img: portrait9, name: "Yaw", role: "Founder", location: "Kumasi, Ghana", quote: "We don't need handouts. We need a runway — F.I.R.E. built mine.", body: "Yaw founded a logistics startup connecting rural farmers to urban markets, now serving 12 districts." },
-    { img: portrait4, name: "Mr. Mensah", role: "Mentor", location: "Tema, Ghana", quote: "Mentorship is the long game. I'm proud to play it.", body: "A retired engineer, Mr. Mensah has personally mentored 40+ F.I.R.E. tech fellows over the last six years." },
-    { img: storyBasketball, name: "Kwame", role: "Coach", location: "Accra, Ghana", quote: "Every kid deserves a coach who shows up — every single week.", body: "Kwame's after-school program has kept hundreds of teens off the streets and on the court since 2019." },
+    {
+      img: portrait1,
+      name: "Ama",
+      role: "Entrepreneur",
+      location: "Accra, Ghana",
+      quote: "F.I.R.E. didn't just teach me business — they believed in me before I did.",
+      body: "Ama launched a small textile studio after completing the entrepreneurship cohort. Two years on, she employs four young women from her neighborhood.",
+    },
+    {
+      img: storyLeadership,
+      name: "Kojo",
+      role: "Youth Leader",
+      location: "Kumasi, Ghana",
+      quote: "The mentors became the older brothers I never had.",
+      body: "Kojo now runs weekend leadership circles for 30+ teens, using the same curriculum that changed his trajectory at 16.",
+    },
+    {
+      img: portrait6,
+      name: "Nana",
+      role: "Software Engineer",
+      location: "Accra, Ghana",
+      quote: "I went from borrowing a laptop to writing code for a global team.",
+      body: "After the tech fellowship, Nana joined a remote engineering team building fintech tools for African SMEs.",
+    },
+    {
+      img: portrait2,
+      name: "Daniel",
+      role: "Tech Fellow",
+      location: "Philadelphia, USA",
+      quote: "F.I.R.E. showed me my zip code wasn't my ceiling.",
+      body: "Daniel was the first in his family to graduate college. He now mentors high schoolers from his old block.",
+    },
+    {
+      img: portrait8,
+      name: "Auntie Adwoa",
+      role: "Teacher",
+      location: "Cape Coast, Ghana",
+      quote: "When you invest in a teacher, you invest in a hundred children.",
+      body: "Adwoa runs a F.I.R.E.-supported reading program serving over 200 students across two schools.",
+    },
+    {
+      img: portrait5,
+      name: "Esi",
+      role: "Scholar",
+      location: "Volta Region, Ghana",
+      quote: "The scholarship gave me a chance. The community gave me belonging.",
+      body: "Esi is studying public health on full scholarship and plans to return home to build maternal care programs.",
+    },
+    {
+      img: portrait10,
+      name: "Abena",
+      role: "Student",
+      location: "Tamale, Ghana",
+      quote: "I want to be the doctor my village never had.",
+      body: "Abena is a top of her class secondary student with her sights set on medical school — F.I.R.E. covers her boarding and books.",
+    },
+    {
+      img: portrait3,
+      name: "Akua",
+      role: "Athlete",
+      location: "Accra, Ghana",
+      quote: "Sport gave me discipline. F.I.R.E. gave me a stage.",
+      body: "Akua represented her region in two national tournaments and now coaches a girls' track squad after school.",
+    },
+    {
+      img: portrait7,
+      name: "Marcus",
+      role: "Hooper",
+      location: "Philadelphia, USA",
+      quote: "The court is where I learned to lead.",
+      body: "Marcus runs the summer hoops league F.I.R.E. sponsors in West Philly — over 180 kids played last season.",
+    },
+    {
+      img: portrait9,
+      name: "Yaw",
+      role: "Founder",
+      location: "Kumasi, Ghana",
+      quote: "We don't need handouts. We need a runway — F.I.R.E. built mine.",
+      body: "Yaw founded a logistics startup connecting rural farmers to urban markets, now serving 12 districts.",
+    },
+    {
+      img: portrait4,
+      name: "Mr. Mensah",
+      role: "Mentor",
+      location: "Tema, Ghana",
+      quote: "Mentorship is the long game. I'm proud to play it.",
+      body: "A retired engineer, Mr. Mensah has personally mentored 40+ F.I.R.E. tech fellows over the last six years.",
+    },
+    {
+      img: storyBasketball,
+      name: "Kwame",
+      role: "Coach",
+      location: "Accra, Ghana",
+      quote: "Every kid deserves a coach who shows up — every single week.",
+      body: "Kwame's after-school program has kept hundreds of teens off the streets and on the court since 2019.",
+    },
   ];
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
   const LOOP = 3;
   const looped = Array.from({ length: LOOP }).flatMap((_, copy) =>
-    portraits.map((p, i) => ({ ...p, _key: `${copy}-${i}`, _origIndex: i }))
+    portraits.map((p, i) => ({ ...p, _key: `${copy}-${i}`, _origIndex: i })),
   );
 
   const features = [
-    { title: "Real Community Voices", body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need." },
-    { title: "Long-Term Mentorship", body: "Our fellows and coaches stay with participants for years, not weeks. Relationships are the engine of lasting change." },
-    { title: "Measurable Impact", body: "From scholarships earned to businesses launched and championships won — we track the outcomes that move lives forward." },
+    {
+      title: "Real Community Voices",
+      body: "Every story begins with a person. We listen first — then build programs that match what families and youth actually need.",
+    },
+    {
+      title: "Long-Term Mentorship",
+      body: "Our fellows and coaches stay with participants for years, not weeks. Relationships are the engine of lasting change.",
+    },
+    {
+      title: "Measurable Impact",
+      body: "From scholarships earned to businesses launched and championships won — we track the outcomes that move lives forward.",
+    },
   ];
 
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -780,7 +877,9 @@ function Stories() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [openStory, setOpenStory] = useState<Story | null>(null);
   const openStoryRef = useRef<Story | null>(null);
-  useEffect(() => { openStoryRef.current = openStory; }, [openStory]);
+  useEffect(() => {
+    openStoryRef.current = openStory;
+  }, [openStory]);
 
   // Detect prefers-reduced-motion
   useEffect(() => {
@@ -854,7 +953,10 @@ function Stories() {
 
   const step = (ts: number) => {
     const el = scrollerRef.current;
-    if (!el) { rafRef.current = null; return; }
+    if (!el) {
+      rafRef.current = null;
+      return;
+    }
     const dt = Math.min(64, ts - lastTsRef.current) || 16;
     lastTsRef.current = ts;
     const frames = dt / 16.6667;
@@ -959,7 +1061,11 @@ function Stories() {
     if (!el) return;
     const wasMoved = d.moved;
     d.down = false;
-    try { el.releasePointerCapture(e.pointerId); } catch {}
+    try {
+      el.releasePointerCapture(e.pointerId);
+    } catch {
+      // pointer already released
+    }
     if (d.samples.length >= 2 && !reducedMotion) {
       const first = d.samples[0];
       const last = d.samples[d.samples.length - 1];
@@ -974,7 +1080,10 @@ function Stories() {
     }
     // Suppress the click that follows a drag
     if (wasMoved) {
-      const swallow = (ev: Event) => { ev.stopPropagation(); ev.preventDefault(); };
+      const swallow = (ev: Event) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+      };
       el.addEventListener("click", swallow, { capture: true, once: true });
     }
   };
@@ -1044,7 +1153,9 @@ function Stories() {
   // Close modal on Escape
   useEffect(() => {
     if (!openStory) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenStory(null); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenStory(null);
+    };
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -1055,7 +1166,9 @@ function Stories() {
   }, [openStory]);
 
   // Resume auto-scroll when modal closes
-  useEffect(() => { if (!openStory) ensureRaf(); }, [openStory]);
+  useEffect(() => {
+    if (!openStory) ensureRaf();
+  }, [openStory]);
 
   return (
     <Section
@@ -1076,8 +1189,13 @@ function Stories() {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
-          onMouseEnter={() => { hoverPausedRef.current = true; }}
-          onMouseLeave={() => { hoverPausedRef.current = false; ensureRaf(); }}
+          onMouseEnter={() => {
+            hoverPausedRef.current = true;
+          }}
+          onMouseLeave={() => {
+            hoverPausedRef.current = false;
+            ensureRaf();
+          }}
           className="flex items-end justify-start gap-3 overflow-x-auto overflow-y-hidden px-6 py-10 md:gap-5 md:py-16 cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           role="region"
@@ -1122,9 +1240,15 @@ function Stories() {
           <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
             <span className="font-medium text-foreground">{portraits[activeIndex]?.name}</span>
             <span className="mx-2 opacity-40">·</span>
-            <span>{portraits[activeIndex]?.role} — {portraits[activeIndex]?.location}</span>
+            <span>
+              {portraits[activeIndex]?.role} — {portraits[activeIndex]?.location}
+            </span>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-2" role="tablist" aria-label="Jump to story">
+          <div
+            className="flex flex-wrap items-center justify-center gap-2"
+            role="tablist"
+            aria-label="Jump to story"
+          >
             {portraits.map((p, i) => {
               const active = i === activeIndex;
               return (
@@ -1142,7 +1266,6 @@ function Stories() {
           </div>
         </div>
       </div>
-
 
       <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
         {features.map((f) => (
@@ -1198,7 +1321,10 @@ function Stories() {
                   <div className="text-[11px] uppercase tracking-[0.22em] text-primary">
                     Community Story
                   </div>
-                  <h3 id="story-modal-title" className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">
+                  <h3
+                    id="story-modal-title"
+                    className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl"
+                  >
                     {openStory.name}
                   </h3>
                   <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
@@ -1234,7 +1360,6 @@ function Stories() {
         </div>
       )}
     </Section>
-
   );
 }
 
@@ -1271,10 +1396,7 @@ function Events() {
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {items.map((e) => (
-          <article
-            key={e.title}
-            className="group relative overflow-hidden rounded-2xl bg-black"
-          >
+          <article key={e.title} className="group relative overflow-hidden rounded-2xl bg-black">
             <img
               src={e.img}
               alt={`${e.title} F.I.R.E. event`}
@@ -1438,7 +1560,13 @@ function Contact() {
           {/* Honeypot field — hidden from real users, catches bots */}
           <div
             aria-hidden="true"
-            style={{ position: "absolute", left: "-9999px", width: 1, height: 1, overflow: "hidden" }}
+            style={{
+              position: "absolute",
+              left: "-9999px",
+              width: 1,
+              height: 1,
+              overflow: "hidden",
+            }}
           >
             <label>
               Website
@@ -1452,8 +1580,6 @@ function Contact() {
               />
             </label>
           </div>
-
-
 
           <label className="text-sm">
             <span className="text-foreground/80">Full name</span>
@@ -1535,7 +1661,13 @@ function Contact() {
               disabled={status === "submitting"}
               className={`${BTN.primary} disabled:cursor-not-allowed disabled:opacity-60`}
             >
-              {status === "submitting" ? "Sending…" : (<>Send Inquiry <ArrowRight className="h-4 w-4" /></>)}
+              {status === "submitting" ? (
+                "Sending…"
+              ) : (
+                <>
+                  Send Inquiry <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
             {status === "error" && Object.keys(errors).length > 0 && (
               <span className="text-xs text-red-600">Please fix the highlighted fields.</span>
@@ -1590,14 +1722,26 @@ function Contact() {
   );
 }
 
-
 /* ---------------------- Donate ---------------------- */
 function Donate() {
   const tiers = [
     { amount: 25, label: "Spark", impact: "Provides school supplies for one student for a month." },
-    { amount: 50, label: "Kindle", impact: "Funds a week of after-school mentorship for a youth athlete." },
-    { amount: 100, label: "Ignite", impact: "Sponsors entrepreneurship training for a community member.", featured: true },
-    { amount: null as number | null, label: "Blaze", impact: "Choose your own gift — every dollar reaches the field." },
+    {
+      amount: 50,
+      label: "Kindle",
+      impact: "Funds a week of after-school mentorship for a youth athlete.",
+    },
+    {
+      amount: 100,
+      label: "Ignite",
+      impact: "Sponsors entrepreneurship training for a community member.",
+      featured: true,
+    },
+    {
+      amount: null as number | null,
+      label: "Blaze",
+      impact: "Choose your own gift — every dollar reaches the field.",
+    },
   ];
 
   const [selectedIdx, setSelectedIdx] = useState<number>(2);
@@ -1614,7 +1758,9 @@ function Donate() {
   const handleDonate = () => {
     setErrorMsg("");
     if (!amountValid) {
-      setErrorMsg(isCustom ? "Enter a custom amount of $1 or more." : "Please select a gift amount.");
+      setErrorMsg(
+        isCustom ? "Enter a custom amount of $1 or more." : "Please select a gift amount.",
+      );
       return;
     }
     setConfirmOpen(true);
@@ -1632,7 +1778,6 @@ function Donate() {
     { icon: Lock, label: "Secure Checkout", sub: "256-bit SSL · PCI compliant" },
     { icon: Award, label: "Audited Annually", sub: "Independent CPA review" },
   ];
-
 
   return (
     <section id="donate" className="px-6 py-10 lg:px-10 lg:py-10">
@@ -1669,7 +1814,9 @@ function Donate() {
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <div className="text-sm font-medium text-foreground">Choose your gift</div>
-                  <div className="text-xs text-foreground/60">One-time · Monthly available at checkout</div>
+                  <div className="text-xs text-foreground/60">
+                    One-time · Monthly available at checkout
+                  </div>
                 </div>
                 <div className="hidden items-center gap-2 text-xs text-foreground/60 sm:flex">
                   <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
@@ -1685,7 +1832,9 @@ function Donate() {
                     type="button"
                     onClick={() => setFrequency(f)}
                     className={`rounded-full px-4 py-1.5 capitalize transition ${
-                      frequency === f ? "bg-white text-foreground shadow-sm" : "text-foreground/60 hover:text-foreground"
+                      frequency === f
+                        ? "bg-white text-foreground shadow-sm"
+                        : "text-foreground/60 hover:text-foreground"
                     }`}
                   >
                     {f === "one-time" ? "One-time" : "Monthly"}
@@ -1700,7 +1849,10 @@ function Donate() {
                     <button
                       key={t.label}
                       type="button"
-                      onClick={() => { setSelectedIdx(i); setErrorMsg(""); }}
+                      onClick={() => {
+                        setSelectedIdx(i);
+                        setErrorMsg("");
+                      }}
                       aria-pressed={isSelected}
                       className={`group relative rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg ${
                         isSelected
@@ -1716,10 +1868,14 @@ function Donate() {
                       <div className="font-display text-2xl font-semibold">
                         {t.amount === null ? "Custom" : `$${t.amount}`}
                       </div>
-                      <div className={`mt-0.5 text-[11px] font-medium uppercase tracking-wider ${isSelected ? "text-white/80" : "text-primary"}`}>
+                      <div
+                        className={`mt-0.5 text-[11px] font-medium uppercase tracking-wider ${isSelected ? "text-white/80" : "text-primary"}`}
+                      >
                         {t.label}
                       </div>
-                      <div className={`mt-3 text-xs leading-snug ${isSelected ? "text-white/90" : "text-foreground/70"}`}>
+                      <div
+                        className={`mt-3 text-xs leading-snug ${isSelected ? "text-white/90" : "text-foreground/70"}`}
+                      >
                         {t.impact}
                       </div>
                     </button>
@@ -1730,11 +1886,16 @@ function Donate() {
               {/* Custom amount input */}
               {isCustom && (
                 <div className="mt-4">
-                  <label htmlFor="custom-amount" className="mb-1 block text-xs font-medium text-foreground/70">
+                  <label
+                    htmlFor="custom-amount"
+                    className="mb-1 block text-xs font-medium text-foreground/70"
+                  >
                     Enter your gift amount (USD)
                   </label>
                   <div className="relative max-w-xs">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/60">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/60">
+                      $
+                    </span>
                     <input
                       id="custom-amount"
                       type="number"
@@ -1742,7 +1903,10 @@ function Donate() {
                       step="1"
                       inputMode="numeric"
                       value={customAmount}
-                      onChange={(e) => { setCustomAmount(e.target.value); setErrorMsg(""); }}
+                      onChange={(e) => {
+                        setCustomAmount(e.target.value);
+                        setErrorMsg("");
+                      }}
                       placeholder="250"
                       className="w-full rounded-full border border-foreground/15 bg-white py-2 pl-7 pr-4 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
@@ -1758,7 +1922,11 @@ function Donate() {
                 </div>
                 <div className="flex h-3 w-full overflow-hidden rounded-full bg-foreground/5">
                   {allocation.map((a) => (
-                    <div key={a.label} className={`${a.color} h-full`} style={{ width: `${a.pct}%` }} />
+                    <div
+                      key={a.label}
+                      className={`${a.color} h-full`}
+                      style={{ width: `${a.pct}%` }}
+                    />
                   ))}
                 </div>
                 <div className="mt-3 flex flex-wrap gap-4 text-xs text-foreground/70">
@@ -1782,7 +1950,9 @@ function Donate() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button type="button" onClick={handleDonate} className={`flex-1 ${BTN.primary}`}>
                   <Heart className="h-4 w-4" />
-                  {amountValid ? `Donate $${effectiveAmount}${frequency === "monthly" ? "/mo" : ""}` : "Donate Now"}
+                  {amountValid
+                    ? `Donate $${effectiveAmount}${frequency === "monthly" ? "/mo" : ""}`
+                    : "Donate Now"}
                 </button>
                 <a href="#contact" className={`flex-1 ${BTN.secondary}`}>
                   <Building2 className="h-4 w-4" />
@@ -1795,13 +1965,14 @@ function Donate() {
             </div>
           </div>
 
-
           {/* Right: trust + corporate */}
           <div className="lg:col-span-4">
             <div className="grid h-full grid-rows-[auto_1fr] gap-6">
               {/* Trust badges */}
               <div className="rounded-2xl border border-foreground/10 bg-white p-6">
-                <div className="mb-4 text-sm font-medium text-foreground">Trusted & accountable</div>
+                <div className="mb-4 text-sm font-medium text-foreground">
+                  Trusted & accountable
+                </div>
                 <ul className="space-y-4">
                   {trust.map((t) => (
                     <li key={t.label} className="flex items-start gap-3">
@@ -1827,15 +1998,18 @@ function Donate() {
                     Partner with F.I.R.E.
                   </h3>
                   <p className="mt-2 text-sm text-white/75">
-                    Workplace giving, matching gifts, and program sponsorships for purpose-led companies.
+                    Workplace giving, matching gifts, and program sponsorships for purpose-led
+                    companies.
                   </p>
                   <ul className="mt-4 space-y-2 text-sm">
-                    {["Custom impact reports", "Brand co-marketing", "Employee volunteer days"].map((i) => (
-                      <li key={i} className="flex items-center gap-2 text-white/85">
-                        <Check className="h-4 w-4 text-accent" />
-                        {i}
-                      </li>
-                    ))}
+                    {["Custom impact reports", "Brand co-marketing", "Employee volunteer days"].map(
+                      (i) => (
+                        <li key={i} className="flex items-center gap-2 text-white/85">
+                          <Check className="h-4 w-4 text-accent" />
+                          {i}
+                        </li>
+                      ),
+                    )}
                   </ul>
                   <a href="#contact" className={`mt-5 ${BTN.onDarkSolid}`}>
                     Become a sponsor
@@ -1856,14 +2030,20 @@ function Donate() {
               Confirm your gift
             </DialogTitle>
             <DialogDescription>
-              You're about to give a {frequency === "monthly" ? "monthly recurring" : "one-time"} gift to F.I.R.E.
+              You're about to give a {frequency === "monthly" ? "monthly recurring" : "one-time"}{" "}
+              gift to F.I.R.E.
             </DialogDescription>
           </DialogHeader>
           <div className="rounded-xl border border-foreground/10 bg-foreground/[0.03] p-4">
             <div className="flex items-baseline justify-between">
-              <span className="text-xs uppercase tracking-wider text-foreground/60">{selected.label}</span>
+              <span className="text-xs uppercase tracking-wider text-foreground/60">
+                {selected.label}
+              </span>
               <span className="font-display text-3xl font-semibold text-foreground">
-                ${effectiveAmount}{frequency === "monthly" && <span className="text-base text-foreground/60">/mo</span>}
+                ${effectiveAmount}
+                {frequency === "monthly" && (
+                  <span className="text-base text-foreground/60">/mo</span>
+                )}
               </span>
             </div>
             <p className="mt-2 text-xs text-foreground/70">{selected.impact}</p>
@@ -1894,7 +2074,6 @@ function Donate() {
     </section>
   );
 }
-
 
 /* ---------------------- Volunteer ---------------------- */
 function Volunteer() {
@@ -1978,7 +2157,6 @@ import ejConsultingLogo from "@/assets/ej-consulting.png.asset.json";
 import mayorsFundLogo from "@/assets/mayors-fund-philadelphia.png.asset.json";
 import cityPhiladelphiaV2Logo from "@/assets/city-of-philadelphia-v2.png.asset.json";
 
-
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
 const PARTNERS: { name: string; logo: string }[] = [
@@ -1990,7 +2168,7 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "City of Philadelphia", logo: cityPhiladelphiaV2Logo.url },
   { name: "T-Mobile", logo: tmobileLogo.url },
   { name: "Network for Good", logo: networkForGoodLogo.url },
-  
+
   { name: "Raytheon Technologies", logo: raytheonLogo.url },
   { name: "Get The Millions", logo: getTheMillionsLogo.url },
   { name: "DTR Consulting", logo: dtrConsultingLogo.url },
@@ -1998,8 +2176,6 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "US-Ghana Chamber of Commerce", logo: usGhanaChamberLogo.url },
   { name: "EJ Consulting", logo: ejConsultingLogo.url },
 ];
-
-
 
 function PartnerCard({ p }: { p: (typeof PARTNERS)[number] }) {
   const [failed, setFailed] = useState(false);
@@ -2079,14 +2255,14 @@ function Partners() {
             Become a partner.
           </div>
           <p className="mt-2 max-w-xl text-white/70">
-            Join a coalition of changemakers funding scholarships, building courts, and launching founders.
+            Join a coalition of changemakers funding scholarships, building courts, and launching
+            founders.
           </p>
         </div>
         <a href="#contact" className={`${BTN_BASE} bg-accent text-foreground hover:bg-accent/90`}>
           Partner with F.I.R.E. <ArrowRight className="h-4 w-4" />
         </a>
       </div>
-
 
       <style>{`
         @keyframes fire-marquee {
