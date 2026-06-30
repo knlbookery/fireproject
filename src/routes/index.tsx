@@ -119,6 +119,9 @@ function Header() {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0); // 0 = on hero, 1 = solid
   const [activeId, setActiveId] = useState<string>("top");
+  const [logoOffset, setLogoOffset] = useState(0);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
 
   // Smooth transparent -> solid transition based on scroll (first ~160px)
   useEffect(() => {
@@ -131,6 +134,19 @@ function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Measure logo offset so it can animate to true viewport center on hero
+  useEffect(() => {
+    const measure = () => {
+      if (!headerRef.current || !logoRef.current) return;
+      const headerLeft = headerRef.current.getBoundingClientRect().left;
+      const restCenter = headerLeft + logoRef.current.offsetLeft + logoRef.current.offsetWidth / 2;
+      setLogoOffset(window.innerWidth / 2 - restCenter);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   // Active section tracking for nav indicator
