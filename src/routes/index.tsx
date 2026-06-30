@@ -257,7 +257,7 @@ function Header() {
       </div>
 
       {open && (
-        <nav className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
+        <nav id="mobile-nav" aria-label="Mobile" className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
