@@ -1063,7 +1063,9 @@ function Stories() {
     d.down = false;
     try {
       el.releasePointerCapture(e.pointerId);
-    } catch {}
+    } catch {
+      // pointer already released
+    }
     if (d.samples.length >= 2 && !reducedMotion) {
       const first = d.samples[0];
       const last = d.samples[d.samples.length - 1];
