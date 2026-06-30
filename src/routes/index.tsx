@@ -2254,8 +2254,12 @@ function Partners() {
     >
       <div
         className="relative -mx-6 lg:-mx-10"
+        role="region"
+        aria-label="Partner organizations"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
       >
         {/* fade edges */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent" />
