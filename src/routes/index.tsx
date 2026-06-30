@@ -446,17 +446,17 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`px-6 py-10 lg:px-10 lg:py-10 ${className}`}>
+    <section id={id} className={`px-6 pt-24 pb-10 lg:px-10 lg:pt-32 lg:pb-10 ${className}`}>
       <div className="mx-auto max-w-[1400px]">
         {(eyebrow || title) && (
           <div className="mb-16 max-w-3xl">
             {eyebrow && (
-              <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
+              <div className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
                 {eyebrow}
               </div>
             )}
             {title && (
-              <h2 className="mt-4 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+              <h2 className="mt-5 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
                 {title}
               </h2>
             )}
