@@ -2167,7 +2167,7 @@ function Footer() {
         </a>
         <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="transition hover:text-white">
+            <a key={l.href} href={l.href} className="rounded-sm transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1230]">
               {l.label}
             </a>
           ))}
