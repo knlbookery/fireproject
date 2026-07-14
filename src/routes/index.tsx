@@ -1366,30 +1366,8 @@ function Stories() {
 }
 
 /* ---------------------- Events ---------------------- */
-function Events() {
-  const items = [
-    {
-      month: "JUN",
-      day: "15",
-      title: "Ghana To The Moon Conference & Pitch Event",
-      place: "Accra, Ghana",
-      img: eventConference,
-    },
-    {
-      month: "JUL",
-      day: "20",
-      title: "Inspiration Weekend Outreach",
-      place: "Philadelphia, USA",
-      img: eventWeekend,
-    },
-    {
-      month: "AUG",
-      day: "10",
-      title: "F.I.R.E. Basketball Tournament",
-      place: "Accra, Ghana",
-      img: storyBasketball,
-    },
-  ];
+function Events({ items }: { items: EventItem[] }) {
+
   return (
     <Section
       id="events"
