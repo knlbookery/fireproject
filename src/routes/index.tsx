@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
+import {
+  getLandingContent,
+  FALLBACK_CONTENT,
+  type HeroSlide,
+  type EventItem,
+} from "@/lib/content.functions";
 import {
   Dialog,
   DialogContent,
