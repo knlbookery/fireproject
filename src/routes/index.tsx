@@ -2281,7 +2281,7 @@ function Landing() {
         <Impact />
         <Stories />
         <Partners />
-        <Events />
+        <Events items={content.events} />
         <Contact />
         <Donate />
         <Volunteer />
