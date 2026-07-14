@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
+import {
+  getLandingContent,
+  FALLBACK_CONTENT,
+  type HeroSlide,
+  type EventItem,
+} from "@/lib/content.functions";
 import {
   Dialog,
   DialogContent,
@@ -67,6 +74,13 @@ const eventConference = U("1540575467063-178a50c2df87"); // conference
 const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
 import fireLogo from "@/assets/fire-logo.png.asset.json";
 
+export const landingContentQuery = queryOptions({
+  queryKey: ["landing-content"],
+  queryFn: () => getLandingContent(),
+  initialData: FALLBACK_CONTENT,
+  staleTime: 5 * 60_000,
+});
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -85,6 +99,7 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: volunteers },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(landingContentQuery),
   component: Landing,
 });
 
@@ -286,66 +301,12 @@ function Header() {
 }
 
 /* ---------------------- Hero Slider ---------------------- */
-type Slide = {
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  alt: string;
-  cta: { label: string; href: string; primary?: boolean }[];
-};
+// Slide data now comes from Airtable via `getLandingContent` (see
+// src/lib/content.functions.ts). The `HeroSlide` type is re-exported from
+// that module and used here as the prop type.
 
-const SLIDES: Slide[] = [
-  {
-    eyebrow: "Our Mission",
-    title: "Empowering Communities. Inspiring Futures.",
-    subtitle:
-      "Creating opportunity through education, technology, sports, entrepreneurship, and community development across Ghana and the United States.",
-    image: volunteers,
-    alt: "F.I.R.E. community gathering",
-    cta: [
-      { label: "Learn more about our mission", href: "#mission", primary: true },
-      { label: "Donate", href: "#donate" },
-    ],
-  },
-  {
-    eyebrow: "Education",
-    title: "Transforming Lives Through Education.",
-    subtitle: "Building brighter futures through access to learning and technology.",
-    image: storyLab,
-    alt: "Students learning in a F.I.R.E. computer lab",
-    cta: [{ label: "Explore Programs", href: "#programs", primary: true }],
-  },
-  {
-    eyebrow: "Sports",
-    title: "Sports That Build Leaders.",
-    subtitle: "Developing confidence, teamwork, and opportunity through sport.",
-    image: storyBasketball,
-    alt: "Young athletes in a F.I.R.E. sports program",
-    cta: [{ label: "View Sports Programs", href: "#programs", primary: true }],
-  },
-  {
-    eyebrow: "Entrepreneurship",
-    title: "Supporting Entrepreneurship.",
-    subtitle: "Helping communities create sustainable futures.",
-    image: progBiz,
-    alt: "Entrepreneur in a F.I.R.E. mentorship program",
-    cta: [{ label: "Discover Opportunities", href: "#programs", primary: true }],
-  },
-  {
-    eyebrow: "Get Involved",
-    title: "Your Support Changes Lives.",
-    subtitle: "Donate, volunteer, sponsor, or partner with us.",
-    image: ghanaAerial,
-    alt: "Aerial view of a Ghanaian community served by F.I.R.E.",
-    cta: [
-      { label: "Donate Today", href: "#donate", primary: true },
-      { label: "Volunteer", href: "#volunteer" },
-    ],
-  },
-];
+function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
 
-function Hero() {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
@@ -1405,30 +1366,8 @@ function Stories() {
 }
 
 /* ---------------------- Events ---------------------- */
-function Events() {
-  const items = [
-    {
-      month: "JUN",
-      day: "15",
-      title: "Ghana To The Moon Conference & Pitch Event",
-      place: "Accra, Ghana",
-      img: eventConference,
-    },
-    {
-      month: "JUL",
-      day: "20",
-      title: "Inspiration Weekend Outreach",
-      place: "Philadelphia, USA",
-      img: eventWeekend,
-    },
-    {
-      month: "AUG",
-      day: "10",
-      title: "F.I.R.E. Basketball Tournament",
-      place: "Accra, Ghana",
-      img: storyBasketball,
-    },
-  ];
+function Events({ items }: { items: EventItem[] }) {
+
   return (
     <Section
       id="events"
@@ -2325,6 +2264,7 @@ function Partners() {
 
 /* ---------------------- Page ---------------------- */
 function Landing() {
+  const { data: content } = useSuspenseQuery(landingContentQuery);
   return (
     <>
       <a
@@ -2335,13 +2275,13 @@ function Landing() {
       </a>
       <Header />
       <main id="main-content">
-        <Hero />
+        <Hero slides={content.heroSlides} />
         <Mission />
         <Programs />
         <Impact />
         <Stories />
         <Partners />
-        <Events />
+        <Events items={content.events} />
         <Contact />
         <Donate />
         <Volunteer />
