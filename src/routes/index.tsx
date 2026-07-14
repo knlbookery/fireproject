@@ -74,6 +74,13 @@ const eventConference = U("1540575467063-178a50c2df87"); // conference
 const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
 import fireLogo from "@/assets/fire-logo.png.asset.json";
 
+export const landingContentQuery = queryOptions({
+  queryKey: ["landing-content"],
+  queryFn: () => getLandingContent(),
+  initialData: FALLBACK_CONTENT,
+  staleTime: 5 * 60_000,
+});
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -92,6 +99,7 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: volunteers },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(landingContentQuery),
   component: Landing,
 });
 
