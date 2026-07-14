@@ -2264,6 +2264,7 @@ function Partners() {
 
 /* ---------------------- Page ---------------------- */
 function Landing() {
+  const { data: content } = useSuspenseQuery(landingContentQuery);
   return (
     <>
       <a
@@ -2274,7 +2275,7 @@ function Landing() {
       </a>
       <Header />
       <main id="main-content">
-        <Hero />
+        <Hero slides={content.heroSlides} />
         <Mission />
         <Programs />
         <Impact />
