@@ -301,66 +301,12 @@ function Header() {
 }
 
 /* ---------------------- Hero Slider ---------------------- */
-type Slide = {
-  eyebrow: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  alt: string;
-  cta: { label: string; href: string; primary?: boolean }[];
-};
+// Slide data now comes from Airtable via `getLandingContent` (see
+// src/lib/content.functions.ts). The `HeroSlide` type is re-exported from
+// that module and used here as the prop type.
 
-const SLIDES: Slide[] = [
-  {
-    eyebrow: "Our Mission",
-    title: "Empowering Communities. Inspiring Futures.",
-    subtitle:
-      "Creating opportunity through education, technology, sports, entrepreneurship, and community development across Ghana and the United States.",
-    image: volunteers,
-    alt: "F.I.R.E. community gathering",
-    cta: [
-      { label: "Learn more about our mission", href: "#mission", primary: true },
-      { label: "Donate", href: "#donate" },
-    ],
-  },
-  {
-    eyebrow: "Education",
-    title: "Transforming Lives Through Education.",
-    subtitle: "Building brighter futures through access to learning and technology.",
-    image: storyLab,
-    alt: "Students learning in a F.I.R.E. computer lab",
-    cta: [{ label: "Explore Programs", href: "#programs", primary: true }],
-  },
-  {
-    eyebrow: "Sports",
-    title: "Sports That Build Leaders.",
-    subtitle: "Developing confidence, teamwork, and opportunity through sport.",
-    image: storyBasketball,
-    alt: "Young athletes in a F.I.R.E. sports program",
-    cta: [{ label: "View Sports Programs", href: "#programs", primary: true }],
-  },
-  {
-    eyebrow: "Entrepreneurship",
-    title: "Supporting Entrepreneurship.",
-    subtitle: "Helping communities create sustainable futures.",
-    image: progBiz,
-    alt: "Entrepreneur in a F.I.R.E. mentorship program",
-    cta: [{ label: "Discover Opportunities", href: "#programs", primary: true }],
-  },
-  {
-    eyebrow: "Get Involved",
-    title: "Your Support Changes Lives.",
-    subtitle: "Donate, volunteer, sponsor, or partner with us.",
-    image: ghanaAerial,
-    alt: "Aerial view of a Ghanaian community served by F.I.R.E.",
-    cta: [
-      { label: "Donate Today", href: "#donate", primary: true },
-      { label: "Volunteer", href: "#volunteer" },
-    ],
-  },
-];
+function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
 
-function Hero() {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
