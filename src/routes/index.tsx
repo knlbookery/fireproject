@@ -377,7 +377,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       ))}
 
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-32 pt-52 text-white sm:pt-56 lg:px-10 lg:pb-40 lg:pt-56">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl pt-12 sm:pt-16 lg:pt-0">
           <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85">
             <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[idx].eyebrow}
           </span>
