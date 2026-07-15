@@ -545,7 +545,7 @@ function Mission() {
           <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
             Our Mission
           </div>
-          <h2 className="mt-4 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
+          <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
             We create opportunity where potential already lives.
           </h2>
           <p className="mt-6 text-lg text-muted-foreground">
@@ -687,7 +687,7 @@ function Impact() {
             <div className="text-xs font-medium uppercase tracking-[0.22em] text-accent">
               Our Impact
             </div>
-            <h2 className="mt-4 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl">
+            <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
               Impact is measured in changed lives.
             </h2>
             <p className="mt-5 max-w-md text-white/75">
@@ -1517,7 +1517,7 @@ function Contact() {
           <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
             Inquire
           </div>
-          <h2 className="mt-4 font-display text-4xl font-medium leading-[1.1] tracking-tight sm:text-5xl">
+          <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
             Let&apos;s start the conversation.
           </h2>
           <p className="mt-5 max-w-md text-foreground/70">
@@ -1769,7 +1769,7 @@ function Donate() {
             <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
               Donate
             </div>
-            <h2 className="mt-4 font-display text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
               Give with confidence.
               <br />
               <span className="text-foreground/60">Watch it become impact.</span>
