@@ -51,12 +51,13 @@ import "atropos/css";
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
-const ghanaAerial = U("1580060839134-75a5edca2e99"); // Accra skyline / Ghana
-const volunteers = U("1593113598332-cd288d649433"); // volunteers hands together
+// const ghanaAerial = U("1580060839134-75a5edca2e99"); // Accra skyline / Ghana
+const ghanaAerial = `src/images/hero1.png`; // Accra skyline / Ghana
+const volunteers = `src/images/hero1.png`; // volunteers hands together
 const storyLab = U("1581091870622-1e7e9b1f17b2"); // students at laptops
 const storyLeadership = U("1573497019940-1c28c88b4f3e"); // confident African woman portrait
-const storyBasketball = U("1546519638-68e109498ffc"); // basketball action
-const portrait1 = U("1531123897727-8f129e1688ce"); // African woman entrepreneur
+const storyBasketball = `src/images/hero1.png`; // basketball action
+const portrait1 = `src/images/hero1.png`; // African woman entrepreneur
 const portrait2 = U("1500648767791-00dcc994a43e"); // young man portrait
 const portrait3 = U("1521119989659-a83eee488004"); // athlete portrait
 const portrait4 = U("1507003211169-0a1dd7228f2d"); // older mentor portrait
@@ -68,7 +69,7 @@ const portrait9 = U("1539571696357-5a69c17a67c6"); // founder portrait
 const portrait10 = U("1517841905240-472988babdf9"); // student portrait
 const progTech = U("1517048676732-d65bc937f952"); // tech classroom
 const progYouth = U("1488521787991-ed7bbaae773c"); // youth group
-const progSports = U("1552674605-db6ffd4facb5"); // youth sports outdoor
+const progSports = `src/images/sport.png`; // youth sports outdoor
 const progBiz = U("1556761175-5973dc0f32e7"); // entrepreneurship meeting
 const eventConference = U("1540575467063-178a50c2df87"); // conference
 const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend

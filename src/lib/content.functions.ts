@@ -55,15 +55,15 @@ const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 const FALLBACK_IMAGES: SiteImages = {
-  ghanaAerial: U("1580060839134-75a5edca2e99"),
-  volunteers: U("1593113598332-cd288d649433"),
-  storyLab: U("1581091870622-1e7e9b1f17b2"),
-  storyLeadership: U("1573497019940-1c28c88b4f3e"),
-  storyBasketball: U("1546519638-68e109498ffc"),
-  progTech: U("1517048676732-d65bc937f952"),
-  progYouth: U("1488521787991-ed7bbaae773c"),
-  progSports: U("1552674605-db6ffd4facb5"),
-  progBiz: U("1556761175-5973dc0f32e7"),
+  ghanaAerial: `src/images/community.png`, //communities
+  volunteers: `src/images/mission.png`, //mission
+  storyLab: `src/images/education.png`, //education
+  storyLeadership: `src/images/basketball.png`,
+  storyBasketball: `src/images/basketball.png`, //good
+  progTech: `src/images/basketball.png`,
+  progYouth: `src/images/basketball.png`,
+  progSports: `src/images/basketball.png`,
+  progBiz: `src/images/basketball.png`, //good
   eventConference: U("1540575467063-178a50c2df87"),
   eventWeekend: U("1529070538774-1843cb3265df"),
 };
