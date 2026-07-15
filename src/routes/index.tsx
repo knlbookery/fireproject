@@ -267,13 +267,19 @@ function Header() {
             onClick={() => setOpen((o) => !o)}
             className="grid h-11 w-11 place-items-center rounded-full border border-black/10 text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
           >
-            <span className="text-lg leading-none" aria-hidden="true">{open ? "×" : "≡"}</span>
+            <span className="text-lg leading-none" aria-hidden="true">
+              {open ? "×" : "≡"}
+            </span>
           </button>
         </div>
       </div>
 
       {open && (
-        <nav id="mobile-nav" aria-label="Mobile" className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden">
+        <nav
+          id="mobile-nav"
+          aria-label="Mobile"
+          className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden"
+        >
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -307,7 +313,6 @@ function Header() {
 // that module and used here as the prop type.
 
 function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
-
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
@@ -394,7 +399,10 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
                 className={`group ${c.primary ? BTN.primary : BTN.onDarkOutline}`}
               >
                 {c.label}
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" />
+                <ArrowRight
+                  className="h-4 w-4 transition group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
               </a>
             ))}
           </div>
@@ -1368,7 +1376,6 @@ function Stories() {
 
 /* ---------------------- Events ---------------------- */
 function Events({ items }: { items: EventItem[] }) {
-
   return (
     <Section
       id="events"
@@ -2105,9 +2112,16 @@ function Footer() {
             </div>
           </div>
         </a>
-        <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80">
+        <nav
+          aria-label="Footer"
+          className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80"
+        >
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="rounded-sm transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1230]">
+            <a
+              key={l.href}
+              href={l.href}
+              className="rounded-sm transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1230]"
+            >
               {l.label}
             </a>
           ))}
