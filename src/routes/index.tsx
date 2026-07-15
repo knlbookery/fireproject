@@ -1176,9 +1176,9 @@ function Stories() {
   return (
     <Section
       id="stories"
-      eyebrow="Community Stories"
-      title="The people behind the spark."
-      intro="A dozen faces. A dozen journeys. One shared belief — that opportunity, once unlocked, multiplies."
+      eyebrow="Organization"
+      title="The Leaders behind the spark"
+      intro="Through purposeful leadership, our team inspires people, expands opportunity, and creates lasting impact."
       className="bg-[var(--surface)]"
     >
       <div
