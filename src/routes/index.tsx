@@ -1505,20 +1505,22 @@ function Contact() {
     setErrors({});
     setStatus("submitting");
     try {
-      await fetch(
-        "https://hooks.airtable.com/workflows/v1/genericWebhook/appWTrxY1CajQl81C/wflmgWwKFu6Pk0pvd/wtrBrqtwE0km59VI9",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: parsed.data.name,
-            email: parsed.data.email,
-            organization: parsed.data.organization ?? "",
-            message: parsed.data.message,
-            submittedAt: new Date().toISOString(),
-          }),
-        },
-      );
+      const response = await fetch("/api/inquire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: parsed.data.name,
+          email: parsed.data.email,
+          organization: parsed.data.organization ?? "",
+          message: parsed.data.message,
+          submittedAt: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to submit your inquiry. Please try again.");
+      }
+
       setStatus("success");
       setValues({ name: "", email: "", organization: "", message: "" });
       setModal("success");
