@@ -1505,11 +1505,16 @@ function Contact() {
     setErrors({});
     setStatus("submitting");
     try {
-      const response = await fetch(
+      // Airtable's generic webhook endpoint does not return CORS headers, so a
+      // standard fetch fails with "Failed to fetch". Sending as a simple
+      // request (text/plain) avoids the preflight, and `no-cors` makes the
+      // response opaque while still delivering the payload to Airtable.
+      await fetch(
         "https://hooks.airtable.com/workflows/v1/genericWebhook/appWTrxY1CajQl81C/wflmgWwKFu6Pk0pvd/wtrBrqtwE0km59VI9",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
           body: JSON.stringify({
             name: parsed.data.name,
             email: parsed.data.email,
@@ -1519,9 +1524,6 @@ function Contact() {
           }),
         },
       );
-      if (!response.ok) {
-        throw new Error(`Submission failed (${response.status})`);
-      }
       setStatus("success");
       setValues({ name: "", email: "", organization: "", message: "" });
       setModal("success");
