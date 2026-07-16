@@ -53,7 +53,7 @@ const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 // const ghanaAerial = U("1580060839134-75a5edca2e99"); // Accra skyline / Ghana
 const ghanaAerial = `src/images/hero1.png`; // Accra skyline / Ghana
-const volunteers = `src/images/hero1.png`; // volunteers hands together
+const volunteers = U("1529070538774-1843cb3265df"); // volunteers hands together
 const storyLab = U("1581091870622-1e7e9b1f17b2"); // students at laptops
 const storyLeadership = U("1573497019940-1c28c88b4f3e"); // confident African woman portrait
 const storyBasketball = `src/images/hero1.png`; // basketball action

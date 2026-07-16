@@ -59,7 +59,7 @@ const FALLBACK_IMAGES: SiteImages = {
   volunteers: `src/images/mission.png`, //mission
   storyLab: `src/images/education.png`, //education
   storyLeadership: `src/images/basketball.png`,
-  storyBasketball: `src/images/basketball.png`, //good
+  storyBasketball: `src/images/basketballteam.png`, //good
   progTech: `src/images/basketball.png`,
   progYouth: `src/images/basketball.png`,
   progSports: `src/images/basketball.png`,
