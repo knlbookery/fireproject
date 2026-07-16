@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as YouthEmpowermentGuideRouteImport } from './routes/youth-empowerment-guide'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiInquireRouteImport } from './routes/api/inquire'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
   id: '/youth-empowerment-guide',
@@ -28,35 +29,49 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiInquireRoute = ApiInquireRouteImport.update({
+  id: '/api/inquire',
+  path: '/api/inquire',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/api/inquire': typeof ApiInquireRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/api/inquire': typeof ApiInquireRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/api/inquire': typeof ApiInquireRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/youth-empowerment-guide'
+  fullPaths: '/' | '/sitemap.xml' | '/youth-empowerment-guide' | '/api/inquire'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/youth-empowerment-guide'
-  id: '__root__' | '/' | '/sitemap.xml' | '/youth-empowerment-guide'
+  to: '/' | '/sitemap.xml' | '/youth-empowerment-guide' | '/api/inquire'
+  id:
+    | '__root__'
+    | '/'
+    | '/sitemap.xml'
+    | '/youth-empowerment-guide'
+    | '/api/inquire'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
+  ApiInquireRoute: typeof ApiInquireRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +97,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/inquire': {
+      id: '/api/inquire'
+      path: '/api/inquire'
+      fullPath: '/api/inquire'
+      preLoaderRoute: typeof ApiInquireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +111,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
+  ApiInquireRoute: ApiInquireRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
