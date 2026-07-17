@@ -2601,7 +2601,7 @@ function Landing() {
         <Impact />
         <Stories />
         <Partners />
-        <Events items={content.events} />
+        <Events fallback={content.events} />
         <Contact />
         <Donate />
         <Volunteer />
