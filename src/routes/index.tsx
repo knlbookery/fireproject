@@ -51,14 +51,26 @@ import "atropos/css";
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
-// const ghanaAerial = U("1580060839134-75a5edca2e99"); // Accra skyline / Ghana
-const ghanaAerial = `src/images/hero1.png`; // Accra skyline / Ghana
-const volunteers = U("1529070538774-1843cb3265df"); // volunteers hands together
-const storyLab = U("1581091870622-1e7e9b1f17b2"); // students at laptops
-const storyLeadership = U("1573497019940-1c28c88b4f3e"); // confident African woman portrait
+
+// what we do and volunteer imagery
+const ghanaAerial = `src/images/community_dev.jpg`; // Accra skyline / Ghana
+const progSports = `src/images/sport.png`; // youth sports outdoor
+const progBiz = `src/images/mission_enterprenuer.png`; // entrepreneurship meeting
+const volunteers = `src/images/impact.png`; // volunteers hands together
+
+const storyLeadership = `src/images/hero.png`; // confident African woman portrait
 const storyBasketball = `src/images/hero1.png`; // basketball action
-const portrait1 = `src/images/hero1.png`; // African woman entrepreneur
-const portrait2 = U("1500648767791-00dcc994a43e"); // young man portrait
+
+// capsule imagery
+const capsule1 = `src/images/capsule1.jpg`; // basketball action
+const capsule2 = `src/images/capsule2.jpg`; // basketball action
+const capsule3 = `src/images/capsule3.jpg`; // basketball action
+const capsule4 = `src/images/capsule4.jpg`; // basketball action
+const capsule5 = `src/images/basketball.png`; // basketball action
+
+// organization program imagery
+const portrait1 = `src/images/portrait1.png`; // African woman entrepreneur
+const portrait2 = `src/images/portrait2.png`; // young man portrait
 const portrait3 = U("1521119989659-a83eee488004"); // athlete portrait
 const portrait4 = U("1507003211169-0a1dd7228f2d"); // older mentor portrait
 const portrait5 = U("1502323777036-f29e3972d82f"); // scholar girl
@@ -69,8 +81,8 @@ const portrait9 = U("1539571696357-5a69c17a67c6"); // founder portrait
 const portrait10 = U("1517841905240-472988babdf9"); // student portrait
 const progTech = U("1517048676732-d65bc937f952"); // tech classroom
 const progYouth = U("1488521787991-ed7bbaae773c"); // youth group
-const progSports = `src/images/sport.png`; // youth sports outdoor
-const progBiz = U("1556761175-5973dc0f32e7"); // entrepreneurship meeting
+
+// event and logo
 const eventConference = U("1540575467063-178a50c2df87"); // conference
 const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
 import fireLogo from "@/assets/fire-logo.png.asset.json";
@@ -489,21 +501,21 @@ function Section({
 /* ---------------------- Capsule Collage ---------------------- */
 function CapsuleCollage() {
   const capsules = [
-    { img: storyLeadership, left: "3%", top: "6%", rotate: -22, delay: "0s" },
-    { img: progYouth, left: "32%", top: "-2%", rotate: -22, delay: "0.15s" },
-    { img: storyBasketball, left: "61%", top: "6%", rotate: -22, delay: "0.3s" },
-    { img: progSports, left: "17%", top: "44%", rotate: -22, delay: "0.45s" },
-    { img: volunteers, left: "47%", top: "40%", rotate: -22, delay: "0.6s" },
+    { img: capsule1, left: "3%", top: "6%", rotate: -22, delay: "0s" },
+    { img: capsule2, left: "32%", top: "-2%", rotate: -22, delay: "0.15s" },
+    { img: capsule3, left: "64%", top: "6%", rotate: -22, delay: "0.3s" },
+    { img: capsule4, left: "23%", top: "44%", rotate: -22, delay: "0.45s" },
+    { img: capsule5, left: "50%", top: "40%", rotate: -22, delay: "0.6s" },
   ];
   const dots = [
-    { left: "2%", top: "22%", size: 14, color: "bg-primary" },
-    { left: "6%", top: "82%", size: 22, color: "bg-accent" },
+    { left: "2%", top: "22%", size: 19, color: "bg-primary" },
+    { left: "6%", top: "82%", size: 29, color: "bg-accent" },
     { left: "94%", top: "12%", size: 18, color: "bg-accent" },
-    { left: "97%", top: "48%", size: 10, color: "bg-primary" },
-    { left: "90%", top: "86%", size: 26, color: "bg-primary" },
-    { left: "50%", top: "96%", size: 12, color: "bg-accent" },
+    { left: "97%", top: "48%", size: 20, color: "bg-primary" },
+    { left: "90%", top: "86%", size: 36, color: "bg-primary" },
+    { left: "50%", top: "96%", size: 18, color: "bg-accent" },
     { left: "74%", top: "92%", size: 8, color: "bg-emerald-500" },
-    { left: "0%", top: "52%", size: 8, color: "bg-rose-500" },
+    { left: "0%", top: "52%", size: 15, color: "bg-rose-500" },
     { left: "84%", top: "0%", size: 10, color: "bg-emerald-500" },
   ];
   return (
@@ -747,104 +759,104 @@ function Stories() {
   const portraits: Story[] = [
     {
       img: portrait1,
-      name: "Ama",
-      role: "Entrepreneur",
-      location: "Accra, Ghana",
-      quote: "F.I.R.E. didn't just teach me business — they believed in me before I did.",
-      body: "Ama launched a small textile studio after completing the entrepreneurship cohort. Two years on, she employs four young women from her neighborhood.",
+      name: "",
+      role: "",
+      location: "",
+      quote: "",
+      body: "",
     },
-    {
-      img: storyLeadership,
-      name: "Kojo",
-      role: "Youth Leader",
-      location: "Kumasi, Ghana",
-      quote: "The mentors became the older brothers I never had.",
-      body: "Kojo now runs weekend leadership circles for 30+ teens, using the same curriculum that changed his trajectory at 16.",
-    },
-    {
-      img: portrait6,
-      name: "Nana",
-      role: "Software Engineer",
-      location: "Accra, Ghana",
-      quote: "I went from borrowing a laptop to writing code for a global team.",
-      body: "After the tech fellowship, Nana joined a remote engineering team building fintech tools for African SMEs.",
-    },
+    // {
+    //   img: storyLeadership,
+    //   name: "",
+    //   role: "",
+    //   location: "",
+    //   quote: "",
+    //   body: "",
+    // },
+    // {
+    //   img: portrait6,
+    //   name: "",
+    //   role: "",
+    //   location: "",
+    //   quote: "",
+    //   body: "",
+    // },
     {
       img: portrait2,
-      name: "Daniel",
-      role: "Tech Fellow",
-      location: "Philadelphia, USA",
-      quote: "F.I.R.E. showed me my zip code wasn't my ceiling.",
-      body: "Daniel was the first in his family to graduate college. He now mentors high schoolers from his old block.",
+      name: "",
+      role: "",
+      location: "",
+      quote: "",
+      body: "",
     },
-    {
-      img: portrait8,
-      name: "Auntie Adwoa",
-      role: "Teacher",
-      location: "Cape Coast, Ghana",
-      quote: "When you invest in a teacher, you invest in a hundred children.",
-      body: "Adwoa runs a F.I.R.E.-supported reading program serving over 200 students across two schools.",
-    },
-    {
-      img: portrait5,
-      name: "Esi",
-      role: "Scholar",
-      location: "Volta Region, Ghana",
-      quote: "The scholarship gave me a chance. The community gave me belonging.",
-      body: "Esi is studying public health on full scholarship and plans to return home to build maternal care programs.",
-    },
-    {
-      img: portrait10,
-      name: "Abena",
-      role: "Student",
-      location: "Tamale, Ghana",
-      quote: "I want to be the doctor my village never had.",
-      body: "Abena is a top of her class secondary student with her sights set on medical school — F.I.R.E. covers her boarding and books.",
-    },
-    {
-      img: portrait3,
-      name: "Akua",
-      role: "Athlete",
-      location: "Accra, Ghana",
-      quote: "Sport gave me discipline. F.I.R.E. gave me a stage.",
-      body: "Akua represented her region in two national tournaments and now coaches a girls' track squad after school.",
-    },
-    {
-      img: portrait7,
-      name: "Marcus",
-      role: "Hooper",
-      location: "Philadelphia, USA",
-      quote: "The court is where I learned to lead.",
-      body: "Marcus runs the summer hoops league F.I.R.E. sponsors in West Philly — over 180 kids played last season.",
-    },
-    {
-      img: portrait9,
-      name: "Yaw",
-      role: "Founder",
-      location: "Kumasi, Ghana",
-      quote: "We don't need handouts. We need a runway — F.I.R.E. built mine.",
-      body: "Yaw founded a logistics startup connecting rural farmers to urban markets, now serving 12 districts.",
-    },
-    {
-      img: portrait4,
-      name: "Mr. Mensah",
-      role: "Mentor",
-      location: "Tema, Ghana",
-      quote: "Mentorship is the long game. I'm proud to play it.",
-      body: "A retired engineer, Mr. Mensah has personally mentored 40+ F.I.R.E. tech fellows over the last six years.",
-    },
-    {
-      img: storyBasketball,
-      name: "Kwame",
-      role: "Coach",
-      location: "Accra, Ghana",
-      quote: "Every kid deserves a coach who shows up — every single week.",
-      body: "Kwame's after-school program has kept hundreds of teens off the streets and on the court since 2019.",
-    },
+    // {
+    //   img: portrait8,
+    //   name: "Auntie Adwoa",
+    //   role: "Teacher",
+    //   location: "Cape Coast, Ghana",
+    //   quote: "When you invest in a teacher, you invest in a hundred children.",
+    //   body: "Adwoa runs a F.I.R.E.-supported reading program serving over 200 students across two schools.",
+    // },
+    // {
+    //   img: portrait5,
+    //   name: "Esi",
+    //   role: "Scholar",
+    //   location: "Volta Region, Ghana",
+    //   quote: "The scholarship gave me a chance. The community gave me belonging.",
+    //   body: "Esi is studying public health on full scholarship and plans to return home to build maternal care programs.",
+    // },
+    // {
+    //   img: portrait10,
+    //   name: "Abena",
+    //   role: "Student",
+    //   location: "Tamale, Ghana",
+    //   quote: "I want to be the doctor my village never had.",
+    //   body: "Abena is a top of her class secondary student with her sights set on medical school — F.I.R.E. covers her boarding and books.",
+    // },
+    // {
+    //   img: portrait3,
+    //   name: "Akua",
+    //   role: "Athlete",
+    //   location: "Accra, Ghana",
+    //   quote: "Sport gave me discipline. F.I.R.E. gave me a stage.",
+    //   body: "Akua represented her region in two national tournaments and now coaches a girls' track squad after school.",
+    // },
+    // {
+    //   img: portrait7,
+    //   name: "Marcus",
+    //   role: "Hooper",
+    //   location: "Philadelphia, USA",
+    //   quote: "The court is where I learned to lead.",
+    //   body: "Marcus runs the summer hoops league F.I.R.E. sponsors in West Philly — over 180 kids played last season.",
+    // },
+    // {
+    //   img: portrait9,
+    //   name: "Yaw",
+    //   role: "Founder",
+    //   location: "Kumasi, Ghana",
+    //   quote: "We don't need handouts. We need a runway — F.I.R.E. built mine.",
+    //   body: "Yaw founded a logistics startup connecting rural farmers to urban markets, now serving 12 districts.",
+    // },
+    // {
+    //   img: portrait4,
+    //   name: "Mr. Mensah",
+    //   role: "Mentor",
+    //   location: "Tema, Ghana",
+    //   quote: "Mentorship is the long game. I'm proud to play it.",
+    //   body: "A retired engineer, Mr. Mensah has personally mentored 40+ F.I.R.E. tech fellows over the last six years.",
+    // },
+    // {
+    //   img: storyBasketball,
+    //   name: "Kwame",
+    //   role: "Coach",
+    //   location: "Accra, Ghana",
+    //   quote: "Every kid deserves a coach who shows up — every single week.",
+    //   body: "Kwame's after-school program has kept hundreds of teens off the streets and on the court since 2019.",
+    // },
   ];
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
-  const LOOP = 3;
+  const LOOP = 2;
   const looped = Array.from({ length: LOOP }).flatMap((_, copy) =>
     portraits.map((p, i) => ({ ...p, _key: `${copy}-${i}`, _origIndex: i })),
   );
@@ -1544,14 +1556,7 @@ function Contact() {
           <p className="mt-5 max-w-md text-foreground/70">
             Interested in sponsoring an event, volunteering, partnering with F.I.R.E., or learning
             more? Send us a note and our team will follow up.
-          </p>
-          <a
-            href="mailto:info@freeinspiration.org"
-            className="mt-8 inline-flex items-center gap-3 text-sm text-foreground/80 transition hover:text-primary"
-          >
-            <Mail className="h-4 w-4 text-primary" />
-            info@freeinspiration.org
-          </a>
+          </p>     
         </div>
         <form
           onSubmit={onSubmit}

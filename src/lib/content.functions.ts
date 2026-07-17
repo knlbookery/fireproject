@@ -63,7 +63,9 @@ const FALLBACK_IMAGES: SiteImages = {
   progTech: `src/images/basketball.png`,
   progYouth: `src/images/basketball.png`,
   progSports: `src/images/basketball.png`,
-  progBiz: `src/images/basketball.png`, //good
+  progBiz: `src/images/enterprenuers.jpg`, //good
+  
+  // Events are not currently used in the landing page, but we still provide a fallback for completeness.
   eventConference: U("1540575467063-178a50c2df87"),
   eventWeekend: U("1529070538774-1843cb3265df"),
 };
