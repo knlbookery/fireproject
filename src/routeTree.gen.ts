@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as YouthEmpowermentGuideRouteImport } from './routes/youth-empowerment-guide'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiRsvpRouteImport } from './routes/api/rsvp'
 import { Route as ApiInquireRouteImport } from './routes/api/inquire'
+import { Route as ApiEventsRouteImport } from './routes/api/events'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
   id: '/youth-empowerment-guide',
@@ -29,9 +31,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRsvpRoute = ApiRsvpRouteImport.update({
+  id: '/api/rsvp',
+  path: '/api/rsvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiInquireRoute = ApiInquireRouteImport.update({
   id: '/api/inquire',
   path: '/api/inquire',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiEventsRoute = ApiEventsRouteImport.update({
+  id: '/api/events',
+  path: '/api/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -39,39 +51,61 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/api/events': typeof ApiEventsRoute
   '/api/inquire': typeof ApiInquireRoute
+  '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/api/events': typeof ApiEventsRoute
   '/api/inquire': typeof ApiInquireRoute
+  '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/api/events': typeof ApiEventsRoute
   '/api/inquire': typeof ApiInquireRoute
+  '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/youth-empowerment-guide' | '/api/inquire'
+  fullPaths:
+    | '/'
+    | '/sitemap.xml'
+    | '/youth-empowerment-guide'
+    | '/api/events'
+    | '/api/inquire'
+    | '/api/rsvp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/youth-empowerment-guide' | '/api/inquire'
+  to:
+    | '/'
+    | '/sitemap.xml'
+    | '/youth-empowerment-guide'
+    | '/api/events'
+    | '/api/inquire'
+    | '/api/rsvp'
   id:
     | '__root__'
     | '/'
     | '/sitemap.xml'
     | '/youth-empowerment-guide'
+    | '/api/events'
     | '/api/inquire'
+    | '/api/rsvp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
+  ApiEventsRoute: typeof ApiEventsRoute
   ApiInquireRoute: typeof ApiInquireRoute
+  ApiRsvpRoute: typeof ApiRsvpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -97,11 +131,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/rsvp': {
+      id: '/api/rsvp'
+      path: '/api/rsvp'
+      fullPath: '/api/rsvp'
+      preLoaderRoute: typeof ApiRsvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/inquire': {
       id: '/api/inquire'
       path: '/api/inquire'
       fullPath: '/api/inquire'
       preLoaderRoute: typeof ApiInquireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/events': {
+      id: '/api/events'
+      path: '/api/events'
+      fullPath: '/api/events'
+      preLoaderRoute: typeof ApiEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -111,18 +159,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
+  ApiEventsRoute: ApiEventsRoute,
   ApiInquireRoute: ApiInquireRoute,
+  ApiRsvpRoute: ApiRsvpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

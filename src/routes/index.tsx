@@ -1387,45 +1387,331 @@ function Stories() {
 }
 
 /* ---------------------- Events ---------------------- */
-function Events({ items }: { items: EventItem[] }) {
+type LiveEvent = {
+  id: string;
+  name: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  photo: string;
+};
+
+const rsvpFormSchema = z.object({
+  fullName: z.string().trim().min(2, "Please enter your full name").max(120),
+  email: z.string().trim().email("Please enter a valid email").max(180),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
+});
+
+function Events({ fallback }: { fallback: EventItem[] }) {
+  const [events, setEvents] = useState<LiveEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<LiveEvent | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/events");
+        const data = (await res.json()) as { success: boolean; events?: LiveEvent[] };
+        if (!cancelled && data.success && data.events) {
+          setEvents(data.events);
+        }
+      } catch (err) {
+        console.error("Failed to load events", err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const displayEvents: LiveEvent[] =
+    events.length > 0
+      ? events
+      : fallback.map((e, i) => ({
+          id: `fallback-${i}`,
+          name: e.title,
+          date: `${e.month} ${e.day}`,
+          time: "",
+          location: e.place,
+          description: "",
+          photo: e.img,
+        }));
+
   return (
     <Section
       id="events"
       eyebrow="Upcoming Events"
-      title="Sponsor an event. Show up for a community."
+      title="Show up. Sponsor. Celebrate community."
     >
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {items.map((e) => (
-          <article key={e.title} className="group relative overflow-hidden rounded-2xl bg-black">
-            <img
-              src={e.img}
-              alt={`${e.title} F.I.R.E. event`}
-              className="aspect-[4/3] w-full object-cover opacity-85 transition duration-700 group-hover:scale-[1.03]"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-            <div className="absolute left-5 top-5 rounded-lg bg-white/95 px-3 py-2 text-center text-foreground">
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-primary">
-                {e.month}
+      {loading && events.length === 0 ? (
+        <p className="text-muted-foreground">Loading upcoming events…</p>
+      ) : displayEvents.length === 0 ? (
+        <p className="text-muted-foreground">No upcoming events yet. Check back soon.</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {displayEvents.map((e) => (
+            <button
+              type="button"
+              key={e.id}
+              onClick={() => setSelected(e)}
+              className="group relative overflow-hidden rounded-2xl bg-black text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
+              <img
+                src={e.photo || fallback[0]?.img}
+                alt={`${e.name} F.I.R.E. event`}
+                className="aspect-[4/3] w-full object-cover opacity-85 transition duration-700 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+              {e.date && (
+                <div className="absolute left-5 top-5 max-w-[70%] rounded-lg bg-white/95 px-3 py-2 text-foreground">
+                  <div className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                    {e.date}
+                  </div>
+                  {e.time && (
+                    <div className="font-display text-sm font-semibold leading-tight">
+                      {e.time}
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                <h3 className="font-display text-lg font-medium leading-snug">{e.name}</h3>
+                {e.location && (
+                  <div className="mt-2 flex items-center gap-1.5 text-xs text-white/80">
+                    <MapPin className="h-3.5 w-3.5" /> {e.location}
+                  </div>
+                )}
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white">
+                  View details & RSVP <ArrowRight className="h-3.5 w-3.5" />
+                </span>
               </div>
-              <div className="font-display text-xl font-semibold leading-none">{e.day}</div>
-            </div>
-            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-              <h3 className="font-display text-lg font-medium leading-snug">{e.title}</h3>
-              <div className="mt-2 flex items-center gap-1.5 text-xs text-white/80">
-                <MapPin className="h-3.5 w-3.5" /> {e.place}
-              </div>
-              <a
-                href="#contact"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white"
-              >
-                Sponsor this event <ArrowRight className="h-3.5 w-3.5" />
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <EventDetailModal event={selected} onClose={() => setSelected(null)} />
     </Section>
+  );
+}
+
+function EventDetailModal({
+  event,
+  onClose,
+}: {
+  event: LiveEvent | null;
+  onClose: () => void;
+}) {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errors, setErrors] = useState<Partial<Record<"fullName" | "email" | "phone", string>>>(
+    {},
+  );
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (event) {
+      setFullName("");
+      setEmail("");
+      setPhone("");
+      setErrors({});
+      setStatus("idle");
+      setErrorMessage("");
+    }
+  }, [event?.id]);
+
+  const isFallback = event?.id.startsWith("fallback-");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!event) return;
+
+    const parsed = rsvpFormSchema.safeParse({ fullName, email, phone });
+    if (!parsed.success) {
+      const fieldErrors: typeof errors = {};
+      parsed.error.issues.forEach((issue) => {
+        const key = issue.path[0] as keyof typeof errors;
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+    setErrors({});
+    setStatus("submitting");
+    try {
+      const res = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId: event.id,
+          fullName: parsed.data.fullName,
+          email: parsed.data.email,
+          phone: parsed.data.phone ?? "",
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        success?: boolean;
+        error?: string;
+      };
+      if (!res.ok || !data.success) {
+        setStatus("error");
+        setErrorMessage(data.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+      setStatus("success");
+    } catch (err) {
+      console.error("RSVP submit failed", err);
+      setStatus("error");
+      setErrorMessage("Network error. Please try again.");
+    }
+  }
+
+  return (
+    <Dialog open={!!event} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-2xl overflow-hidden p-0">
+        {event && (
+          <div className="max-h-[85vh] overflow-y-auto">
+            {event.photo && (
+              <div className="relative h-52 w-full overflow-hidden md:h-64">
+                <img
+                  src={event.photo}
+                  alt={event.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            )}
+            <div className="space-y-6 p-6 md:p-8">
+              <DialogHeader className="space-y-2 text-left">
+                {event.date && (
+                  <div className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                    {event.date}
+                    {event.time ? ` • ${event.time}` : ""}
+                  </div>
+                )}
+                <DialogTitle className="font-display text-2xl font-semibold leading-tight md:text-3xl">
+                  {event.name}
+                </DialogTitle>
+                {event.location && (
+                  <DialogDescription className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4" /> {event.location}
+                  </DialogDescription>
+                )}
+              </DialogHeader>
+
+              {event.description && (
+                <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                  {event.description}
+                </p>
+              )}
+
+              <div className="border-t border-border pt-6">
+                <h3 className="font-display text-lg font-semibold">
+                  Register for the guest list
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  We'll confirm your spot by email.
+                </p>
+
+                {isFallback ? (
+                  <p className="mt-4 rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
+                    RSVPs open once this event is published from Airtable.
+                  </p>
+                ) : status === "success" ? (
+                  <div className="mt-4 flex items-start gap-3 rounded-lg border border-primary/30 bg-primary/5 p-4 text-sm">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
+                    <div>
+                      <div className="font-semibold">You're on the list.</div>
+                      <div className="text-muted-foreground">
+                        Thanks, {fullName || "friend"} — we'll be in touch with details.
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div>
+                        <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Full name
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={fullName}
+                          onChange={(ev) => setFullName(ev.target.value)}
+                          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                        />
+                        {errors.fullName && (
+                          <p className="mt-1 text-xs text-destructive">{errors.fullName}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(ev) => setEmail(ev.target.value)}
+                          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                        />
+                        {errors.email && (
+                          <p className="mt-1 text-xs text-destructive">{errors.email}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Phone (optional)
+                      </label>
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(ev) => setPhone(ev.target.value)}
+                        placeholder="+1 555 000 0000"
+                        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+
+                    {status === "error" && (
+                      <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-xs text-destructive">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                        <span>{errorMessage}</span>
+                      </div>
+                    )}
+
+                    <DialogFooter className="mt-2 flex flex-row justify-end gap-2 sm:justify-end">
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-lg border border-border px-4 py-2 text-sm font-medium hover:bg-muted"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={status === "submitting"}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+                      >
+                        {status === "submitting" ? "Registering…" : "Confirm RSVP"}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </DialogFooter>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -2315,7 +2601,7 @@ function Landing() {
         <Impact />
         <Stories />
         <Partners />
-        <Events items={content.events} />
+        <Events fallback={content.events} />
         <Contact />
         <Donate />
         <Volunteer />
