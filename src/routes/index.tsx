@@ -761,9 +761,9 @@ const FALLBACK_PORTRAITS: Story[] = [
 ];
 
 function Stories() {
-  const [portraits, setPortraits] = React.useState<Story[]>(FALLBACK_PORTRAITS);
+  const [portraits, setPortraits] = useState<Story[]>(FALLBACK_PORTRAITS);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
