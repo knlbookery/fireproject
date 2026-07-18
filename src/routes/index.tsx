@@ -1899,6 +1899,8 @@ function Contact() {
               placeholder="Your name"
               value={values.name}
               onChange={(e) => set("name", e.target.value)}
+              onBlur={() => validateField("name")}
+
               aria-invalid={!!errors.name}
               aria-describedby={errors.name ? "contact-name-err" : undefined}
               maxLength={100}
