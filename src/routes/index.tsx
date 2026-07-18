@@ -1716,29 +1716,37 @@ function EventDetailModal({
 }
 
 /* ---------------------- Contact ---------------------- */
+const NAME_REGEX = /^[A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ'’.\- ]{1,}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
+
 const contactSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, { message: "Please enter your name" })
-    .max(100, { message: "Name must be less than 100 characters" }),
+    .min(2, { message: "Please enter your full name (at least 2 characters)." })
+    .max(100, { message: "Name must be less than 100 characters." })
+    .regex(NAME_REGEX, {
+      message: "Name can only contain letters, spaces, hyphens and apostrophes.",
+    }),
   email: z
     .string()
     .trim()
-    .email({ message: "Please enter a valid email address" })
-    .max(255, { message: "Email must be less than 255 characters" }),
+    .min(1, { message: "Please enter your email address." })
+    .max(255, { message: "Email must be less than 255 characters." })
+    .regex(EMAIL_REGEX, { message: "Please enter a valid email address (e.g. name@example.com)." }),
   organization: z
     .string()
     .trim()
-    .max(120, { message: "Organization must be less than 120 characters" })
+    .max(120, { message: "Organization must be less than 120 characters." })
     .optional()
     .or(z.literal("")),
   message: z
     .string()
     .trim()
-    .min(20, { message: "Please share at least 20 characters about your inquiry" })
-    .max(1000, { message: "Message must be less than 1000 characters" }),
+    .min(20, { message: "Please share at least 20 characters about your inquiry." })
+    .max(1000, { message: "Message must be less than 1000 characters." }),
 });
+
 type ContactValues = z.infer<typeof contactSchema>;
 type ContactErrors = Partial<Record<keyof ContactValues, string>>;
 
