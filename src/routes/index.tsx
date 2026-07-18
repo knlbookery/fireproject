@@ -2041,356 +2041,71 @@ function Contact() {
 
 /* ---------------------- Donate ---------------------- */
 function Donate() {
-  const tiers = [
-    { amount: 25, label: "Spark", impact: "Provides school supplies for one student for a month." },
-    {
-      amount: 50,
-      label: "Kindle",
-      impact: "Funds a week of after-school mentorship for a youth athlete.",
-    },
-    {
-      amount: 100,
-      label: "Ignite",
-      impact: "Sponsors entrepreneurship training for a community member.",
-      featured: true,
-    },
-    {
-      amount: null as number | null,
-      label: "Blaze",
-      impact: "Choose your own gift — every dollar reaches the field.",
-    },
-  ];
-
-  const [selectedIdx, setSelectedIdx] = useState<number>(2);
-  const [customAmount, setCustomAmount] = useState<string>("");
-  const [frequency, setFrequency] = useState<"one-time" | "monthly">("one-time");
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string>("");
-
-  const selected = tiers[selectedIdx];
-  const isCustom = selected.amount === null;
-  const effectiveAmount = isCustom ? Number(customAmount) : (selected.amount as number);
-  const amountValid = Number.isFinite(effectiveAmount) && effectiveAmount >= 1;
-
-  const handleDonate = () => {
-    setErrorMsg("");
-    if (!amountValid) {
-      setErrorMsg(
-        isCustom ? "Enter a custom amount of $1 or more." : "Please select a gift amount.",
-      );
-      return;
-    }
-    setConfirmOpen(true);
-  };
-
-  const allocation = [
-    { label: "Programs", pct: 82, color: "bg-primary" },
-    { label: "Community Events", pct: 12, color: "bg-accent" },
-    { label: "Operations", pct: 6, color: "bg-foreground/40" },
-  ];
-
-  const trust = [
-    { icon: ShieldCheck, label: "501(c)(3) Nonprofit", sub: "EIN on request" },
-    { icon: FileCheck, label: "Tax-Deductible", sub: "Receipt emailed instantly" },
-    { icon: Lock, label: "Secure Checkout", sub: "256-bit SSL · PCI compliant" },
-    { icon: Award, label: "Audited Annually", sub: "Independent CPA review" },
-  ];
+  useEffect(() => {
+    const SRC = "https://www.zeffy.com/embed/v2/zeffy-embed.js";
+    if (document.querySelector(`script[src="${SRC}"]`)) return;
+    const s = document.createElement("script");
+    s.src = SRC;
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
 
   return (
-    <section id="donate" className="px-6 py-10 lg:px-10 lg:py-10">
-      <div className="mx-auto max-w-[1400px]">
-        {/* Header */}
-        <div className="mb-12 flex flex-col items-start justify-between gap-6 lg:mb-16 lg:flex-row lg:items-end">
-          <div className="max-w-2xl">
-            <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
-              Donate
-            </div>
-            <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-              Give with confidence.
-              <br />
-              <span className="text-foreground/60">Watch it become impact.</span>
-            </h2>
+    <section id="donate" className="bg-slate-50 px-6 py-24 lg:px-10 lg:py-32">
+      <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+        {/* Intro */}
+        <div className="lg:col-span-5 lg:sticky lg:top-28">
+          <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
+            Donate
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-xs text-foreground/70">
+          <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
+            Give Inspiration That Changes Lives!
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-foreground/75">
+            <span className="font-semibold text-foreground">Join us in Creating Change!</span> At
+            Fire Free Inspiration Reaching Everyone, we know that change starts with people like
+            you. Every act of kindness, every dollar, and every moment of your time brings us
+            closer to achieving our mission. Together, we can create a brighter future.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3 text-xs text-foreground/70">
             <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-              Verified Nonprofit
+              501(c)(3) · Tax-Deductible
             </span>
             <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
               <Lock className="h-3.5 w-3.5 text-primary" />
-              Encrypted Giving
+              Secure Checkout via Zeffy
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-white px-3 py-1.5">
+              <Heart className="h-3.5 w-3.5 text-primary" />
+              100% Reaches F.I.R.E.
             </span>
           </div>
         </div>
 
-        {/* Main grid */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* Left: tiers */}
-          <div className="lg:col-span-8">
-            <div className="rounded-2xl border border-foreground/10 bg-white p-6 sm:p-8 lg:p-10">
-              <div className="mb-6 flex items-center justify-between">
-                <div>
-                  <div className="text-sm font-medium text-foreground">Choose your gift</div>
-                  <div className="text-xs text-foreground/60">
-                    One-time · Monthly available at checkout
-                  </div>
-                </div>
-                <div className="hidden items-center gap-2 text-xs text-foreground/60 sm:flex">
-                  <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
-                  <span>2,400+ donors this year</span>
-                </div>
-              </div>
-
-              {/* Frequency toggle */}
-              <div className="mb-4 inline-flex rounded-full border border-foreground/10 bg-foreground/[0.03] p-1 text-xs font-medium">
-                {(["one-time", "monthly"] as const).map((f) => (
-                  <button
-                    key={f}
-                    type="button"
-                    onClick={() => setFrequency(f)}
-                    className={`rounded-full px-4 py-1.5 capitalize transition ${
-                      frequency === f
-                        ? "bg-white text-foreground shadow-sm"
-                        : "text-foreground/60 hover:text-foreground"
-                    }`}
-                  >
-                    {f === "one-time" ? "One-time" : "Monthly"}
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {tiers.map((t, i) => {
-                  const isSelected = selectedIdx === i;
-                  return (
-                    <button
-                      key={t.label}
-                      type="button"
-                      onClick={() => {
-                        setSelectedIdx(i);
-                        setErrorMsg("");
-                      }}
-                      aria-pressed={isSelected}
-                      className={`group relative rounded-xl border p-4 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-                        isSelected
-                          ? "border-primary bg-primary text-white shadow-md ring-2 ring-primary/30"
-                          : "border-foreground/10 bg-white text-foreground hover:border-primary/40"
-                      }`}
-                    >
-                      {t.featured && (
-                        <span className="absolute -top-2 right-3 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
-                          Most given
-                        </span>
-                      )}
-                      <div className="font-display text-2xl font-semibold">
-                        {t.amount === null ? "Custom" : `$${t.amount}`}
-                      </div>
-                      <div
-                        className={`mt-0.5 text-[11px] font-medium uppercase tracking-wider ${isSelected ? "text-white/80" : "text-primary"}`}
-                      >
-                        {t.label}
-                      </div>
-                      <div
-                        className={`mt-3 text-xs leading-snug ${isSelected ? "text-white/90" : "text-foreground/70"}`}
-                      >
-                        {t.impact}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Custom amount input */}
-              {isCustom && (
-                <div className="mt-4">
-                  <label
-                    htmlFor="custom-amount"
-                    className="mb-1 block text-xs font-medium text-foreground/70"
-                  >
-                    Enter your gift amount (USD)
-                  </label>
-                  <div className="relative max-w-xs">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-foreground/60">
-                      $
-                    </span>
-                    <input
-                      id="custom-amount"
-                      type="number"
-                      min="1"
-                      step="1"
-                      inputMode="numeric"
-                      value={customAmount}
-                      onChange={(e) => {
-                        setCustomAmount(e.target.value);
-                        setErrorMsg("");
-                      }}
-                      placeholder="250"
-                      className="w-full rounded-full border border-foreground/15 bg-white py-2 pl-7 pr-4 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Allocation bar */}
-              <div className="mt-8 border-t border-foreground/10 pt-6">
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="text-sm font-medium text-foreground">Where every dollar goes</div>
-                  <div className="text-xs text-foreground/60">FY 2025 · Audited</div>
-                </div>
-                <div className="flex h-3 w-full overflow-hidden rounded-full bg-foreground/5">
-                  {allocation.map((a) => (
-                    <div
-                      key={a.label}
-                      className={`${a.color} h-full`}
-                      style={{ width: `${a.pct}%` }}
-                    />
-                  ))}
-                </div>
-                <div className="mt-3 flex flex-wrap gap-4 text-xs text-foreground/70">
-                  {allocation.map((a) => (
-                    <div key={a.label} className="flex items-center gap-2">
-                      <span className={`h-2.5 w-2.5 rounded-sm ${a.color}`} />
-                      <span className="font-medium text-foreground">{a.pct}%</span>
-                      <span>{a.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {errorMsg && (
-                <div className="mt-6 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
-                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                  <span>{errorMsg}</span>
-                </div>
-              )}
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <button type="button" onClick={handleDonate} className={`flex-1 ${BTN.primary}`}>
-                  <Heart className="h-4 w-4" />
-                  {amountValid
-                    ? `Donate $${effectiveAmount}${frequency === "monthly" ? "/mo" : ""}`
-                    : "Donate Now"}
-                </button>
-                <a href="#contact" className={`flex-1 ${BTN.secondary}`}>
-                  <Building2 className="h-4 w-4" />
-                  Corporate Giving
-                </a>
-              </div>
-              <p className="mt-4 text-center text-xs text-foreground/60">
-                Powered by Stripe & Network for Good · Your information is never shared.
-              </p>
-            </div>
+        {/* Zeffy donation form card */}
+        <div className="lg:col-span-7">
+          <div className="overflow-hidden rounded-3xl border border-black/5 bg-white p-3 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.25)] sm:p-5">
+            <iframe
+              title="Donation form powered by Zeffy"
+              src="https://www.zeffy.com/en-US/donation-form/give-inspiration-that-changes-lives"
+              allow="payment"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              loading="lazy"
+              className="block w-full rounded-2xl border-0 bg-white"
+              style={{ minHeight: 900 }}
+            />
           </div>
-
-          {/* Right: trust + corporate */}
-          <div className="lg:col-span-4">
-            <div className="grid h-full grid-rows-[auto_1fr] gap-6">
-              {/* Trust badges */}
-              <div className="rounded-2xl border border-foreground/10 bg-white p-6">
-                <div className="mb-4 text-sm font-medium text-foreground">
-                  Trusted & accountable
-                </div>
-                <ul className="space-y-4">
-                  {trust.map((t) => (
-                    <li key={t.label} className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <t.icon className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{t.label}</div>
-                        <div className="text-xs text-foreground/60">{t.sub}</div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Corporate CTA */}
-              <div className="relative overflow-hidden rounded-2xl bg-foreground p-6 text-white">
-                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/30 blur-2xl" />
-                <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-accent/30 blur-2xl" />
-                <div className="relative">
-                  <Building2 className="h-6 w-6 text-accent" />
-                  <h3 className="mt-4 font-display text-xl font-medium leading-tight">
-                    Partner with F.I.R.E.
-                  </h3>
-                  <p className="mt-2 text-sm text-white/75">
-                    Workplace giving, matching gifts, and program sponsorships for purpose-led
-                    companies.
-                  </p>
-                  <ul className="mt-4 space-y-2 text-sm">
-                    {["Custom impact reports", "Brand co-marketing", "Employee volunteer days"].map(
-                      (i) => (
-                        <li key={i} className="flex items-center gap-2 text-white/85">
-                          <Check className="h-4 w-4 text-accent" />
-                          {i}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                  <a href="#contact" className={`mt-5 ${BTN.onDarkSolid}`}>
-                    Become a sponsor
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p className="mt-4 text-center text-xs text-foreground/60">
+            Zeffy charges zero platform fees — every dollar you give reaches F.I.R.E.
+          </p>
         </div>
       </div>
-
-      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-display text-2xl">
-              <Heart className="h-5 w-5 text-primary" />
-              Confirm your gift
-            </DialogTitle>
-            <DialogDescription>
-              You're about to give a {frequency === "monthly" ? "monthly recurring" : "one-time"}{" "}
-              gift to F.I.R.E.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="rounded-xl border border-foreground/10 bg-foreground/[0.03] p-4">
-            <div className="flex items-baseline justify-between">
-              <span className="text-xs uppercase tracking-wider text-foreground/60">
-                {selected.label}
-              </span>
-              <span className="font-display text-3xl font-semibold text-foreground">
-                ${effectiveAmount}
-                {frequency === "monthly" && (
-                  <span className="text-base text-foreground/60">/mo</span>
-                )}
-              </span>
-            </div>
-            <p className="mt-2 text-xs text-foreground/70">{selected.impact}</p>
-          </div>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => setConfirmOpen(false)}
-              className={`flex-1 ${BTN.secondary}`}
-            >
-              Cancel
-            </button>
-            <a
-              href={`https://www.networkforgood.com/donation/MakeDonation10.aspx?ORGID2=&amount=${effectiveAmount}&frequency=${frequency}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex-1 ${BTN.primary}`}
-            >
-              Continue to checkout
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-          <p className="text-center text-[11px] text-foreground/55">
-            Secure checkout · Tax-deductible receipt emailed instantly.
-          </p>
-        </DialogContent>
-      </Dialog>
     </section>
   );
 }
+
 
 /* ---------------------- Volunteer ---------------------- */
 function Volunteer() {
