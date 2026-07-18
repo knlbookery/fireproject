@@ -1955,6 +1955,8 @@ function Contact() {
               placeholder="Tell us about your interest — sponsorship, volunteering, partnership…"
               value={values.message}
               onChange={(e) => set("message", e.target.value)}
+              onBlur={() => validateField("message")}
+
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? "contact-message-err" : undefined}
               maxLength={1000}
