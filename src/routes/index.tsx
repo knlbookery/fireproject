@@ -755,105 +755,52 @@ type Story = {
   body: string;
 };
 
+const FALLBACK_PORTRAITS: Story[] = [
+  { img: portrait1, name: "", role: "", location: "", quote: "", body: "" },
+  { img: portrait2, name: "", role: "", location: "", quote: "", body: "" },
+];
+
 function Stories() {
-  const portraits: Story[] = [
-    {
-      img: portrait1,
-      name: "",
-      role: "",
-      location: "",
-      quote: "",
-      body: "",
-    },
-    // {
-    //   img: storyLeadership,
-    //   name: "",
-    //   role: "",
-    //   location: "",
-    //   quote: "",
-    //   body: "",
-    // },
-    // {
-    //   img: portrait6,
-    //   name: "",
-    //   role: "",
-    //   location: "",
-    //   quote: "",
-    //   body: "",
-    // },
-    {
-      img: portrait2,
-      name: "",
-      role: "",
-      location: "",
-      quote: "",
-      body: "",
-    },
-    // {
-    //   img: portrait8,
-    //   name: "Auntie Adwoa",
-    //   role: "Teacher",
-    //   location: "Cape Coast, Ghana",
-    //   quote: "When you invest in a teacher, you invest in a hundred children.",
-    //   body: "Adwoa runs a F.I.R.E.-supported reading program serving over 200 students across two schools.",
-    // },
-    // {
-    //   img: portrait5,
-    //   name: "Esi",
-    //   role: "Scholar",
-    //   location: "Volta Region, Ghana",
-    //   quote: "The scholarship gave me a chance. The community gave me belonging.",
-    //   body: "Esi is studying public health on full scholarship and plans to return home to build maternal care programs.",
-    // },
-    // {
-    //   img: portrait10,
-    //   name: "Abena",
-    //   role: "Student",
-    //   location: "Tamale, Ghana",
-    //   quote: "I want to be the doctor my village never had.",
-    //   body: "Abena is a top of her class secondary student with her sights set on medical school — F.I.R.E. covers her boarding and books.",
-    // },
-    // {
-    //   img: portrait3,
-    //   name: "Akua",
-    //   role: "Athlete",
-    //   location: "Accra, Ghana",
-    //   quote: "Sport gave me discipline. F.I.R.E. gave me a stage.",
-    //   body: "Akua represented her region in two national tournaments and now coaches a girls' track squad after school.",
-    // },
-    // {
-    //   img: portrait7,
-    //   name: "Marcus",
-    //   role: "Hooper",
-    //   location: "Philadelphia, USA",
-    //   quote: "The court is where I learned to lead.",
-    //   body: "Marcus runs the summer hoops league F.I.R.E. sponsors in West Philly — over 180 kids played last season.",
-    // },
-    // {
-    //   img: portrait9,
-    //   name: "Yaw",
-    //   role: "Founder",
-    //   location: "Kumasi, Ghana",
-    //   quote: "We don't need handouts. We need a runway — F.I.R.E. built mine.",
-    //   body: "Yaw founded a logistics startup connecting rural farmers to urban markets, now serving 12 districts.",
-    // },
-    // {
-    //   img: portrait4,
-    //   name: "Mr. Mensah",
-    //   role: "Mentor",
-    //   location: "Tema, Ghana",
-    //   quote: "Mentorship is the long game. I'm proud to play it.",
-    //   body: "A retired engineer, Mr. Mensah has personally mentored 40+ F.I.R.E. tech fellows over the last six years.",
-    // },
-    // {
-    //   img: storyBasketball,
-    //   name: "Kwame",
-    //   role: "Coach",
-    //   location: "Accra, Ghana",
-    //   quote: "Every kid deserves a coach who shows up — every single week.",
-    //   body: "Kwame's after-school program has kept hundreds of teens off the streets and on the court since 2019.",
-    // },
-  ];
+  const [portraits, setPortraits] = useState<Story[]>(FALLBACK_PORTRAITS);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/organization");
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          success: boolean;
+          members: Array<{
+            name: string;
+            role: string;
+            location: string;
+            quote: string;
+            body: string;
+            photo: string;
+          }>;
+        };
+        if (cancelled || !data.success || !data.members?.length) return;
+        const mapped: Story[] = data.members
+          .filter((m) => m.photo)
+          .map((m) => ({
+            img: m.photo,
+            name: m.name,
+            role: m.role,
+            location: m.location,
+            quote: m.quote,
+            body: m.body,
+          }));
+        if (mapped.length) setPortraits(mapped);
+      } catch (err) {
+        console.error("Failed to load organization members:", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
   const LOOP = 2;

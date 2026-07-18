@@ -13,6 +13,7 @@ import { Route as YouthEmpowermentGuideRouteImport } from './routes/youth-empowe
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRsvpRouteImport } from './routes/api/rsvp'
+import { Route as ApiOrganizationRouteImport } from './routes/api/organization'
 import { Route as ApiInquireRouteImport } from './routes/api/inquire'
 import { Route as ApiEventsRouteImport } from './routes/api/events'
 
@@ -36,6 +37,11 @@ const ApiRsvpRoute = ApiRsvpRouteImport.update({
   path: '/api/rsvp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiOrganizationRoute = ApiOrganizationRouteImport.update({
+  id: '/api/organization',
+  path: '/api/organization',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiInquireRoute = ApiInquireRouteImport.update({
   id: '/api/inquire',
   path: '/api/inquire',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
   '/api/events': typeof ApiEventsRoute
   '/api/inquire': typeof ApiInquireRoute
+  '/api/organization': typeof ApiOrganizationRoute
   '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
   '/api/events': typeof ApiEventsRoute
   '/api/inquire': typeof ApiInquireRoute
+  '/api/organization': typeof ApiOrganizationRoute
   '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
   '/api/events': typeof ApiEventsRoute
   '/api/inquire': typeof ApiInquireRoute
+  '/api/organization': typeof ApiOrganizationRoute
   '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/youth-empowerment-guide'
     | '/api/events'
     | '/api/inquire'
+    | '/api/organization'
     | '/api/rsvp'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/youth-empowerment-guide'
     | '/api/events'
     | '/api/inquire'
+    | '/api/organization'
     | '/api/rsvp'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/youth-empowerment-guide'
     | '/api/events'
     | '/api/inquire'
+    | '/api/organization'
     | '/api/rsvp'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
   ApiEventsRoute: typeof ApiEventsRoute
   ApiInquireRoute: typeof ApiInquireRoute
+  ApiOrganizationRoute: typeof ApiOrganizationRoute
   ApiRsvpRoute: typeof ApiRsvpRoute
 }
 
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiRsvpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/organization': {
+      id: '/api/organization'
+      path: '/api/organization'
+      fullPath: '/api/organization'
+      preLoaderRoute: typeof ApiOrganizationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/inquire': {
       id: '/api/inquire'
       path: '/api/inquire'
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
   ApiEventsRoute: ApiEventsRoute,
   ApiInquireRoute: ApiInquireRoute,
+  ApiOrganizationRoute: ApiOrganizationRoute,
   ApiRsvpRoute: ApiRsvpRoute,
 }
 export const routeTree = rootRouteImport
