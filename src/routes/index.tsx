@@ -1920,6 +1920,8 @@ function Contact() {
               placeholder="you@example.com"
               value={values.email}
               onChange={(e) => set("email", e.target.value)}
+              onBlur={() => validateField("email")}
+
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "contact-email-err" : undefined}
               maxLength={255}
