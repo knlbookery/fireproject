@@ -1773,10 +1773,20 @@ function Contact() {
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
+  const validateField = <K extends keyof ContactValues>(key: K) => {
+    const fieldSchema = contactSchema.shape[key];
+    const result = fieldSchema.safeParse(values[key]);
+    setErrors((prev) => ({
+      ...prev,
+      [key]: result.success ? undefined : result.error.issues[0]?.message,
+    }));
+  };
+
   const inputBase =
     "mt-1.5 w-full rounded-lg border bg-white px-3 py-2.5 text-sm outline-none transition focus:border-primary";
   const inputCls = (k: keyof ContactValues) =>
     `${inputBase} ${errors[k] ? "border-red-500 focus:border-red-500" : "border-black/10"}`;
+
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
