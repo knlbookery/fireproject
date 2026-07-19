@@ -768,7 +768,6 @@ function Stories() {
     (async () => {
       try {
         const res = await fetch("/api/organization");
-        if (!res.ok) return;
         const data = (await res.json()) as {
           success: boolean;
           members: Array<{
@@ -780,7 +779,7 @@ function Stories() {
             photo: string;
           }>;
         };
-        if (cancelled || !data.success || !data.members?.length) return;
+        if (!res.ok || cancelled || !data.success || !data.members?.length) return;
         const mapped: Story[] = data.members
           .filter((m) => m.photo)
           .map((m) => ({
@@ -792,8 +791,8 @@ function Stories() {
             body: m.body,
           }));
         if (mapped.length) setPortraits(mapped);
-      } catch (err) {
-        console.error("Failed to load organization members:", err);
+      } catch {
+        // Keep the built-in fallback portraits when local Airtable credentials are unavailable.
       }
     })();
     return () => {
