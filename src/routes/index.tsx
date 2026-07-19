@@ -1269,6 +1269,8 @@ function Stories() {
           </div>
         </div>
       </div>
+      )}
+
 
       <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
         {features.map((f) => (
