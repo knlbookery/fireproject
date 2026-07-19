@@ -1159,10 +1159,32 @@ function Stories() {
       intro="Through purposeful leadership, our team inspires people, expands opportunity, and creates lasting impact."
       className="bg-[var(--surface)]"
     >
+      {status !== "ready" || portraits.length === 0 ? (
+        <div className="mx-auto max-w-2xl rounded-3xl border border-dashed border-black/15 bg-white/60 px-8 py-16 text-center">
+          {status === "loading" ? (
+            <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground">
+              Loading organization…
+            </p>
+          ) : status === "error" ? (
+            <>
+              <p className="font-display text-xl font-medium">Unable to load from Airtable</p>
+              <p className="mt-3 text-sm text-muted-foreground">{errorHint}</p>
+            </>
+          ) : (
+            <>
+              <p className="font-display text-xl font-medium">No leaders published yet</p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Add records to the Airtable “Organization” table with Status = Active and a Photo attachment.
+              </p>
+            </>
+          )}
+        </div>
+      ) : (
       <div
         className="relative mx-auto w-full"
         style={{ perspective: reducedMotion ? undefined : "1400px" }}
       >
+
         <div
           ref={scrollerRef}
           onWheel={onWheel}
