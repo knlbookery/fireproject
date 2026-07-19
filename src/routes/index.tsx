@@ -755,13 +755,13 @@ type Story = {
   body: string;
 };
 
-const FALLBACK_PORTRAITS: Story[] = [
-  { img: portrait1, name: "", role: "", location: "", quote: "", body: "" },
-  { img: portrait2, name: "", role: "", location: "", quote: "", body: "" },
-];
+
+
 
 function Stories() {
-  const [portraits, setPortraits] = useState<Story[]>(FALLBACK_PORTRAITS);
+  const [portraits, setPortraits] = useState<Story[]>([]);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [errorHint, setErrorHint] = useState<string>("");
 
   useEffect(() => {
     let cancelled = false;
@@ -770,6 +770,8 @@ function Stories() {
         const res = await fetch("/api/organization");
         const data = (await res.json()) as {
           success: boolean;
+          error?: string;
+          hint?: string;
           members: Array<{
             name: string;
             role: string;
@@ -779,8 +781,13 @@ function Stories() {
             photo: string;
           }>;
         };
-        if (!res.ok || cancelled || !data.success || !data.members?.length) return;
-        const mapped: Story[] = data.members
+        if (cancelled) return;
+        if (!res.ok || !data.success) {
+          setStatus("error");
+          setErrorHint(data.hint || data.error || "Unable to load organization from Airtable.");
+          return;
+        }
+        const mapped: Story[] = (data.members ?? [])
           .filter((m) => m.photo)
           .map((m) => ({
             img: m.photo,
@@ -790,15 +797,20 @@ function Stories() {
             quote: m.quote,
             body: m.body,
           }));
-        if (mapped.length) setPortraits(mapped);
-      } catch {
-        // Keep the built-in fallback portraits when local Airtable credentials are unavailable.
+        setPortraits(mapped);
+        setStatus("ready");
+      } catch (err) {
+        if (cancelled) return;
+        setStatus("error");
+        setErrorHint(err instanceof Error ? err.message : "Network error while loading organization.");
       }
     })();
     return () => {
       cancelled = true;
     };
   }, []);
+
+
 
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
@@ -1147,10 +1159,32 @@ function Stories() {
       intro="Through purposeful leadership, our team inspires people, expands opportunity, and creates lasting impact."
       className="bg-[var(--surface)]"
     >
+      {status !== "ready" || portraits.length === 0 ? (
+        <div className="mx-auto max-w-2xl rounded-3xl border border-dashed border-black/15 bg-white/60 px-8 py-16 text-center">
+          {status === "loading" ? (
+            <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground">
+              Loading organization…
+            </p>
+          ) : status === "error" ? (
+            <>
+              <p className="font-display text-xl font-medium">Unable to load from Airtable</p>
+              <p className="mt-3 text-sm text-muted-foreground">{errorHint}</p>
+            </>
+          ) : (
+            <>
+              <p className="font-display text-xl font-medium">No leaders published yet</p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Add records to the Airtable “Organization” table with Status = Active and a Photo attachment.
+              </p>
+            </>
+          )}
+        </div>
+      ) : (
       <div
         className="relative mx-auto w-full"
         style={{ perspective: reducedMotion ? undefined : "1400px" }}
       >
+
         <div
           ref={scrollerRef}
           onWheel={onWheel}
@@ -1235,6 +1269,8 @@ function Stories() {
           </div>
         </div>
       </div>
+      )}
+
 
       <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
         {features.map((f) => (
