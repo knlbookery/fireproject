@@ -755,10 +755,8 @@ type Story = {
   body: string;
 };
 
-const FALLBACK_PORTRAITS: Story[] = [
-  { img: portrait1, name: "", role: "", location: "", quote: "", body: "" },
-  { img: portrait2, name: "", role: "", location: "", quote: "", body: "" },
-];
+
+
 
 function Stories() {
   const [portraits, setPortraits] = useState<Story[]>([]);
