@@ -22,6 +22,29 @@ type AirtableFields = {
   Status?: string;
 };
 type AirtableRecord = { id: string; fields: AirtableFields };
+type AirtableErrorBody = {
+  error?: {
+    type?: string;
+    message?: string;
+  };
+};
+
+const ORGANIZATION_SETUP_HINT =
+  "Organization content is using fallback portraits. Check AIRTABLE_BASE_ID, AIRTABLE_API_KEY, and AIRTABLE_TABLE_ORGANIZATION. The Airtable token needs data.records:read access to the selected base, and the table name or table ID must match exactly.";
+
+async function readAirtableError(response: Response) {
+  const text = await response.text();
+  try {
+    const parsed = JSON.parse(text) as AirtableErrorBody;
+    return {
+      type: parsed.error?.type,
+      message: parsed.error?.message ?? text,
+      raw: text,
+    };
+  } catch {
+    return { type: undefined, message: text, raw: text };
+  }
+}
 
 export const Route = createFileRoute("/api/organization")({
   server: {
@@ -32,8 +55,8 @@ export const Route = createFileRoute("/api/organization")({
 
         if (!baseId || !token) {
           return Response.json(
-            { success: false, error: "Airtable not configured", members: [] },
-            { status: 500 },
+            { success: false, error: "Airtable not configured", hint: ORGANIZATION_SETUP_HINT, members: [] },
+            { headers: { "Cache-Control": "no-store" } },
           );
         }
 
@@ -53,11 +76,26 @@ export const Route = createFileRoute("/api/organization")({
           });
 
           if (!response.ok) {
-            const body = await response.text();
-            console.error(`Airtable organization fetch failed [${response.status}]: ${body}`);
+            const details = await readAirtableError(response);
+            const isPermissionOrModelError =
+              response.status === 403 && details.type === "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND";
+
+            console.warn(
+              isPermissionOrModelError
+                ? `Airtable organization setup issue: cannot read table "${tableName}" in base "${baseId}". ${ORGANIZATION_SETUP_HINT}`
+                : `Airtable organization fetch failed [${response.status}]: ${details.raw}`,
+            );
+
             return Response.json(
-              { success: false, error: "Failed to fetch organization", members: [] },
-              { status: 502 },
+              {
+                success: false,
+                error: isPermissionOrModelError
+                  ? "Airtable organization table is unavailable"
+                  : "Failed to fetch organization",
+                hint: isPermissionOrModelError ? ORGANIZATION_SETUP_HINT : undefined,
+                members: [],
+              },
+              { headers: { "Cache-Control": "no-store" } },
             );
           }
 
@@ -79,8 +117,8 @@ export const Route = createFileRoute("/api/organization")({
         } catch (error) {
           console.error("Organization fetch error:", error);
           return Response.json(
-            { success: false, error: "Unable to load organization", members: [] },
-            { status: 500 },
+            { success: false, error: "Unable to load organization", hint: ORGANIZATION_SETUP_HINT, members: [] },
+            { headers: { "Cache-Control": "no-store" } },
           );
         }
       },
