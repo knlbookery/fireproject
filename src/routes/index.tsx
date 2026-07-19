@@ -761,7 +761,9 @@ const FALLBACK_PORTRAITS: Story[] = [
 ];
 
 function Stories() {
-  const [portraits, setPortraits] = useState<Story[]>(FALLBACK_PORTRAITS);
+  const [portraits, setPortraits] = useState<Story[]>([]);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [errorHint, setErrorHint] = useState<string>("");
 
   useEffect(() => {
     let cancelled = false;
@@ -770,6 +772,8 @@ function Stories() {
         const res = await fetch("/api/organization");
         const data = (await res.json()) as {
           success: boolean;
+          error?: string;
+          hint?: string;
           members: Array<{
             name: string;
             role: string;
@@ -779,8 +783,13 @@ function Stories() {
             photo: string;
           }>;
         };
-        if (!res.ok || cancelled || !data.success || !data.members?.length) return;
-        const mapped: Story[] = data.members
+        if (cancelled) return;
+        if (!res.ok || !data.success) {
+          setStatus("error");
+          setErrorHint(data.hint || data.error || "Unable to load organization from Airtable.");
+          return;
+        }
+        const mapped: Story[] = (data.members ?? [])
           .filter((m) => m.photo)
           .map((m) => ({
             img: m.photo,
@@ -790,15 +799,20 @@ function Stories() {
             quote: m.quote,
             body: m.body,
           }));
-        if (mapped.length) setPortraits(mapped);
-      } catch {
-        // Keep the built-in fallback portraits when local Airtable credentials are unavailable.
+        setPortraits(mapped);
+        setStatus("ready");
+      } catch (err) {
+        if (cancelled) return;
+        setStatus("error");
+        setErrorHint(err instanceof Error ? err.message : "Network error while loading organization.");
       }
     })();
     return () => {
       cancelled = true;
     };
   }, []);
+
+
 
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
