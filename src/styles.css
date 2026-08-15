@@ -119,6 +119,34 @@
 @utility animate-float { animation: float-slow 6s ease-in-out infinite; }
 @utility animate-float-delay { animation: float-slower 7s ease-in-out infinite; animation-delay: 1.5s; }
 
+/* --- Advanced slide / scroll motion ---------------------------------- */
+@keyframes ken-burns {
+  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+  100% { transform: scale(1.16) translate3d(-1.2%, -1.4%, 0); }
+}
+@keyframes hero-text-in {
+  0%   { opacity: 0; transform: translate3d(0, 26px, 0); filter: blur(6px); }
+  100% { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes slide-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@utility animate-ken-burns { animation: ken-burns 9s ease-out forwards; }
+@utility animate-hero-text {
+  animation: hero-text-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns,
+  .animate-hero-text {
+    animation: none !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+
 
 @layer base {
   /* Enforce Montserrat 500 on all H2 headings */
