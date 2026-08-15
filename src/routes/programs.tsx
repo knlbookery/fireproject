@@ -1,12 +1,69 @@
 import { pageHead } from "@/lib/seo";
 import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Users } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand, BTN } from "@/components/site/ui";
 import { ProgramDonateDialog } from "@/components/site/ProgramDonateDialog";
 import { PROGRAMS } from "@/data/site";
+import {
+  formatGiftDate,
+  formatMoney,
+  useDonationSummary,
+  type ProgrammeDonations,
+} from "@/lib/donations";
+
+/** Live funding progress for one programme, fed by the Zeffy webhook ledger. */
+function ProgrammeFunding({
+  funding,
+  goal,
+}: {
+  funding?: ProgrammeDonations;
+  goal?: number;
+}) {
+  if (!funding || funding.raised <= 0) return null;
+
+  const currency = funding.currency || "USD";
+  const pct = goal && goal > 0 ? Math.min(100, Math.round((funding.raised / goal) * 100)) : null;
+  const lastGift = formatGiftDate(funding.lastGiftAt);
+
+  return (
+    <div className="mt-8 rounded-2xl border border-border bg-muted/40 p-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <p className="text-sm font-semibold">
+          <span className="font-display text-2xl tracking-tight">
+            {formatMoney(funding.raised, currency)}
+          </span>{" "}
+          <span className="text-muted-foreground font-normal">
+            raised{goal ? ` of ${formatMoney(goal, currency)}` : ""}
+          </span>
+        </p>
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Users className="h-3.5 w-3.5" aria-hidden="true" />
+          {funding.supporters} {funding.supporters === 1 ? "supporter" : "supporters"}
+        </p>
+      </div>
+
+      {pct !== null && (
+        <div
+          className="mt-3 h-2 w-full overflow-hidden rounded-full bg-border"
+          role="progressbar"
+          aria-valuenow={pct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Funding progress"
+        >
+          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+        </div>
+      )}
+
+      {lastGift && (
+        <p className="mt-3 text-xs text-muted-foreground">Most recent gift: {lastGift}</p>
+      )}
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/programs")({
   head: () =>
@@ -22,6 +79,7 @@ export const Route = createFileRoute("/programs")({
 
 function ProgramsPage() {
   const copy = usePageCopy("/programs");
+  const { summary, refresh } = useDonationSummary();
   const hero = copy("hero", {
     eyebrow: "Programs",
     title: "Six programmes. One throughline: opportunity.",
@@ -82,11 +140,15 @@ function ProgramsPage() {
                     </li>
                   ))}
                 </ul>
+
+                <ProgrammeFunding funding={summary[p.slug]} goal={p.fundingGoal} />
+
                 <div className="mt-8 flex flex-wrap gap-3">
                   <ProgramDonateDialog
                     programSlug={p.slug}
                     programTitle={p.title}
                     triggerClassName={BTN.primary}
+                    onCompleted={refresh}
                   />
                   <Link to="/contact" className={BTN.secondary}>
                     Ask about this programme <ArrowRight className="h-4 w-4" aria-hidden="true" />

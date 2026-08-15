@@ -89,13 +89,30 @@ POST /api/rsvp.php      → creates linked Event RSVP record
 POST /api/contact.php   → Airtable record + Brevo notification
 GET  /api/health.php    → { "status": "ok" }
 POST /api/assistant.php → { success, reply, offline }   # visitor AI assistant
+GET  /api/donations.php → { success, programmes[] }     # live per-programme totals
+POST /api/zeffy-webhook.php → { success, recorded }     # Zeffy donation callback
 ```
 
 Adding an endpoint means: new file in `server/public-api/`, logic in `server/app/src/`, documented here and in `DEPLOYMENT.md`, and added to the deployment mapping. Removing or renaming one is a breaking change to the deployed frontend.
 
+### Donation status (Zeffy → Airtable → website)
+
+Zeffy remains the only payment surface — no card data touches this codebase.
+Zeffy posts settlement callbacks to `/api/zeffy-webhook.php`, authenticated with
+`ZEFFY_WEBHOOK_SECRET` (HMAC-SHA256 of the raw body in `X-Zeffy-Signature`, or
+the raw secret in `X-Zeffy-Token` / `Authorization: Bearer`). `Fire\DonationLedger`
+writes a redacted record (Programme, Programme Name, Amount, Currency, Status,
+Frequency, Donor Name, Payment ID, Donated At) to the Airtable `Donations` table
+and clears the cache. `/api/donations.php` serves aggregated totals per programme
+slug (raised, supporters, last gift) cached 5 minutes at
+`storage/donations/summary.json`. Programme attribution comes from the
+`utm_campaign` (slug) and `designation` (title) parameters the donate dialog
+appends to the embedded Zeffy form URL. Every failure degrades silently — the
+programme cards simply omit funding figures.
+
 ## 6. Environment Contract
 
-Exactly these 14 variables are read by the backend. Adding others has no effect; documenting phantom variables has already cost production time.
+Exactly these 16 variables are read by the backend. Adding others has no effect; documenting phantom variables has already cost production time.
 
 ```env
 AIRTABLE_PAT=
@@ -117,6 +134,9 @@ CONTACT_RATE_LIMIT_MAX=5
 CONTACT_RATE_LIMIT_WINDOW_SECONDS=900
 
 LOVABLE_API_KEY=
+
+ZEFFY_WEBHOOK_SECRET=
+AIRTABLE_TABLE_DONATIONS=Donations
 ```
 
 `LOVABLE_API_KEY` powers `/api/assistant.php` (site-wide visitor assistant). It is
