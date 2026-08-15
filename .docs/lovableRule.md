@@ -134,6 +134,9 @@ CONTACT_RATE_LIMIT_MAX=5
 CONTACT_RATE_LIMIT_WINDOW_SECONDS=900
 
 LOVABLE_API_KEY=
+
+ZEFFY_WEBHOOK_SECRET=
+AIRTABLE_TABLE_DONATIONS=Donations
 ```
 
 `LOVABLE_API_KEY` powers `/api/assistant.php` (site-wide visitor assistant). It is
