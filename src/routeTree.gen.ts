@@ -18,6 +18,8 @@ import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PressRouteImport } from './routes/press'
 import { Route as GhanaInitiativesRouteImport } from './routes/ghana-initiatives'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -67,6 +69,16 @@ const GhanaInitiativesRoute = GhanaInitiativesRouteImport.update({
   path: '/ghana-initiatives',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -87,6 +99,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/press': typeof PressRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -101,6 +115,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/press': typeof PressRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -116,6 +132,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/press': typeof PressRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -132,6 +150,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/donate'
+    | '/events'
     | '/ghana-initiatives'
     | '/press'
     | '/privacy-policy'
@@ -146,6 +166,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/donate'
+    | '/events'
     | '/ghana-initiatives'
     | '/press'
     | '/privacy-policy'
@@ -160,6 +182,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
+    | '/donate'
+    | '/events'
     | '/ghana-initiatives'
     | '/press'
     | '/privacy-policy'
@@ -175,6 +199,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
+  DonateRoute: typeof DonateRoute
+  EventsRoute: typeof EventsRoute
   GhanaInitiativesRoute: typeof GhanaInitiativesRoute
   PressRoute: typeof PressRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -251,6 +277,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GhanaInitiativesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -279,6 +319,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
+  DonateRoute: DonateRoute,
+  EventsRoute: EventsRoute,
   GhanaInitiativesRoute: GhanaInitiativesRoute,
   PressRoute: PressRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
