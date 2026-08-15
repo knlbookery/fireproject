@@ -104,13 +104,21 @@ export function AssistantWidget() {
       if (toggleRef.current?.contains(target)) return;
       setOpen(false);
     };
+    const onPopState = () => setOpen(false);
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("popstate", onPopState);
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("popstate", onPopState);
     };
   }, [open]);
+
+  // Close whenever the visitor navigates (link click, back/forward).
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   const canSend = useMemo(() => input.trim().length > 1 && !busy, [input, busy]);
 
