@@ -18,7 +18,6 @@ import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as MissionRouteImport } from './routes/mission'
-import { Route as LeadershipRouteImport } from './routes/leadership'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as GhanaInitiativesRouteImport } from './routes/ghana-initiatives'
 import { Route as EventsRouteImport } from './routes/events'
@@ -27,6 +26,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PressIndexRouteImport } from './routes/press.index'
+import { Route as LeadershipIndexRouteImport } from './routes/leadership.index'
 import { Route as PressSlugRouteImport } from './routes/press.$slug'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
@@ -74,11 +74,6 @@ const MissionRoute = MissionRouteImport.update({
   path: '/mission',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LeadershipRoute = LeadershipRouteImport.update({
-  id: '/leadership',
-  path: '/leadership',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ImpactRoute = ImpactRouteImport.update({
   id: '/impact',
   path: '/impact',
@@ -119,6 +114,11 @@ const PressIndexRoute = PressIndexRouteImport.update({
   path: '/press/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LeadershipIndexRoute = LeadershipIndexRouteImport.update({
+  id: '/leadership/',
+  path: '/leadership/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PressSlugRoute = PressSlugRouteImport.update({
   id: '/press/$slug',
   path: '/press/$slug',
@@ -133,7 +133,6 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/impact': typeof ImpactRoute
-  '/leadership': typeof LeadershipRoute
   '/mission': typeof MissionRoute
   '/partners': typeof PartnersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -144,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
   '/press/$slug': typeof PressSlugRoute
+  '/leadership/': typeof LeadershipIndexRoute
   '/press/': typeof PressIndexRoute
 }
 export interface FileRoutesByTo {
@@ -154,7 +154,6 @@ export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/impact': typeof ImpactRoute
-  '/leadership': typeof LeadershipRoute
   '/mission': typeof MissionRoute
   '/partners': typeof PartnersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -165,6 +164,7 @@ export interface FileRoutesByTo {
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
   '/press/$slug': typeof PressSlugRoute
+  '/leadership': typeof LeadershipIndexRoute
   '/press': typeof PressIndexRoute
 }
 export interface FileRoutesById {
@@ -176,7 +176,6 @@ export interface FileRoutesById {
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/impact': typeof ImpactRoute
-  '/leadership': typeof LeadershipRoute
   '/mission': typeof MissionRoute
   '/partners': typeof PartnersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
@@ -187,6 +186,7 @@ export interface FileRoutesById {
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
   '/press/$slug': typeof PressSlugRoute
+  '/leadership/': typeof LeadershipIndexRoute
   '/press/': typeof PressIndexRoute
 }
 export interface FileRouteTypes {
@@ -199,7 +199,6 @@ export interface FileRouteTypes {
     | '/events'
     | '/ghana-initiatives'
     | '/impact'
-    | '/leadership'
     | '/mission'
     | '/partners'
     | '/privacy-policy'
@@ -210,6 +209,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/youth-empowerment-guide'
     | '/press/$slug'
+    | '/leadership/'
     | '/press/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -220,7 +220,6 @@ export interface FileRouteTypes {
     | '/events'
     | '/ghana-initiatives'
     | '/impact'
-    | '/leadership'
     | '/mission'
     | '/partners'
     | '/privacy-policy'
@@ -231,6 +230,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/youth-empowerment-guide'
     | '/press/$slug'
+    | '/leadership'
     | '/press'
   id:
     | '__root__'
@@ -241,7 +241,6 @@ export interface FileRouteTypes {
     | '/events'
     | '/ghana-initiatives'
     | '/impact'
-    | '/leadership'
     | '/mission'
     | '/partners'
     | '/privacy-policy'
@@ -252,6 +251,7 @@ export interface FileRouteTypes {
     | '/volunteer'
     | '/youth-empowerment-guide'
     | '/press/$slug'
+    | '/leadership/'
     | '/press/'
   fileRoutesById: FileRoutesById
 }
@@ -263,7 +263,6 @@ export interface RootRouteChildren {
   EventsRoute: typeof EventsRoute
   GhanaInitiativesRoute: typeof GhanaInitiativesRoute
   ImpactRoute: typeof ImpactRoute
-  LeadershipRoute: typeof LeadershipRoute
   MissionRoute: typeof MissionRoute
   PartnersRoute: typeof PartnersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
@@ -274,6 +273,7 @@ export interface RootRouteChildren {
   VolunteerRoute: typeof VolunteerRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
   PressSlugRoute: typeof PressSlugRoute
+  LeadershipIndexRoute: typeof LeadershipIndexRoute
   PressIndexRoute: typeof PressIndexRoute
 }
 
@@ -342,13 +342,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MissionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/leadership': {
-      id: '/leadership'
-      path: '/leadership'
-      fullPath: '/leadership'
-      preLoaderRoute: typeof LeadershipRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/impact': {
       id: '/impact'
       path: '/impact'
@@ -405,6 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PressIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/leadership/': {
+      id: '/leadership/'
+      path: '/leadership'
+      fullPath: '/leadership/'
+      preLoaderRoute: typeof LeadershipIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/press/$slug': {
       id: '/press/$slug'
       path: '/press/$slug'
@@ -423,7 +423,6 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRoute: EventsRoute,
   GhanaInitiativesRoute: GhanaInitiativesRoute,
   ImpactRoute: ImpactRoute,
-  LeadershipRoute: LeadershipRoute,
   MissionRoute: MissionRoute,
   PartnersRoute: PartnersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
@@ -434,6 +433,7 @@ const rootRouteChildren: RootRouteChildren = {
   VolunteerRoute: VolunteerRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
   PressSlugRoute: PressSlugRoute,
+  LeadershipIndexRoute: LeadershipIndexRoute,
   PressIndexRoute: PressIndexRoute,
 }
 export const routeTree = rootRouteImport

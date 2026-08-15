@@ -64,34 +64,32 @@ function LeadershipPage() {
         title="Meet the leadership team."
         intro="Each leader carries a defined remit — finance, programmes, technology, partnerships — and reports against it every quarter."
       >
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {LEADERS.map((l) => (
-            <article
+            <Link
               key={l.slug}
-              className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card"
+              to="/leadership/$slug"
+              params={{ slug: l.slug }}
+              className="group flex flex-col items-center rounded-3xl border border-border bg-card p-6 text-center transition-colors hover:bg-foreground/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <img
                 src={l.img}
                 alt={`${l.name}, ${l.role}`}
-                className="h-72 w-full object-cover"
+                className="h-24 w-24 rounded-full object-cover"
                 loading="lazy"
               />
-              <div className="flex flex-1 flex-col p-8">
-                <h3 className="font-display text-2xl font-bold tracking-tight">{l.name}</h3>
-                <div className="mt-1 text-sm font-semibold uppercase tracking-[0.14em] text-primary">
-                  {l.role}
-                </div>
-                <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <MapPin className="h-4 w-4" aria-hidden="true" />
-                  {l.location}
-                </p>
-                <blockquote className="mt-5 flex gap-2 text-sm italic text-foreground/80">
-                  <Quote className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                  <span>{l.quote}</span>
-                </blockquote>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{l.body}</p>
+              <h3 className="mt-4 font-display text-lg font-bold tracking-tight">{l.name}</h3>
+              <div className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+                {l.role}
               </div>
-            </article>
+              <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                {l.location}
+              </p>
+              <span className="mt-4 text-xs font-semibold text-foreground group-hover:underline">
+                View profile
+              </span>
+            </Link>
           ))}
         </div>
       </Section>
