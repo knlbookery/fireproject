@@ -45,7 +45,6 @@ if ($slug !== '') {
     $formula = "AND({Status}='Published',{Slug}='{$escaped}')";
 }
 
-$client = new AirtableClient($table === null ? 'Press Articles' : $table, $pat);
 $client = new AirtableClient($baseId, $pat);
 $result = $client->get($table ?? 'Press Articles', [
     'filterByFormula' => $formula,
