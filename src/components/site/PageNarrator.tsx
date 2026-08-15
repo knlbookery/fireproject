@@ -58,6 +58,25 @@ function localScript(pathname: string) {
 const VOICE_KEY = "fire.narrator.voice";
 const RATE_KEY = "fire.narrator.rate";
 
+type Sentence = { text: string; start: number; end: number };
+
+/** Split a script into sentences, keeping each one's offset in the source text. */
+function splitSentences(text: string): Sentence[] {
+  const out: Sentence[] = [];
+  const re = /[^.!?]+[.!?]*\s*/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(text)) !== null) {
+    const raw = match[0];
+    if (raw.trim() === "") continue;
+    out.push({ text: raw.trim(), start: match.index, end: match.index + raw.length });
+  }
+  if (out.length === 0 && text.trim() !== "") {
+    out.push({ text: text.trim(), start: 0, end: text.length });
+  }
+  return out;
+}
+
+
 export function PageNarrator() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
