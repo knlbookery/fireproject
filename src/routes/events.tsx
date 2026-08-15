@@ -325,6 +325,55 @@ function EventsPage() {
       />
 
       <Section eyebrow={calendar.eyebrow} title={calendar.title}>
+        {events.length > 0 && (
+          <div className="mb-10 flex flex-col gap-5">
+            <div className="relative max-w-md">
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <label htmlFor="events-search" className="sr-only">
+                Search events
+              </label>
+              <input
+                id="events-search"
+                type="search"
+                value={query}
+                onChange={(ev) => setQuery(ev.target.value)}
+                placeholder="Search events…"
+                className="w-full rounded-full border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              />
+            </div>
+
+            {places.length > 1 && (
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by location">
+                {places.map((p) => {
+                  const active = p === place;
+                  return (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setPlace(p)}
+                      aria-pressed={active}
+                      className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                        active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-card text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            <p className="text-sm text-muted-foreground" aria-live="polite">
+              {filtered.length} {filtered.length === 1 ? "event" : "events"}
+            </p>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
             {[0, 1, 2].map((i) => (
@@ -342,9 +391,14 @@ function EventsPage() {
             </a>{" "}
             to hear about the next one first.
           </p>
+        ) : filtered.length === 0 ? (
+          <p className="text-lg text-muted-foreground">
+            No events match your search. Try a different keyword or location.
+          </p>
         ) : (
           <ul className="grid list-none gap-6 p-0 md:grid-cols-2 lg:grid-cols-3">
-            {events.map((e) => (
+            {filtered.map((e) => (
+
               <li key={e.id}>
                 <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition hover:shadow-lg">
                   {e.photo && (
