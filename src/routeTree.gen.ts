@@ -19,6 +19,7 @@ import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as MissionRouteImport } from './routes/mission'
 import { Route as LeadershipRouteImport } from './routes/leadership'
+import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as GhanaInitiativesRouteImport } from './routes/ghana-initiatives'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as DonateRouteImport } from './routes/donate'
@@ -78,6 +79,11 @@ const LeadershipRoute = LeadershipRouteImport.update({
   path: '/leadership',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImpactRoute = ImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GhanaInitiativesRoute = GhanaInitiativesRouteImport.update({
   id: '/ghana-initiatives',
   path: '/ghana-initiatives',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof DonateRoute
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
+  '/impact': typeof ImpactRoute
   '/leadership': typeof LeadershipRoute
   '/mission': typeof MissionRoute
   '/partners': typeof PartnersRoute
@@ -146,6 +153,7 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
+  '/impact': typeof ImpactRoute
   '/leadership': typeof LeadershipRoute
   '/mission': typeof MissionRoute
   '/partners': typeof PartnersRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/donate': typeof DonateRoute
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
+  '/impact': typeof ImpactRoute
   '/leadership': typeof LeadershipRoute
   '/mission': typeof MissionRoute
   '/partners': typeof PartnersRoute
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/events'
     | '/ghana-initiatives'
+    | '/impact'
     | '/leadership'
     | '/mission'
     | '/partners'
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/events'
     | '/ghana-initiatives'
+    | '/impact'
     | '/leadership'
     | '/mission'
     | '/partners'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/events'
     | '/ghana-initiatives'
+    | '/impact'
     | '/leadership'
     | '/mission'
     | '/partners'
@@ -250,6 +262,7 @@ export interface RootRouteChildren {
   DonateRoute: typeof DonateRoute
   EventsRoute: typeof EventsRoute
   GhanaInitiativesRoute: typeof GhanaInitiativesRoute
+  ImpactRoute: typeof ImpactRoute
   LeadershipRoute: typeof LeadershipRoute
   MissionRoute: typeof MissionRoute
   PartnersRoute: typeof PartnersRoute
@@ -336,6 +349,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeadershipRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/impact': {
+      id: '/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof ImpactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ghana-initiatives': {
       id: '/ghana-initiatives'
       path: '/ghana-initiatives'
@@ -402,6 +422,7 @@ const rootRouteChildren: RootRouteChildren = {
   DonateRoute: DonateRoute,
   EventsRoute: EventsRoute,
   GhanaInitiativesRoute: GhanaInitiativesRoute,
+  ImpactRoute: ImpactRoute,
   LeadershipRoute: LeadershipRoute,
   MissionRoute: MissionRoute,
   PartnersRoute: PartnersRoute,

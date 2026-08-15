@@ -14,7 +14,16 @@ export type NavItem = {
 };
 
 export const NAV: NavItem[] = [
-  { label: "About", to: "/about" },
+  {
+    label: "About",
+    to: "/about",
+    children: [
+      { label: "About F.I.R.E.", to: "/about" },
+      { label: "Our Mission", to: "/mission" },
+      { label: "Our Impact", to: "/impact" },
+      { label: "Organisation Leaders", to: "/leadership" },
+    ],
+  },
   { label: "Programs", to: "/programs" },
   {
     label: "Initiatives",
@@ -25,10 +34,11 @@ export const NAV: NavItem[] = [
     ],
   },
   { label: "Events", to: "/events" },
-  { label: "Sponsors", to: "/sponsors" },
+  { label: "Partners", to: "/partners" },
   { label: "Press", to: "/press" },
   { label: "Contact", to: "/contact" },
 ];
+
 
 export const SITE = {
   name: "F.I.R.E.",
