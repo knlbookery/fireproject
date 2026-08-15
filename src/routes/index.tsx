@@ -146,9 +146,7 @@ function Landing() {
   });
 
   return (
-    <div className="relative min-h-screen bg-background">
-      <Header />
-
+    <SiteLayout>
       <Hero slides={processedSlides} />
 
       <Mission />
@@ -157,13 +155,36 @@ function Landing() {
       <Team />
       <Partners />
       <Events fallback={content?.events || []} />
-      <Contact />
-      <Donate />
-      <Volunteer />
-      <Footer />
-    </div>
+
+      <CTABand
+        title="Give inspiration that changes lives."
+        body="Every dollar funds coaching, classrooms, and founders — 100% of your gift reaches F.I.R.E."
+        primary={{ label: "Donate", to: "/donate" }}
+        secondary={{ label: "Become a sponsor", to: "/sponsors" }}
+      />
+
+      <Section
+        eyebrow="Get involved"
+        title="Become part of the mission."
+        intro="Volunteer your time, partner with us, or start a conversation — there's a way in for everyone."
+        align="center"
+      >
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link to="/volunteer" className={BTN.primary}>
+            Volunteer with us
+          </Link>
+          <Link to="/sponsors" className={BTN.secondary}>
+            Partner with F.I.R.E.
+          </Link>
+          <Link to="/contact" className={BTN.secondary}>
+            Contact us
+          </Link>
+        </div>
+      </Section>
+    </SiteLayout>
   );
 }
+
 
 /* ---------------------- Hero Slider ---------------------- */
 function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
