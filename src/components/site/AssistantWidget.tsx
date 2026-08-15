@@ -87,6 +87,7 @@ export function AssistantWidget() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const scrollRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (open) scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -97,8 +98,18 @@ export function AssistantWidget() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (panelRef.current?.contains(target)) return;
+      if (toggleRef.current?.contains(target)) return;
+      setOpen(false);
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointerDown);
+    };
   }, [open]);
 
   const canSend = useMemo(() => input.trim().length > 1 && !busy, [input, busy]);
@@ -139,12 +150,13 @@ export function AssistantWidget() {
   return (
     <>
       <button
+        ref={toggleRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="fire-assistant-panel"
         aria-label={open ? "Close the F.I.R.E. assistant" : "Ask the F.I.R.E. assistant"}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="fixed bottom-5 right-5 z-[70] flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {open ? (
           <X className="h-6 w-6" aria-hidden="true" />
@@ -159,13 +171,23 @@ export function AssistantWidget() {
           ref={panelRef}
           role="dialog"
           aria-label="F.I.R.E. assistant"
-          className="fixed bottom-24 right-5 z-50 flex h-[min(70vh,540px)] w-[min(92vw,380px)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl"
+          className="fixed bottom-24 right-3 z-[60] flex max-h-[calc(100dvh-8rem)] h-[min(70vh,540px)] w-[min(94vw,380px)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl sm:right-5"
         >
-          <div className="border-b border-border px-5 py-4">
-            <p className="font-display text-lg font-bold tracking-tight">Ask F.I.R.E.</p>
-            <p className="text-xs text-muted-foreground">
-              Quick answers about our work, events and how to get involved.
-            </p>
+          <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
+            <div>
+              <p className="font-display text-lg font-bold tracking-tight">Ask F.I.R.E.</p>
+              <p className="text-xs text-muted-foreground">
+                Quick answers about our work, events and how to get involved.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close the F.I.R.E. assistant"
+              className="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
