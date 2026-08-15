@@ -9,7 +9,7 @@ import { pageHead } from "@/lib/seo";
 import { usePageCopy } from "@/lib/page-content";
 import { FALLBACK_ARTICLES, fetchPressArticles } from "@/lib/press";
 
-export const Route = createFileRoute("/press")({
+export const Route = createFileRoute("/press/")({
   head: () =>
     pageHead({
       title: "Press & Media | F.I.R.E.",
