@@ -2,12 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
-import {
-  getLandingContent,
-  FALLBACK_CONTENT,
-  type HeroSlide,
-  type EventItem,
-} from "@/lib/content.functions";
+import { FALLBACK_CONTENT, type HeroSlide, type EventItem } from "@/lib/content.functions";
 import {
   Dialog,
   DialogContent,
@@ -16,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ExternalLink } from "lucide-react";
 import {
   ArrowRight,
   Users,
@@ -48,51 +43,49 @@ import {
 import { Atropos } from "atropos/react";
 import "atropos/css";
 
+import { useQuery } from "@tanstack/react-query";
+import { landingContentQuery } from "@/lib/content";
+
 // Unsplash imagery — editorial, community, Ghana, sports, entrepreneurship
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
 
 // what we do and volunteer imagery
-const ghanaAerial = `src/images/community_dev.jpg`; // Accra skyline / Ghana
-const progSports = `src/images/sport.png`; // youth sports outdoor
-const progBiz = `src/images/mission_enterprenuer.png`; // entrepreneurship meeting
-const volunteers = `src/images/impact.png`; // volunteers hands together
-
-const storyLeadership = `src/images/hero.png`; // confident African woman portrait
-const storyBasketball = `src/images/hero1.png`; // basketball action
+const ghanaAerial = `/images/community_dev.jpg`; // Accra skyline / Ghana
+const progSports = `/images/sport.jpg`; // youth sports outdoor
+const progBiz = `/images/mission_enterprenuer.jpg`; // entrepreneurship meeting
+const volunteers = `/images/impact.jpg`; // volunteers hands together
 
 // capsule imagery
-const capsule1 = `src/images/capsule1.jpg`; // basketball action
-const capsule2 = `src/images/capsule2.jpg`; // basketball action
-const capsule3 = `src/images/capsule3.jpg`; // basketball action
-const capsule4 = `src/images/capsule4.jpg`; // basketball action
-const capsule5 = `src/images/basketball.png`; // basketball action
+const capsule1 = `/images/capsule1.jpg`; // basketball action
+const capsule2 = `/images/capsule2.jpg`; // basketball action
+const capsule3 = `/images/capsule3.jpg`; // basketball action
+const capsule4 = `/images/capsule4.jpg`; // basketball action
+const capsule5 = `/images/basketball.jpg`; // basketball action
 
-// organization program imagery
-const portrait1 = `src/images/portrait1.png`; // African woman entrepreneur
-const portrait2 = `src/images/portrait2.png`; // young man portrait
-const portrait3 = U("1521119989659-a83eee488004"); // athlete portrait
-const portrait4 = U("1507003211169-0a1dd7228f2d"); // older mentor portrait
-const portrait5 = U("1502323777036-f29e3972d82f"); // scholar girl
-const portrait6 = U("1542178243-bc20204b769f"); // software engineer
-const portrait7 = U("1519085360753-af0119f7cbe7"); // hooper
-const portrait8 = U("1544005313-94ddf0286df2"); // teacher
-const portrait9 = U("1539571696357-5a69c17a67c6"); // founder portrait
-const portrait10 = U("1517841905240-472988babdf9"); // student portrait
-const progTech = U("1517048676732-d65bc937f952"); // tech classroom
-const progYouth = U("1488521787991-ed7bbaae773c"); // youth group
+// organization team imagery
+const portrait1 = `/images/portrait1.jpg`; // African woman entrepreneur
+const portrait2 = `/images/portrait2.jpg`; // young man portrait
+const portrait3 = `/images/portrait3.jpg`; // young man portrait
+const portrait4 = `/images/portrait4.jpg`; // young man portrait
+const portrait5 = `/images/portrait5.jpg`; // young man portrait
+const portrait6 = `/images/portrait6.jpg`; // young man portrait
+const portrait7 = `/images/portrait7.jpg`; // young man portrait
 
-// event and logo
-const eventConference = U("1540575467063-178a50c2df87"); // conference
-const eventWeekend = U("1529070538774-1843cb3265df"); // community weekend
-import fireLogo from "@/assets/fire-logo.png.asset.json";
-
-export const landingContentQuery = queryOptions({
-  queryKey: ["landing-content"],
-  queryFn: () => getLandingContent(),
-  initialData: FALLBACK_CONTENT,
-  staleTime: 5 * 60_000,
-});
+// Logos. Native art is 328x66 for both wordmarks and 430x385 for the icon;
+// each is rendered with an explicit height and `w-auto` so the true 4.97:1
+// (wordmark) aspect is preserved rather than forced to the nominal target
+// size. Widths therefore land within a few px of the specified dimensions.
+// TODO: SVG versions are coming — swapping them in removes the raster
+// softness these PNGs show at 2x DPI (see CLAUDE.md deferred work).
+// Note: /images/firelogo.png is still shipped and referenced as the
+// og:image/twitter:image in __root.tsx and youth-empowerment-guide.tsx via
+// absolute URLs; it is simply no longer rendered on this page.
+const fireLogoFull = { url: `/images/firelogo-full.png` }; // wordmark, dark art for light bg
+// Named for where it goes, not what the file is called: the artwork in
+// firelogo-full-dark.png is *light* coloured, for use on the dark footer.
+const fireLogoFullOnDark = { url: `/images/firelogo-full-dark.png` };
+const fireLogoIcon = { url: `/images/firelogo2.png` }; // icon/avatar — mobile header
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -120,70 +113,81 @@ const NAV = [
   { label: "Mission", href: "#mission" },
   { label: "Programs", href: "#programs" },
   { label: "Impact", href: "#impact" },
-  { label: "Stories", href: "#stories" },
+  { label: "Team", href: "#team" },
   { label: "Partners", href: "#partners" },
   { label: "Events", href: "#events" },
   { label: "Contact", href: "#contact" },
 ];
 
-/* ---------------------- Button system (consistent across site) ---------------------- */
+/* ---------------------- Button system ---------------------- */
 const BTN_BASE =
   "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 const BTN = {
-  // Solid brand button on light surfaces
   primary: `${BTN_BASE} bg-primary text-primary-foreground hover:bg-primary/90`,
-  // Outline button on light surfaces
   secondary: `${BTN_BASE} border border-foreground/15 text-foreground hover:bg-foreground/5`,
-  // Solid dark button on light surfaces
   dark: `${BTN_BASE} bg-foreground text-background hover:opacity-90`,
-  // Outline button on dark / image backgrounds
   onDarkOutline: `${BTN_BASE} border border-white/30 text-white hover:bg-white/10`,
-  // Solid white button on dark / colored backgrounds
   onDarkSolid: `${BTN_BASE} bg-white text-primary hover:bg-white/90`,
 } as const;
+
+/* ---------------------- Landing Component ---------------------- */
+function Landing() {
+  const { data: content } = useQuery(landingContentQuery);
+
+  const activeSlides = content?.heroSlides || FALLBACK_CONTENT.heroSlides;
+
+  const processedSlides = activeSlides.map((slide) => {
+    let displayImage = slide.image;
+
+    if (!displayImage) {
+      if (slide.eyebrow?.toLowerCase().includes("sport")) {
+        displayImage = progSports;
+      } else if (slide.eyebrow?.toLowerCase().includes("entrepreneur")) {
+        displayImage = progBiz;
+      } else {
+        displayImage = FALLBACK_CONTENT.heroSlides[0].image;
+      }
+    }
+
+    return {
+      ...slide,
+      image: displayImage,
+    };
+  });
+
+  return (
+    <div className="relative min-h-screen bg-background">
+      <Header />
+
+      <Hero slides={processedSlides} />
+
+      <Mission />
+      <Programs />
+      <Impact />
+      <Team />
+      <Partners />
+      <Events fallback={content?.events || []} />
+      <Contact />
+      <Donate />
+      <Volunteer />
+      <Footer />
+    </div>
+  );
+}
 
 /* ---------------------- Header ---------------------- */
 function Header() {
   const [open, setOpen] = useState(false);
-  const [progress, setProgress] = useState(0); // 0 = on hero, 1 = solid
   const [activeId, setActiveId] = useState<string>("top");
-  const [logoOffset, setLogoOffset] = useState(0);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLAnchorElement>(null);
 
-  // Smooth transparent -> solid transition based on scroll (first ~160px)
-  useEffect(() => {
-    const onScroll = () => {
-      const start = 40;
-      const end = 160;
-      const p = Math.min(1, Math.max(0, (window.scrollY - start) / (end - start)));
-      setProgress(p);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Measure logo offset so it can animate to true viewport center on hero
-  useEffect(() => {
-    const measure = () => {
-      if (!headerRef.current || !logoRef.current) return;
-      const headerLeft = headerRef.current.getBoundingClientRect().left;
-      const restCenter = headerLeft + logoRef.current.offsetLeft + logoRef.current.offsetWidth / 2;
-      setLogoOffset(window.innerWidth / 2 - restCenter);
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
-
-  // Active section tracking for nav indicator
+  // Keep section highlighting based on scroll position
   useEffect(() => {
     const ids = NAV.map((n) => n.href.replace("#", ""));
     const els = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
     if (!els.length) return;
+
     const io = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -193,53 +197,47 @@ function Header() {
       },
       { rootMargin: "-45% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] },
     );
+
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
 
-  const onHero = progress < 0.5;
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4 sm:px-4">
-      <div
-        ref={headerRef}
-        className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full px-4 py-2.5 transition-all duration-300 sm:px-5"
-        style={{
-          backgroundColor: `rgba(255,255,255,${progress * 0.85})`,
-          backdropFilter: progress > 0.05 ? "blur(12px) saturate(150%)" : "none",
-          WebkitBackdropFilter: progress > 0.05 ? "blur(12px) saturate(150%)" : "none",
-          borderColor: `rgba(0,0,0,${progress * 0.05})`,
-          borderWidth: 1,
-          borderStyle: "solid",
-          boxShadow:
-            progress > 0.05 ? `0 8px 30px -12px rgba(15,23,42,${progress * 0.18})` : "none",
-        }}
-      >
-        {/* Logo — center on hero, slide to left on scroll */}
-        <a
-          ref={logoRef}
-          href="#top"
-          className="flex items-center gap-2.5 transition-transform duration-500 ease-out"
-          style={{
-            transform: `translateX(${logoOffset * (1 - progress)}px)`,
-          }}
-        >
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full border border-black/10 bg-white px-4 py-2.5 shadow-md backdrop-blur-md transition-none sm:px-5">
+        {/*
+          Logo lockup. The breakpoint is `lg` to match the nav menu below,
+          which is where the header collapses to the hamburger — so the
+          compact icon-plus-text lockup appears exactly when the desktop nav
+          does not. Both variants render explicit height with w-auto to hold
+          the source aspect ratio.
+        */}
+        <a href="#top" className="flex items-center gap-3">
+          {/* Desktop: full wordmark, no accompanying text */}
           <img
-            src={fireLogo.url}
-            alt="F.I.R.E. logo"
-            className="h-8 w-8 object-contain md:h-9 md:w-9"
+            src={fireLogoFull.url}
+            alt="F.I.R.E. — Free Inspiration Reaching Everyone"
+            width={219}
+            height={42}
+            className="hidden h-[42px] w-auto object-contain lg:block"
           />
-          <span
-            className="hidden font-display text-base font-semibold tracking-tight transition-colors sm:inline"
-            style={{ color: onHero ? "#ffffff" : "hsl(var(--foreground))" }}
-          >
+          {/* Mobile/tablet: icon plus the F.I.R.E. wordmark in brand navy.
+              Sized down 25% from the original 52x47 spec at the user's
+              request — 39x35. */}
+          <img
+            src={fireLogoIcon.url}
+            alt="F.I.R.E. logo"
+            width={39}
+            height={35}
+            className="h-[35px] w-auto object-contain lg:hidden"
+          />
+          <span className="font-display text-base font-extrabold leading-tight tracking-tight text-[#000075] lg:hidden">
             F.I.R.E.
           </span>
         </a>
-        <nav
-          aria-label="Primary"
-          className="hidden items-center gap-6 text-sm transition-opacity duration-300 md:flex"
-          style={{ opacity: progress, pointerEvents: progress > 0.5 ? "auto" : "none" }}
-        >
+
+        {/* Desktop Navigation (Always Visible & Clickable) */}
+        <nav aria-label="Primary" className="hidden items-center gap-6 text-sm lg:flex">
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
             const active = activeId === id;
@@ -248,7 +246,9 @@ function Header() {
                 key={i.href}
                 href={i.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative py-1 transition-colors rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:text-primary ${active ? "text-primary" : "text-foreground/75"}`}
+                className={`relative py-1 transition-colors rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 hover:text-primary ${
+                  active ? "text-primary font-medium" : "text-foreground/75"
+                }`}
               >
                 {i.label}
                 <span
@@ -260,37 +260,32 @@ function Header() {
             );
           })}
         </nav>
-        <div
-          className="flex items-center gap-2 transition-opacity duration-300"
-          style={{ opacity: Math.max(progress, 0.001) }}
-        >
-          <a
-            href="#donate"
-            className={`hidden sm:inline-flex ${BTN.primary}`}
-            style={{ pointerEvents: progress > 0.5 ? "auto" : "none" }}
-          >
+
+        {/* Action Buttons & Mobile Toggle */}
+        <div className="flex items-center gap-2">
+          <a href="#donate" className={`hidden lg:inline-flex ${BTN.primary}`}>
             <Heart className="h-4 w-4" />
             Donate
           </a>
           <button
+            type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
-            className="grid h-11 w-11 place-items-center rounded-full border border-black/10 text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:hidden"
+            className="relative z-50 grid h-10 w-10 place-items-center rounded-full bg-white/90 text-foreground shadow-md backdrop-blur lg:hidden"
           >
-            <span className="text-lg leading-none" aria-hidden="true">
-              {open ? "×" : "≡"}
-            </span>
+            <span className="text-2xl font-bold leading-none">{open ? "×" : "≡"}</span>
           </button>
         </div>
       </div>
 
+      {/* Mobile Drawer (Fixed display & structure) */}
       {open && (
         <nav
           id="mobile-nav"
-          aria-label="Mobile"
-          className="mx-auto mt-2 max-w-[1400px] rounded-2xl border border-black/5 bg-white px-4 py-3 shadow-lg md:hidden"
+          aria-label="Mobile Navigation"
+          className="mx-auto mt-2 flex max-w-[1400px] flex-col gap-1 rounded-2xl border border-black/10 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:hidden"
         >
           {NAV.map((i) => {
             const id = i.href.replace("#", "");
@@ -300,55 +295,75 @@ function Header() {
                 key={i.href}
                 href={i.href}
                 onClick={() => setOpen(false)}
-                className={`block py-2 text-sm ${active ? "text-primary font-medium" : "text-foreground/80"}`}
+                aria-current={active ? "page" : undefined}
+                className={`rounded-lg px-3 py-2.5 text-base transition-colors ${
+                  active
+                    ? "bg-primary/10 font-semibold text-primary"
+                    : "text-foreground/80 hover:bg-black/5 hover:text-foreground"
+                }`}
               >
                 {i.label}
               </a>
             );
           })}
-          <a
-            href="#donate"
-            onClick={() => setOpen(false)}
-            className={`mt-2 flex w-full ${BTN.primary}`}
-          >
-            Donate
-          </a>
+          <div className="mt-2 pt-2 border-t border-black/5 sm:hidden">
+            <a
+              href="#donate"
+              onClick={() => setOpen(false)}
+              className={`flex w-full items-center justify-center gap-2 ${BTN.primary}`}
+            >
+              <Heart className="h-4 w-4" />
+              Donate
+            </a>
+          </div>
         </nav>
       )}
     </header>
   );
 }
-
 /* ---------------------- Hero Slider ---------------------- */
-// Slide data now comes from Airtable via `getLandingContent` (see
-// src/lib/content.functions.ts). The `HeroSlide` type is re-exported from
-// that module and used here as the prop type.
-
 function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const regionRef = useRef<HTMLElement>(null);
 
+  // SLIDES is a prop whose length can change after mount: the first render
+  // uses FALLBACK_HERO, then the Airtable-backed content query resolves and
+  // swaps in the live slides. If the incoming array is shorter (an editor
+  // deleting a hero slide in Airtable is enough), a previously-valid idx now
+  // points past its end — and every read below is an unguarded
+  // SLIDES[idx].title / .eyebrow / .subtitle / .cta, so it would throw and
+  // take down the whole hero. Clamp on read rather than assuming idx is in
+  // range, and key the interval on SLIDES.length so it stops advancing on a
+  // stale modulus. The clamp is what covers the gap between the array
+  // changing and the next interval tick correcting idx.
+  const safeIdx = idx < SLIDES.length ? idx : 0;
+
   useEffect(() => {
     const prefersReducedMotion =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (paused || prefersReducedMotion) return;
+    if (paused || prefersReducedMotion || SLIDES.length === 0) return;
     const t = setInterval(() => setIdx((i) => (i + 1) % SLIDES.length), 6500);
     return () => clearInterval(t);
-  }, [paused]);
+  }, [paused, SLIDES.length]);
 
   const go = (n: number) => setIdx((n + SLIDES.length) % SLIDES.length);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      go(idx - 1);
+      go(safeIdx - 1);
     } else if (e.key === "ArrowRight") {
       e.preventDefault();
-      go(idx + 1);
+      go(safeIdx + 1);
     }
   };
+
+  // Airtable returning zero active hero slides yields an empty array, which
+  // wins over the fallback ([] is truthy), so this is reachable via content
+  // changes alone — and would otherwise be a SLIDES[0] crash.
+  if (SLIDES.length === 0) return null;
 
   return (
     <section
@@ -366,7 +381,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       className="relative min-h-[760px] w-full overflow-hidden bg-black focus:outline-none lg:h-screen"
     >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
-        Slide {idx + 1} of {SLIDES.length}: {SLIDES[idx].title}
+        Slide {safeIdx + 1} of {SLIDES.length}: {SLIDES[safeIdx].title}
       </div>
       {SLIDES.map((s, i) => (
         <div
@@ -374,8 +389,8 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           role="group"
           aria-roledescription="slide"
           aria-label={`${i + 1} of ${SLIDES.length}: ${s.eyebrow}`}
-          aria-hidden={i !== idx}
-          className={`absolute inset-0 transition-opacity duration-1000 ${i === idx ? "opacity-100" : "opacity-0"}`}
+          aria-hidden={i !== safeIdx}
+          className={`absolute inset-0 transition-opacity duration-1000 ${i === safeIdx ? "opacity-100" : "opacity-0"}`}
         >
           <img
             src={s.image}
@@ -391,20 +406,32 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-24 pt-52 text-white sm:pt-56 lg:px-10 lg:pb-40 lg:pt-56">
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85">
-            <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[idx].eyebrow}
+            <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[safeIdx].eyebrow}
           </span>
-          {idx === 0 ? (
-            <h1 className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-              {SLIDES[idx].title}
+          {/*
+            whitespace-pre-line renders real newlines typed into the Airtable
+            field as line breaks, while still collapsing incidental runs of
+            spaces. This is deliberately not HTML: the values are interpolated
+            as text so React escapes them, and a <br/> typed into Airtable
+            shows up as literal characters rather than markup. Rendering these
+            as HTML would need dangerouslySetInnerHTML, which would make every
+            Airtable text field an XSS vector — see CLAUDE.md's requirement
+            that public Airtable content is sanitized.
+          */}
+          {safeIdx === 0 ? (
+            <h1 className="mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+              {SLIDES[safeIdx].title}
             </h1>
           ) : (
-            <p className="mt-5 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-              {SLIDES[idx].title}
+            <p className="mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+              {SLIDES[safeIdx].title}
             </p>
           )}
-          <p className="mt-5 max-w-xl text-base text-white/85 sm:text-lg">{SLIDES[idx].subtitle}</p>
+          <p className="mt-5 max-w-xl whitespace-pre-line text-base text-white/85 sm:text-lg">
+            {SLIDES[safeIdx].subtitle}
+          </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            {SLIDES[idx].cta.map((c) => (
+            {SLIDES[safeIdx].cta.map((c) => (
               <a
                 key={c.label}
                 href={c.href}
@@ -427,10 +454,10 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
                 key={i}
                 type="button"
                 role="tab"
-                aria-selected={i === idx}
+                aria-selected={i === safeIdx}
                 aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className={`h-1.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === idx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
+                className={`h-1.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === safeIdx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
               />
             ))}
           </div>
@@ -438,7 +465,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             <button
               type="button"
               aria-label="Previous slide"
-              onClick={() => go(idx - 1)}
+              onClick={() => go(safeIdx - 1)}
               className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
@@ -446,7 +473,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             <button
               type="button"
               aria-label="Next slide"
-              onClick={() => go(idx + 1)}
+              onClick={() => go(safeIdx + 1)}
               className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
@@ -556,7 +583,6 @@ function CapsuleCollage() {
 }
 
 /* ---------------------- Mission ---------------------- */
-
 function Mission() {
   return (
     <section id="mission" className="px-6 py-10 lg:px-10 lg:py-10">
@@ -714,8 +740,8 @@ function Impact() {
               From education access to youth sports and entrepreneurship support, we meet
               communities where they are — and build forward together.
             </p>
-            <a href="#stories" className={`mt-8 ${BTN.onDarkOutline}`}>
-              Read the stories <ArrowRight className="h-4 w-4" />
+            <a href="#team" className={`mt-8 ${BTN.onDarkOutline}`}>
+              Read the team <ArrowRight className="h-4 w-4" />
             </a>
           </div>
           <div className="relative lg:col-span-7">
@@ -745,7 +771,7 @@ function Impact() {
   );
 }
 
-/* ---------------------- Stories ---------------------- */
+/* ---------------------- Team ---------------------- */
 type Story = {
   img: string;
   name: string;
@@ -755,63 +781,69 @@ type Story = {
   body: string;
 };
 
+function Team() {
+  const portraits: Story[] = [
+    {
+      img: portrait1,
+      name: "Emil Acolatse",
+      role: "Founder & Executive Director",
+      location: "USA & Ghana",
+      quote: "Empowering communities through shared inspiration and sustainable vision.",
+      body: "Leading strategic growth, partnership expansion, and organizational alignment across all regional initiatives.",
+    },
+    {
+      img: portrait2,
+      name: "Larz E. Jeter",
+      role: "CFO",
+      location: "USA & Ghana",
+      quote: "Efficiency and empathy are the pillars of impactful execution.",
+      body: "Oversees financial planning, budgeting, compliance, and the fiscal architecture supporting F.I.R.E.’s cross-border operations.",
+    },
+    {
+      img: portrait3,
+      name: "Donavan S. West",
+      role: "CBO",
+      location: "USA & Ghana",
+      quote: "Real transformation starts at the grassroots level.",
+      body: "Driving outreach programs, volunteer mobilization, and building lasting relationships with local partners.",
+    },
+    {
+      img: portrait4,
+      name: "James R. Beckley",
+      role: "CTO",
+      location: "USA & Ghana",
+      quote:
+        "Building scalable frameworks, systems, and leveraging modern technology to amplify real-world human impact and long-term community value.",
+      body: "Architecting and maintaining the core digital platforms, web infrastructures, and automated systems.",
+    },
+    {
+      img: portrait5,
+      name: "Zebi Williams",
+      role: "Program Director",
+      location: "USA & Ghana",
+      quote:
+        "We empower the people we work alongside with the power to ignite action and spark real change within their lives and their communities.",
+      body: "Developing ecosystem growth plans, project roadmaps, and key stakeholder performance frameworks.",
+    },
+    {
+      img: portrait6,
+      name: "Star Wright",
+      role: "CPO",
+      location: "USA & Ghana",
+      quote: "Every partnership is an opportunity to uplift lives and create opportunity.",
+      body: "Coordinating event execution, field operations, and monitoring program impact across active locations.",
+    },
+    {
+      img: portrait7,
+      name: "Sean McMillan",
+      role: "Business Intelligence Director",
+      location: "USA & Ghana",
+      quote: "Information is the key to unlocking potential and driving meaningful change.",
+      body: "Coordinating data collection, analysis, and reporting to inform strategic decisions and measure program effectiveness.",
+    },
+  ];
 
-
-
-function Stories() {
-  const [portraits, setPortraits] = useState<Story[]>([]);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
-  const [errorHint, setErrorHint] = useState<string>("");
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch("/api/organization");
-        const data = (await res.json()) as {
-          success: boolean;
-          error?: string;
-          hint?: string;
-          members: Array<{
-            name: string;
-            role: string;
-            location: string;
-            quote: string;
-            body: string;
-            photo: string;
-          }>;
-        };
-        if (cancelled) return;
-        if (!res.ok || !data.success) {
-          setStatus("error");
-          setErrorHint(data.hint || data.error || "Unable to load organization from Airtable.");
-          return;
-        }
-        const mapped: Story[] = (data.members ?? [])
-          .filter((m) => m.photo)
-          .map((m) => ({
-            img: m.photo,
-            name: m.name,
-            role: m.role,
-            location: m.location,
-            quote: m.quote,
-            body: m.body,
-          }));
-        setPortraits(mapped);
-        setStatus("ready");
-      } catch (err) {
-        if (cancelled) return;
-        setStatus("error");
-        setErrorHint(err instanceof Error ? err.message : "Network error while loading organization.");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-
-
+  // ... rest of your Team carousel calculations, UI triggers, and layout continues unchanged below
 
   // Triple the list so we can seamlessly loop by jumping between identical copies
   const LOOP = 2;
@@ -900,9 +932,13 @@ function Stories() {
       const y = abs * abs * 70;
       const z = -abs * abs * 140;
       const scale = 1.04 - abs * abs * 0.22;
-      const opacity = Math.max(0, 1 - abs * 0.35);
       card.style.transform = `translateY(${y}px) translateZ(${z}px) rotate(${rotate}deg) scale(${scale})`;
-      card.style.opacity = String(opacity);
+      // Portraits render at full opacity. This previously faded with
+      // distance from centre (down to ~0.58), which let the light section
+      // background show through and read as a white wash over the photos
+      // rather than as depth. Depth is still conveyed by the rotation,
+      // translate, and scale above.
+      card.style.opacity = "1";
     });
     setActiveIndex((prev) => (prev === closestIdx ? prev : closestIdx));
   };
@@ -1127,7 +1163,14 @@ function Stories() {
     return () => {
       el.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      // Reset the ref, not just cancel the frame — otherwise StrictMode's
+      // dev-mode mount→cleanup→mount leaves rafRef.current holding a stale,
+      // already-cancelled ID, so ensureRaf()'s null-check on the second
+      // mount thinks a frame is already scheduled and never starts a new one.
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
   }, [reducedMotion]);
 
@@ -1153,38 +1196,16 @@ function Stories() {
 
   return (
     <Section
-      id="stories"
+      id="team"
       eyebrow="Organization"
-      title="The Leaders behind the spark"
+      title="The Leaders Behind The Spark"
       intro="Through purposeful leadership, our team inspires people, expands opportunity, and creates lasting impact."
       className="bg-[var(--surface)]"
     >
-      {status !== "ready" || portraits.length === 0 ? (
-        <div className="mx-auto max-w-2xl rounded-3xl border border-dashed border-black/15 bg-white/60 px-8 py-16 text-center">
-          {status === "loading" ? (
-            <p className="text-sm uppercase tracking-[0.22em] text-muted-foreground">
-              Loading organization…
-            </p>
-          ) : status === "error" ? (
-            <>
-              <p className="font-display text-xl font-medium">Unable to load from Airtable</p>
-              <p className="mt-3 text-sm text-muted-foreground">{errorHint}</p>
-            </>
-          ) : (
-            <>
-              <p className="font-display text-xl font-medium">No leaders published yet</p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Add records to the Airtable “Organization” table with Status = Active and a Photo attachment.
-              </p>
-            </>
-          )}
-        </div>
-      ) : (
       <div
         className="relative mx-auto w-full"
         style={{ perspective: reducedMotion ? undefined : "1400px" }}
       >
-
         <div
           ref={scrollerRef}
           onWheel={onWheel}
@@ -1229,8 +1250,8 @@ function Stories() {
                 />
               </div>
               <figcaption className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <div className="font-display text-base font-medium">{p.name}</div>
-                <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                <div className="font-display text-[11.2px] font-medium">{p.name}</div>
+                <div className="text-[8.4px] uppercase tracking-[0.18em] text-muted-foreground">
                   {p.role}
                 </div>
               </figcaption>
@@ -1269,8 +1290,6 @@ function Stories() {
           </div>
         </div>
       </div>
-      )}
-
 
       <div className="mt-20 grid grid-cols-1 gap-10 border-t border-black/10 pt-14 md:grid-cols-3 md:gap-12">
         {features.map((f) => (
@@ -1349,7 +1368,7 @@ function Stories() {
                 </p>
                 <div className="mt-2 flex flex-wrap gap-3">
                   <a href="#volunteer" className={BTN.primary} onClick={() => setOpenStory(null)}>
-                    Support more stories <ArrowRight className="h-4 w-4" />
+                    Support our mission <ArrowRight className="h-4 w-4" />
                   </a>
                   <button
                     type="button"
@@ -1377,13 +1396,40 @@ type LiveEvent = {
   location: string;
   description: string;
   photo: string;
+  links?: { label: string; url: string }[];
 };
 
 const rsvpFormSchema = z.object({
   fullName: z.string().trim().min(2, "Please enter your full name").max(120),
   email: z.string().trim().email("Please enter a valid email").max(180),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  // Digits only, 9-10 — covers US 10-digit numbers and Ghanaian numbers in
+  // local format (10 with the leading 0, 9 without). The input itself strips
+  // non-digits and hard-caps at 10, so this is the server-side-mirrored
+  // backstop rather than the primary guard.
+  //
+  // FUTURE ITERATION: this deliberately does not support international
+  // numbers — no country code, no +, no extensions. Adding proper
+  // international support (country selector or E.164 parsing via something
+  // like libphonenumber-js) is planned; see CLAUDE.md's deferred work.
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\d{9,10}$/, "Please enter a valid phone number (9-10 digits)"),
 });
+
+type RsvpField = "fullName" | "email" | "phone";
+
+/**
+ * Progressive display formatting for the RSVP phone input. State always
+ * holds bare digits — which is what rsvpFormSchema, the POST body, and
+ * rsvp.php all expect — so this affects only what the user sees as they
+ * type. Grouping is US-style, matching the field's placeholder.
+ */
+function formatPhoneDisplay(digits: string): string {
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+}
 
 function Events({ fallback }: { fallback: EventItem[] }) {
   const [events, setEvents] = useState<LiveEvent[]>([]);
@@ -1394,7 +1440,7 @@ function Events({ fallback }: { fallback: EventItem[] }) {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch("/api/events");
+        const res = await fetch("/api/events.php");
         const data = (await res.json()) as { success: boolean; events?: LiveEvent[] };
         if (!cancelled && data.success && data.events) {
           setEvents(data.events);
@@ -1424,11 +1470,7 @@ function Events({ fallback }: { fallback: EventItem[] }) {
         }));
 
   return (
-    <Section
-      id="events"
-      eyebrow="Upcoming Events"
-      title="Show up. Sponsor. Celebrate community."
-    >
+    <Section id="events" eyebrow="Upcoming Events" title="Show up. Sponsor. Celebrate community.">
       {loading && events.length === 0 ? (
         <p className="text-muted-foreground">Loading upcoming events…</p>
       ) : displayEvents.length === 0 ? (
@@ -1455,9 +1497,7 @@ function Events({ fallback }: { fallback: EventItem[] }) {
                     {e.date}
                   </div>
                   {e.time && (
-                    <div className="font-display text-sm font-semibold leading-tight">
-                      {e.time}
-                    </div>
+                    <div className="font-display text-sm font-semibold leading-tight">{e.time}</div>
                   )}
                 </div>
               )}
@@ -1482,22 +1522,18 @@ function Events({ fallback }: { fallback: EventItem[] }) {
   );
 }
 
-function EventDetailModal({
-  event,
-  onClose,
-}: {
-  event: LiveEvent | null;
-  onClose: () => void;
-}) {
+function EventDetailModal({ event, onClose }: { event: LiveEvent | null; onClose: () => void }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [errors, setErrors] = useState<Partial<Record<"fullName" | "email" | "phone", string>>>(
-    {},
-  );
+  const [errors, setErrors] = useState<Partial<Record<RsvpField, string>>>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Depends on event?.id, not event, deliberately: this resets the form only
+  // when a *different* event is opened. Depending on the whole object would
+  // re-run on any parent re-render that rebuilds the events array — same
+  // event, new object identity — wiping a visitor's half-typed RSVP.
   useEffect(() => {
     if (event) {
       setFullName("");
@@ -1507,9 +1543,32 @@ function EventDetailModal({
       setStatus("idle");
       setErrorMessage("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event?.id]);
 
   const isFallback = event?.id.startsWith("fallback-");
+
+  // Mirrors the Contact form's error-state pattern: validate the blurred
+  // field on blur, clear its error as soon as the user edits it again, and
+  // show a red border plus red helper text underneath (no modal).
+  const validateField = (key: RsvpField) => {
+    const result = rsvpFormSchema.safeParse({ fullName, email, phone });
+    const message = result.success
+      ? undefined
+      : result.error.issues.find((issue) => issue.path[0] === key)?.message;
+    setErrors((prev) => ({ ...prev, [key]: message }));
+  };
+
+  const clearError = (key: RsvpField) => {
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+  };
+
+  const inputBase =
+    "w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition focus:ring-2";
+  const inputCls = (key: RsvpField) =>
+    `${inputBase} ${
+      errors[key] ? "border-red-500 focus:ring-red-500" : "border-border focus:ring-primary"
+    }`;
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -1528,14 +1587,14 @@ function EventDetailModal({
     setErrors({});
     setStatus("submitting");
     try {
-      const res = await fetch("/api/rsvp", {
+      const res = await fetch("/api/rsvp.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           eventId: event.id,
           fullName: parsed.data.fullName,
           email: parsed.data.email,
-          phone: parsed.data.phone ?? "",
+          phone: parsed.data.phone,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as {
@@ -1562,11 +1621,7 @@ function EventDetailModal({
           <div className="max-h-[85vh] overflow-y-auto">
             {event.photo && (
               <div className="relative h-52 w-full overflow-hidden md:h-64">
-                <img
-                  src={event.photo}
-                  alt={event.name}
-                  className="h-full w-full object-cover"
-                />
+                <img src={event.photo} alt={event.name} className="h-full w-full object-cover" />
               </div>
             )}
             <div className="space-y-6 p-6 md:p-8">
@@ -1593,10 +1648,25 @@ function EventDetailModal({
                 </p>
               )}
 
+              {event.links && event.links.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {event.links.map((link) => (
+                    <a
+                      key={link.url}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted"
+                    >
+                      {link.label}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  ))}
+                </div>
+              )}
+
               <div className="border-t border-border pt-6">
-                <h3 className="font-display text-lg font-semibold">
-                  Register for the guest list
-                </h3>
+                <h3 className="font-display text-lg font-semibold">Register for the guest list</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
                   We'll confirm your spot by email.
                 </p>
@@ -1616,50 +1686,85 @@ function EventDetailModal({
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                  <form onSubmit={handleSubmit} noValidate className="mt-4 space-y-4">
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       <div>
                         <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                          Full name
+                          Full name <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="text"
                           required
                           value={fullName}
-                          onChange={(ev) => setFullName(ev.target.value)}
-                          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                          onChange={(ev) => {
+                            setFullName(ev.target.value);
+                            clearError("fullName");
+                          }}
+                          onBlur={() => validateField("fullName")}
+                          aria-invalid={!!errors.fullName}
+                          aria-describedby={errors.fullName ? "rsvp-fullname-err" : undefined}
+                          className={inputCls("fullName")}
                         />
                         {errors.fullName && (
-                          <p className="mt-1 text-xs text-destructive">{errors.fullName}</p>
+                          <span id="rsvp-fullname-err" className="mt-1 block text-xs text-red-600">
+                            {errors.fullName}
+                          </span>
                         )}
                       </div>
                       <div>
                         <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                          Email
+                          Email <span className="text-red-500">*</span>
                         </label>
                         <input
                           type="email"
                           required
                           value={email}
-                          onChange={(ev) => setEmail(ev.target.value)}
-                          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                          onChange={(ev) => {
+                            setEmail(ev.target.value);
+                            clearError("email");
+                          }}
+                          onBlur={() => validateField("email")}
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? "rsvp-email-err" : undefined}
+                          className={inputCls("email")}
                         />
                         {errors.email && (
-                          <p className="mt-1 text-xs text-destructive">{errors.email}</p>
+                          <span id="rsvp-email-err" className="mt-1 block text-xs text-red-600">
+                            {errors.email}
+                          </span>
                         )}
                       </div>
                     </div>
                     <div>
                       <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Phone (optional)
+                        Phone <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
-                        value={phone}
-                        onChange={(ev) => setPhone(ev.target.value)}
-                        placeholder="+1 555 000 0000"
-                        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                        required
+                        inputMode="numeric"
+                        autoComplete="tel"
+                        maxLength={14}
+                        value={formatPhoneDisplay(phone)}
+                        onChange={(ev) => {
+                          // Strip anything non-numeric and hard-cap at 10.
+                          // Handles paste as well as typing, so letters and
+                          // the display formatting characters never reach
+                          // state — only bare digits are ever stored.
+                          setPhone(ev.target.value.replace(/\D/g, "").slice(0, 10));
+                          clearError("phone");
+                        }}
+                        onBlur={() => validateField("phone")}
+                        aria-invalid={!!errors.phone}
+                        aria-describedby={errors.phone ? "rsvp-phone-err" : undefined}
+                        placeholder="(555) 123-4567"
+                        className={inputCls("phone")}
                       />
+                      {errors.phone && (
+                        <span id="rsvp-phone-err" className="mt-1 block text-xs text-red-600">
+                          {errors.phone}
+                        </span>
+                      )}
                     </div>
 
                     {status === "error" && (
@@ -1705,6 +1810,7 @@ const contactSchema = z.object({
   name: z
     .string()
     .trim()
+    .min(1, { message: "Full name is required." })
     .min(2, { message: "Please enter your full name (at least 2 characters)." })
     .max(100, { message: "Name must be less than 100 characters." })
     .regex(NAME_REGEX, {
@@ -1713,7 +1819,7 @@ const contactSchema = z.object({
   email: z
     .string()
     .trim()
-    .min(1, { message: "Please enter your email address." })
+    .min(1, { message: "Email address is required." })
     .max(255, { message: "Email must be less than 255 characters." })
     .regex(EMAIL_REGEX, { message: "Please enter a valid email address (e.g. name@example.com)." }),
   organization: z
@@ -1725,6 +1831,7 @@ const contactSchema = z.object({
   message: z
     .string()
     .trim()
+    .min(1, { message: "Inquiry message is required." })
     .min(20, { message: "Please share at least 20 characters about your inquiry." })
     .max(1000, { message: "Message must be less than 1000 characters." }),
 });
@@ -1756,12 +1863,17 @@ function Contact() {
   };
 
   const validateField = <K extends keyof ContactValues>(key: K) => {
-    const fieldSchema = contactSchema.shape[key];
-    const result = fieldSchema.safeParse(values[key]);
-    setErrors((prev) => ({
-      ...prev,
-      [key]: result.success ? undefined : result.error.issues[0]?.message,
-    }));
+    // Validates the whole object and surfaces only the blurred field's
+    // message. Equivalent to picking that field's sub-schema (contactSchema
+    // has no cross-field refinements, so an issue with path[0] === key can
+    // only come from that field's own rules) but without the `as any` cast
+    // that a dynamic .pick() key requires. Same approach as the RSVP form.
+    const result = contactSchema.safeParse(values);
+    const message = result.success
+      ? undefined
+      : result.error.issues.find((issue) => issue.path[0] === key)?.message;
+
+    setErrors((prev) => ({ ...prev, [key]: message }));
   };
 
   const inputBase =
@@ -1769,11 +1881,10 @@ function Contact() {
   const inputCls = (k: keyof ContactValues) =>
     `${inputBase} ${errors[k] ? "border-red-500 focus:border-red-500" : "border-black/10"}`;
 
-
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Honeypot: silently "succeed" without doing anything if filled by a bot
+    // 1. Honeypot anti-bot check
     if (honeypotRef.current && honeypotRef.current.value.trim() !== "") {
       setStatus("success");
       setValues({ name: "", email: "", organization: "", message: "" });
@@ -1781,14 +1892,7 @@ function Contact() {
       return;
     }
 
-    // Submit-time delay check: reject suspiciously fast submissions
-    if (Date.now() - mountTimeRef.current < 2000) {
-      setStatus("success");
-      setValues({ name: "", email: "", organization: "", message: "" });
-      setModal("success");
-      return;
-    }
-
+    // 2. Strict Zod Schema Validation BEFORE anything else
     const parsed = contactSchema.safeParse(values);
     if (!parsed.success) {
       const fieldErrors: ContactErrors = {};
@@ -1796,14 +1900,28 @@ function Contact() {
         const k = issue.path[0] as keyof ContactValues | undefined;
         if (k && !fieldErrors[k]) fieldErrors[k] = issue.message;
       }
+
+      // Highlight field errors in red & trigger error modal
       setErrors(fieldErrors);
       setStatus("error");
+      setErrorDetail("Please fill in all required fields highlighted in red.");
+      setModal("error");
       return;
     }
+
+    // 3. Fast submit speed check (evaluated after field check)
+    if (Date.now() - mountTimeRef.current < 1000) {
+      setStatus("error");
+      setErrorDetail("Form submitted too quickly. Please try again.");
+      setModal("error");
+      return;
+    }
+
+    // 4. API Submission
     setErrors({});
     setStatus("submitting");
     try {
-      const response = await fetch("/api/inquire", {
+      const response = await fetch("/api/contact.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1812,6 +1930,12 @@ function Contact() {
           organization: parsed.data.organization ?? "",
           message: parsed.data.message,
           submittedAt: new Date().toISOString(),
+          // Sent alongside the existing client-side honeypot/min-fill-time
+          // checks above so the backend can enforce them independently —
+          // those checks are trivially bypassed by a request that skips
+          // the browser JS and posts directly to the API.
+          website: honeypotRef.current?.value ?? "",
+          formRenderedAt: new Date(mountTimeRef.current).toISOString(),
         }),
       });
 
@@ -1842,7 +1966,7 @@ function Contact() {
           <p className="mt-5 max-w-md text-foreground/70">
             Interested in sponsoring an event, volunteering, partnering with F.I.R.E., or learning
             more? Send us a note and our team will follow up.
-          </p>     
+          </p>
         </div>
         <form
           onSubmit={onSubmit}
@@ -1875,18 +1999,20 @@ function Contact() {
           </div>
 
           <label className="text-sm">
-            <span className="text-foreground/80">Full name</span>
+            <span className="text-foreground/80">
+              Full name <span className="text-red-500">*</span>
+            </span>
             <input
               className={inputCls("name")}
               placeholder="Your name"
               value={values.name}
               onChange={(e) => set("name", e.target.value)}
               onBlur={() => validateField("name")}
-
               aria-invalid={!!errors.name}
               aria-describedby={errors.name ? "contact-name-err" : undefined}
               maxLength={100}
               autoComplete="name"
+              required
             />
             {errors.name && (
               <span id="contact-name-err" className="mt-1 block text-xs text-red-600">
@@ -1894,8 +2020,11 @@ function Contact() {
               </span>
             )}
           </label>
+
           <label className="text-sm">
-            <span className="text-foreground/80">Email address</span>
+            <span className="text-foreground/80">
+              Email address <span className="text-red-500">*</span>
+            </span>
             <input
               type="email"
               className={inputCls("email")}
@@ -1903,11 +2032,11 @@ function Contact() {
               value={values.email}
               onChange={(e) => set("email", e.target.value)}
               onBlur={() => validateField("email")}
-
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "contact-email-err" : undefined}
               maxLength={255}
               autoComplete="email"
+              required
             />
             {errors.email && (
               <span id="contact-email-err" className="mt-1 block text-xs text-red-600">
@@ -1915,6 +2044,7 @@ function Contact() {
               </span>
             )}
           </label>
+
           <label className="text-sm sm:col-span-2">
             <span className="text-foreground/80">Organization (optional)</span>
             <input
@@ -1922,6 +2052,7 @@ function Contact() {
               placeholder="Company or organization"
               value={values.organization}
               onChange={(e) => set("organization", e.target.value)}
+              onBlur={() => validateField("organization")}
               maxLength={120}
               autoComplete="organization"
             />
@@ -1929,8 +2060,11 @@ function Contact() {
               <span className="mt-1 block text-xs text-red-600">{errors.organization}</span>
             )}
           </label>
+
           <label className="text-sm sm:col-span-2">
-            <span className="text-foreground/80">How can we help?</span>
+            <span className="text-foreground/80">
+              How can we help? <span className="text-red-500">*</span>
+            </span>
             <textarea
               rows={4}
               className={inputCls("message")}
@@ -1938,14 +2072,14 @@ function Contact() {
               value={values.message}
               onChange={(e) => set("message", e.target.value)}
               onBlur={() => validateField("message")}
-
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? "contact-message-err" : undefined}
               maxLength={1000}
+              required
             />
             <div className="mt-1 flex items-center justify-between text-xs">
               {errors.message ? (
-                <span id="contact-message-err" className="text-red-600">
+                <span id="contact-message-err" className="text-red-600 font-medium">
                   {errors.message}
                 </span>
               ) : (
@@ -1954,6 +2088,7 @@ function Contact() {
               <span className="text-foreground/40">{values.message.length}/1000</span>
             </div>
           </label>
+
           <div className="sm:col-span-2 flex items-center gap-4">
             <button
               type="submit"
@@ -1969,9 +2104,23 @@ function Contact() {
               )}
             </button>
             {status === "error" && Object.keys(errors).length > 0 && (
-              <span className="text-xs text-red-600">Please fix the highlighted fields.</span>
+              <span className="text-xs font-medium text-red-600">
+                Please fix the highlighted required fields.
+              </span>
             )}
           </div>
+
+          <p className="sm:col-span-2 text-xs text-foreground/50">
+            By submitting you consent to our{" "}
+            <Link to="/privacy-policy" className="underline hover:text-foreground/70">
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link to="/terms-of-use" className="underline hover:text-foreground/70">
+              Terms of Use
+            </Link>
+            .
+          </p>
         </form>
       </div>
 
@@ -2002,10 +2151,10 @@ function Contact() {
                 <div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-full bg-red-100 text-red-600">
                   <AlertTriangle className="h-6 w-6" />
                 </div>
-                <DialogTitle className="text-center">Something went wrong</DialogTitle>
+                <DialogTitle className="text-center">Missing required fields</DialogTitle>
                 <DialogDescription className="text-center">
                   {errorDetail ||
-                    "We couldn't send your message. Please check your connection and try again."}
+                    "Please make sure Full Name, Email, and Message are all filled out."}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter className="sm:justify-center">
@@ -2020,7 +2169,6 @@ function Contact() {
     </section>
   );
 }
-
 /* ---------------------- Donate ---------------------- */
 function Donate() {
   useEffect(() => {
@@ -2033,21 +2181,19 @@ function Donate() {
   }, []);
 
   return (
-    <section id="donate" className="bg-slate-50 px-6 py-24 lg:px-10 lg:py-32">
+    <section id="donate" className="mb-[70px] bg-slate-50 px-6 py-24 lg:px-10 lg:py-32">
       <div className="mx-auto grid max-w-[1400px] grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
         {/* Intro */}
         <div className="lg:col-span-5 lg:sticky lg:top-28">
-          <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">
-            Donate
-          </div>
+          <div className="text-xs font-medium uppercase tracking-[0.22em] text-primary">Donate</div>
           <h2 className="mt-4 font-display text-5xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
             Give Inspiration That Changes Lives!
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-foreground/75">
             <span className="font-semibold text-foreground">Join us in Creating Change!</span> At
             Fire Free Inspiration Reaching Everyone, we know that change starts with people like
-            you. Every act of kindness, every dollar, and every moment of your time brings us
-            closer to achieving our mission. Together, we can create a brighter future.
+            you. Every act of kindness, every dollar, and every moment of your time brings us closer
+            to achieving our mission. Together, we can create a brighter future.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3 text-xs text-foreground/70">
@@ -2088,7 +2234,6 @@ function Donate() {
   );
 }
 
-
 /* ---------------------- Volunteer ---------------------- */
 function Volunteer() {
   return (
@@ -2123,60 +2268,74 @@ function Volunteer() {
 }
 
 /* ---------------------- Footer ---------------------- */
-function Footer() {
-  const links = [...NAV, { label: "Donate", href: "#donate" }];
-  return (
-    <footer className="border-t border-black/10 bg-[#0b1230] px-6 py-14 text-white lg:px-10">
-      <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-        <a href="#top" className="flex items-center gap-2.5">
-          <img src={fireLogo.url} alt="F.I.R.E. logo" className="h-10 w-10 object-contain" />
+import { Link } from "@tanstack/react-router";
 
-          <div>
-            <div className="font-display text-lg font-semibold tracking-tight">F.I.R.E.</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-white/55">
-              Free Inspiration Reaching Everyone
-            </div>
-          </div>
-        </a>
-        <nav
-          aria-label="Footer"
-          className="flex flex-wrap items-center gap-x-7 gap-y-2 text-sm text-white/80"
-        >
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="rounded-sm transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1230]"
+function Footer() {
+  return (
+    <footer className="w-full bg-[#0b1230] px-6 py-10 text-white lg:px-12">
+      <div className="mx-auto flex max-w-[1400px] flex-col justify-between gap-6 md:flex-row md:items-end">
+        {/* Left Column: Logo */}
+        <div className="flex flex-col gap-1">
+          <a href="#top" className="flex items-center">
+            {/*
+              Light-coloured wordmark for the dark footer. Height steps from
+              43px (mobile) to 54px (md and up); w-auto keeps the source
+              aspect ratio, so the full lockup fits a narrow viewport without
+              needing the icon-only fallback.
+            */}
+            <img
+              src={fireLogoFullOnDark.url}
+              alt="F.I.R.E. — Free Inspiration Reaching Everyone"
+              width={277}
+              height={54}
+              className="h-[43px] w-auto object-contain md:h-[54px]"
+            />
+          </a>
+        </div>
+
+        {/* Right Column: Copyright & Legal Policies */}
+        <div className="flex flex-col items-start gap-2 md:items-end">
+          <p className="text-xs text-white/80 md:text-right">
+            © {new Date().getFullYear()} F.I.R.E. — Free Inspiration Reaching Everyone. All rights
+            reserved.
+          </p>
+
+          <div className="flex items-center gap-2 text-sm">
+            <Link
+              to="/privacy-policy"
+              className="underline underline-offset-4 hover:text-white/80 transition-colors"
             >
-              {l.label}
-            </a>
-          ))}
-        </nav>
-      </div>
-      <div className="mx-auto mt-10 flex max-w-[1400px] flex-col items-start justify-between gap-2 border-t border-white/10 pt-6 text-xs text-white/55 md:flex-row md:items-center">
-        <div>© {new Date().getFullYear()} F.I.R.E. — Free Inspiration Reaching Everyone.</div>
-        <div>Ghana · United States</div>
+              Privacy Policy
+            </Link>
+            <span className="text-white/60">·</span>
+            <Link
+              to="/terms-of-use"
+              className="underline underline-offset-4 hover:text-white/80 transition-colors"
+            >
+              Terms of Use
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
 }
 
 /* ---------------------- Partners ---------------------- */
-import exxonLogo from "@/assets/exxonmobil.png.asset.json";
-import macarthurLogo from "@/assets/macarthur.svg.asset.json";
-import urbanAffairsLogo from "@/assets/urban-affairs-coalition.png.asset.json";
-import feedChildrenLogo from "@/assets/feed-the-children.png.asset.json";
-import philadelphiaLogo from "@/assets/city-of-philadelphia.png.asset.json";
-import tmobileLogo from "@/assets/tmobile.png.asset.json";
-import networkForGoodLogo from "@/assets/network-for-good.png.asset.json";
-import raytheonLogo from "@/assets/raytheon.png.asset.json";
-import getTheMillionsLogo from "@/assets/get-the-millions.png.asset.json";
-import dtrConsultingLogo from "@/assets/dtr-consulting.png.asset.json";
-import atolatseLogo from "@/assets/atolatse.png.asset.json";
-import usGhanaChamberLogo from "@/assets/us-ghana-chamber.png.asset.json";
-import ejConsultingLogo from "@/assets/ej-consulting.png.asset.json";
-import mayorsFundLogo from "@/assets/mayors-fund-philadelphia.png.asset.json";
-import cityPhiladelphiaV2Logo from "@/assets/city-of-philadelphia-v2.png.asset.json";
+const exxonLogo = { url: `/images/partners/exxonLogo.png` };
+const macarthurLogo = { url: `/images/partners/macarthur.png` };
+const urbanAffairsLogo = { url: `/images/partners/urban-affairs-coalition.png` };
+const feedChildrenLogo = { url: `/images/partners/feed-the-children.png` };
+const tmobileLogo = { url: `/images/partners/tmobile.png` };
+const networkForGoodLogo = { url: `/images/partners/network-for-good.png` };
+const raytheonLogo = { url: `/images/partners/raytheon.jpg` };
+const getTheMillionsLogo = { url: `/images/partners/get-the-millions.jpg` };
+const dtrConsultingLogo = { url: `/images/partners/dtr-consulting.png` };
+const atolatseLogo = { url: `/images/partners/atolatse.jpg` };
+const usGhanaChamberLogo = { url: `/images/partners/us-ghana-chamber.jpg` };
+const ejConsultingLogo = { url: `/images/partners/ej-consulting.jpg` };
+const mayorsFundLogo = { url: `/images/partners/mayors-fund-philadelphia.png` };
+const cityPhiladelphiaV2Logo = { url: `/images/partners/city-of-philadelphia.png` };
 
 const clearbit = (domain: string) => `https://logo.clearbit.com/${domain}`;
 
@@ -2189,7 +2348,6 @@ const PARTNERS: { name: string; logo: string }[] = [
   { name: "City of Philadelphia", logo: cityPhiladelphiaV2Logo.url },
   { name: "T-Mobile", logo: tmobileLogo.url },
   { name: "Network for Good", logo: networkForGoodLogo.url },
-
   { name: "Raytheon Technologies", logo: raytheonLogo.url },
   { name: "Get The Millions", logo: getTheMillionsLogo.url },
   { name: "DTR Consulting", logo: dtrConsultingLogo.url },
@@ -2300,34 +2458,5 @@ function Partners() {
         }
       `}</style>
     </Section>
-  );
-}
-
-/* ---------------------- Page ---------------------- */
-function Landing() {
-  const { data: content } = useSuspenseQuery(landingContentQuery);
-  return (
-    <>
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-      >
-        Skip to main content
-      </a>
-      <Header />
-      <main id="main-content">
-        <Hero slides={content.heroSlides} />
-        <Mission />
-        <Programs />
-        <Impact />
-        <Stories />
-        <Partners />
-        <Events fallback={content.events} />
-        <Contact />
-        <Donate />
-        <Volunteer />
-      </main>
-      <Footer />
-    </>
   );
 }

@@ -1,0 +1,354 @@
+F.I.R.E. PLATFORM — DEVELOPMENT AND BUILD EXECUTION INSTRUCTIONS
+
+PURPOSE
+This file defines the mandatory execution workflow for developers and AI coding agents.
+
+Document roles:
+- README.md explains the project purpose, scope, architecture history, major features, and expected outcomes.
+- CLAUDE.md is the authoritative source for the current architecture, security rules, environment contract, deployment target, and definition of done.
+- INSTRUCTIONS.txt defines how work must be planned, executed, validated, documented, and handed off.
+
+When instructions conflict, follow the priority order defined in CLAUDE.md. Do not use this file to revive superseded Netlify, TanStack Start SSR, Bun, or browser-side Airtable instructions.
+
+============================================================
+1. STARTUP CHECKLIST
+============================================================
+
+Before changing any file:
+
+1. Read README.md for project context and intended outcomes.
+2. Read CLAUDE.md in full for the authoritative technical requirements.
+3. Read this INSTRUCTIONS.txt file.
+4. Review relevant files in deployment/, .docs/, and .files/ when present.
+5. Review the files directly affected by the task.
+6. For build, integration, or deployment work, review at minimum:
+   - package.json
+   - package-lock.json or the active lockfile
+   - vite.config.*
+   - tsconfig files
+   - .gitignore
+   - CLAUDE.md section 10 (environment variable contract — no env file is committed)
+   - server/app/composer.json and composer.lock when present
+   - public/.htaccess
+   - legacy Netlify or TanStack files only when the task includes migration or removal
+7. Confirm the repository root:
+   git rev-parse --show-toplevel
+8. Confirm the active branch:
+   git branch --show-current
+9. Confirm repository status:
+   git status
+10. Confirm the remote:
+    git remote -v
+11. Do not proceed if the terminal is in the Windows home directory, system directory, or another parent directory.
+12. Summarize the requested task, implementation plan, relevant constraints, and material risks before making substantial changes.
+13. Ask for clarification only when ambiguity could materially affect behavior, security, data, deployment, cost, or production availability.
+
+============================================================
+2. SCOPE CONTROL
+============================================================
+
+1. Do not assume project requirements that conflict with CLAUDE.md or the user’s current request.
+2. Do not invent features, pages, routes, Airtable fields, integrations, workflows, or business rules.
+3. Do not add unrequested “helpful” functionality.
+4. Do not perform broad refactors unless required to complete the approved task safely.
+5. Do not mix dependency upgrades, formatting rewrites, or unrelated cleanup into a feature or bug-fix change.
+6. Preserve approved design, copy, responsive behavior, accessibility, fallback behavior, and business logic unless the task authorizes a change.
+7. Build material changes in reviewable phases.
+8. Do not remove legacy Netlify, TanStack Start, SSR, or server-function behavior until its purpose is identified and an approved static/PHP replacement is implemented and validated.
+9. Stop and report unresolved conflicts rather than silently choosing a risky interpretation.
+
+============================================================
+3. CURRENT EXECUTION TARGET
+============================================================
+
+All implementation work must align with the current target defined in CLAUDE.md:
+
+- Static React/TypeScript/Vite frontend
+- npm and package-lock.json as the target JavaScript toolchain
+- npm run build generating dist/
+- PHP-FPM backend hosted on the existing AlmaLinux 9 DirectAdmin VPS
+- Same-origin PHP endpoints under /api/
+- Airtable as the external content and contact-data store
+- Brevo SMTP for outbound contact email
+- Google-hosted email as the destination mailbox
+- Cloudflare for DNS and browser-facing SSL
+- No permanent Node.js production process
+- No local database or schema
+- No Netlify production dependency after migration
+
+Historical Netlify, Bun, TanStack Start SSR, and server-function files may be inspected during migration, but they are not the final implementation target.
+
+============================================================
+4. SECURITY AND SECRETS
+============================================================
+
+1. Never hardcode or expose:
+   - Airtable Personal Access Tokens
+   - Brevo SMTP credentials or SMTP keys
+   - passwords
+   - webhook URLs or secrets
+   - authorization headers
+   - private filesystem paths
+   - health-check tokens
+   - vendor credentials
+2. No private value may use the VITE_ prefix.
+3. React/Vite browser code must never call Airtable or Brevo directly.
+4. Private integrations must run through PHP endpoints under /api/.
+5. Do not expose all of process.env through Vite define settings.
+6. Do not use unrestricted loadEnv calls or envPrefix: ''.
+7. The production environment file must remain at:
+   /home/DA_USERNAME/domains/freeinspiration.org/private/.env
+8. The production .env file must remain outside public_html and outside the Git repository.
+9. No env file — placeholder or otherwise — is ever committed to the repository, including local example templates. The variable contract is documented as prose in CLAUDE.md only.
+10. Never request that real secrets be pasted into source code, documentation, screenshots, commit messages, or chat transcripts.
+11. Never commit .env files, private/, runtime storage/, logs, cache, lock files, rate-limit records, or real credentials.
+12. If a real credential may have entered Git history, a browser bundle, generated output, or public log, flag it for provider-side rotation. Removing the current line is not sufficient.
+13. Use generic public errors and redacted private logs.
+14. Never use chmod 777.
+
+============================================================
+5. ENVIRONMENT VARIABLE STANDARD
+============================================================
+
+The authoritative variable contract is defined in CLAUDE.md section 10 only — no env file is committed to the repository.
+
+Current standard variables include:
+
+APP_ENV
+APP_DEBUG
+APP_URL
+
+AIRTABLE_PAT
+AIRTABLE_BASE_ID
+AIRTABLE_TABLE_EVENTS
+AIRTABLE_TABLE_HERO
+AIRTABLE_TABLE_SITE_IMAGES
+AIRTABLE_TABLE_CONTACTS
+
+BREVO_SMTP_HOST
+BREVO_SMTP_PORT
+BREVO_SMTP_ENCRYPTION
+BREVO_SMTP_USERNAME
+BREVO_SMTP_PASSWORD
+
+MAIL_FROM_ADDRESS
+MAIL_FROM_NAME
+MAIL_TO_ADDRESS
+
+CONTACT_RATE_LIMIT_MAX
+CONTACT_RATE_LIMIT_WINDOW_SECONDS
+
+Rules:
+
+1. Use AIRTABLE_PAT rather than legacy AIRTABLE_API_KEY in the target implementation.
+2. Add variables only when required by an approved and implemented feature.
+3. Do not invent Airtable IDs, field names, table names, credentials, sender addresses, or webhook values.
+4. PHP must load production values from private/.env at runtime.
+5. Vite must never load, copy, or bundle private/.env.
+6. MAIL_FROM_ADDRESS must be an approved Brevo sender.
+7. The visitor’s validated email may be used only as Reply-To.
+8. Google SMTP credentials are not part of this workflow.
+
+============================================================
+6. IMPLEMENTATION RULES
+============================================================
+
+1. Prefer clear, modular, production-ready code.
+2. Keep the frontend static and browser-safe.
+3. Keep private PHP application code and Composer dependencies outside public_html.
+4. Keep public API files thin and place them under public_html/api in production.
+5. Use same-origin frontend requests such as:
+   GET /api/content.php
+   POST /api/contact.php
+6. Validate and sanitize all user input before Airtable writes or email delivery.
+7. Validate external API responses before rendering, caching, or persistence.
+8. Preserve local fallback content and the last valid Airtable cache.
+9. Do not query Airtable separately for every public visitor when cached content can be served.
+10. Use explicit public-field allowlists for Airtable content.
+11. Use atomic writes and locking for cache, rate-limit, and synchronization files.
+12. Use PHPMailer with authenticated Brevo SMTP; do not use PHP mail() as the primary production transport.
+13. Avoid duplicate Airtable request logic by using reusable PHP service modules.
+14. Do not change Airtable schema assumptions without reviewing all readers, writers, types, tests, cache mappings, and UI consumers.
+15. Do not activate or alter payment processing without explicit approval and a separate security review.
+16. Do not commit generated dist output.
+17. Do not introduce a second JavaScript lockfile after the npm migration is validated.
+18. Do not place Composer vendor files inside public_html.
+
+============================================================
+7. ASSET AND ROUTING RULES
+============================================================
+
+1. Assets inside src must be imported by the component or module.
+2. Assets inside public must be referenced from the domain root.
+3. Never use /src/... as a browser URL.
+4. Preserve exact filename capitalization.
+5. Check images, fonts, video, CSS url(...), favicons, metadata, and downloadable files.
+6. Do not rely permanently on temporary Airtable attachment URLs.
+7. When approved Airtable attachments are synchronized, validate file type and size and serve stable website-owned copies.
+8. public/.htaccess must be copied into dist/.htaccess by the Vite build.
+9. Preserve real files, directories, and /api requests before applying the React SPA fallback.
+10. Do not add a React fallback inside public_html/api.
+11. Never reference /.netlify/functions-internal/server in the target configuration.
+
+============================================================
+8. REQUIRED BUILD AND BACKEND CHECKS
+============================================================
+
+Use the repository’s actual scripts. Do not invent missing scripts or report them as executed.
+
+Frontend checks when supported:
+
+npm ci
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+
+Minimum required frontend validation:
+
+1. npm run build completes successfully.
+2. dist/index.html exists.
+3. dist/.htaccess exists.
+4. dist/assets/ exists.
+5. Nested routes and browser refreshes work.
+6. Images, fonts, icons, forms, and fallback content work.
+7. No SSR, Netlify runtime, or permanent Node service is required.
+
+Backend checks when PHP files are affected:
+
+1. Run composer validate.
+2. Run composer install as required by the task or environment.
+3. Run PHP syntax validation for every changed PHP file.
+4. Verify the required PHP extensions documented in CLAUDE.md and DEPLOYMENT.md.
+5. Test affected API endpoints directly when possible.
+6. Test invalid method, invalid JSON, missing field, invalid email, rate-limit, provider-failure, and missing-configuration behavior when relevant.
+
+Do not claim Airtable, Brevo, deployment, or network integration success without valid credentials, network access, and an actual successful test.
+
+============================================================
+9. CREDENTIAL-LEAK REVIEW
+============================================================
+
+After every production build or integration refactor:
+
+1. Search source, Git-tracked files, and dist for real credentials and private URLs.
+2. Review matches for:
+   - AIRTABLE_PAT or legacy AIRTABLE_API_KEY
+   - Airtable authorization values
+   - api.airtable.com or private Airtable webhook URLs
+   - BREVO_SMTP_USERNAME
+   - BREVO_SMTP_PASSWORD
+   - SMTP keys
+   - Authorization or Bearer values
+   - private/.env paths accidentally emitted into browser output
+   - obsolete Netlify runtime endpoints
+3. Confirm browser network requests do not call Airtable or Brevo directly.
+4. Confirm no .env file, private directory, runtime storage, vendor directory, or dist output is staged.
+5. Rotate any credential that may have been exposed.
+
+============================================================
+10. ERROR LOGGING
+============================================================
+
+Maintain errors-log.txt only when meaningful errors, regressions, or unresolved warnings are found.
+
+Each entry should include:
+
+- Date and time
+- Environment
+- Branch and commit when available
+- Error message
+- Reproduction steps
+- Root cause
+- Files affected
+- Fix applied
+- Validation performed
+- Current status
+- Remaining risk
+
+Do not record secrets, complete authorization headers, SMTP keys, private webhook URLs, or unnecessary personal data.
+Do not add empty entries merely to satisfy the process.
+
+============================================================
+11. GIT SAFETY
+============================================================
+
+Before staging:
+
+git rev-parse --show-toplevel
+git branch --show-current
+git status
+
+Rules:
+
+1. Work on dev unless explicitly authorized otherwise.
+2. Never run git add . from the Windows home directory or a parent directory.
+3. Never initialize Git in a parent folder because a child folder is not recognized.
+4. Never remove .git without explicit approval and a verified recovery plan.
+5. Fetch or pull before pushing when remote work may exist.
+6. Resolve conflicts intentionally.
+7. Do not force-push without explicit approval.
+8. Review staged changes:
+   git diff --cached
+9. Use a clear commit message describing the actual change.
+10. Do not include secrets, .env files, private/, storage/, server/vendor/, dist/, or unrelated work.
+11. Stop for approval before merging dev into main or deploying production unless the task explicitly authorizes the action.
+
+============================================================
+12. DEPLOYMENT REVIEW
+============================================================
+
+The completed migration targets the existing DirectAdmin VPS, not Netlify.
+
+Before declaring a VPS deployment successful:
+
+1. Confirm the frontend build artifact was generated locally or by the approved deployment workflow.
+2. Confirm the contents of dist were deployed directly into the correct public_html document root.
+3. Confirm public API entry points were deployed under public_html/api.
+4. Confirm private PHP application code and Composer vendor files remain outside public_html.
+5. Confirm private/.env remains outside public_html and was not overwritten.
+6. Confirm storage directories are writable only as required by the DirectAdmin PHP-FPM user.
+7. Confirm ownership and permissions match CLAUDE.md and DEPLOYMENT.md.
+8. Confirm SSL and Cloudflare behavior are correct.
+9. Test the homepage, nested routes, assets, /api/health.php, content retrieval, and contact submission.
+10. Confirm Airtable storage and Brevo delivery separately.
+11. Review PHP/application logs for redacted failures.
+12. Confirm no Netlify proxy, function, environment variable, or runtime dependency remains active unless explicitly documented as unresolved migration work.
+
+Historical Netlify deployment checks are relevant only while auditing or removing the legacy system. They are not completion criteria for the final VPS target.
+
+============================================================
+13. DOCUMENTATION AND HANDOFF
+============================================================
+
+After each approved development cycle:
+
+1. Update README.md only when project purpose, feature scope, architecture history, expected outcome, or developer orientation materially changes.
+2. Update CLAUDE.md when current architecture, environment variables, security rules, deployment targets, project state, or definition of done changes.
+3. Update deployment/DEPLOYMENT.md when server paths, permissions, build commands, deployment mapping, cron, PHP, Cloudflare, Airtable, or Brevo requirements change.
+4. Update CLAUDE.md section 10 when variable names change — this is the only place the variable contract is documented.
+5. Add a concise current-state or change-log entry only for material changes.
+6. Move older history to .docs/CHANGELOG.md when the active instruction files become difficult to scan.
+7. Record unresolved risks and manual server actions honestly.
+8. Update errors-log.txt only when meaningful error information exists.
+9. Do not duplicate the full README narrative inside CLAUDE.md or INSTRUCTIONS.txt.
+10. Do not duplicate the full CLAUDE architecture contract inside this file; reference CLAUDE.md and keep this file execution-focused.
+
+============================================================
+14. COMPLETION STANDARD
+============================================================
+
+A development cycle is complete only when:
+
+- The approved task is implemented.
+- No unapproved functionality was added.
+- Current CLAUDE.md architecture and security requirements are satisfied.
+- The production frontend build passes.
+- Applicable frontend and backend checks pass.
+- Asset paths and nested routes work after build.
+- Airtable and Brevo remain behind the PHP boundary.
+- Private values remain outside browser output, Git, public_html, and public responses.
+- The diff is clean, focused, and reviewed.
+- No generated or runtime files are staged.
+- Documentation and handoff notes are current where required.
+- Known limitations, untested integrations, and manual actions are reported honestly.

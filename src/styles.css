@@ -118,3 +118,20 @@
 }
 @utility animate-float { animation: float-slow 6s ease-in-out infinite; }
 @utility animate-float-delay { animation: float-slower 7s ease-in-out infinite; animation-delay: 1.5s; }
+
+
+@layer base {
+  /* Enforce Montserrat 500 on all H2 headings */
+  h2, 
+  section h2 {
+    font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif !important;
+    font-weight: 500 !important;
+  }
+
+  /* Enforce Montserrat 500 on Hero paragraph elements */
+  .hero-slider p,
+  section:first-of-type p {
+    font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif !important;
+    font-weight: 500 !important;
+  }
+}

@@ -1,15 +1,44 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, nitro (build-only using cloudflare as a default target),
-//     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
-//     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import tsConfigPaths from "vite-tsconfig-paths";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
+// Conventional static Vite SPA — no SSR, no Nitro, no Netlify build target.
+// See CLAUDE.md sections 5, 8, and 17 for the target architecture and the
+// Netlify/TanStack Start removal record.
 export default defineConfig({
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
+  plugins: [
+    tanstackRouter({ target: "react", autoCodeSplitting: true }),
+    react(),
+    tailwindcss(),
+    tsConfigPaths(),
+  ],
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
+    sourcemap: false,
+  },
+  server: {
+    // Fail loudly if 5173 is already in use instead of silently starting on
+    // 5174, 5175, and so on. Vite's default is to drift to the next free
+    // port, which quietly leaves earlier dev servers running and pointed at
+    // stale code — the browser tab you already have open keeps loading from
+    // a server that is no longer the one rebuilding your changes. Dev only;
+    // has no effect on `npm run build` or on production.
+    strictPort: true,
+    proxy: {
+      // Bridge-testing only: proxy /api/*.php to a local PHP dev server so
+      // the frontend can be exercised against server/public-api during
+      // `npm run dev`. Start it with:
+      //   php -S localhost:8080 -t server/public-api
+      // Production frontend calls remain relative /api/*.php (CLAUDE.md
+      // section 19); nothing here is used at build/deploy time.
+      "^/api/.*\\.php$": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
 });

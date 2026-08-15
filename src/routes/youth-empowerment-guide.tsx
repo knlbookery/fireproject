@@ -16,9 +16,9 @@ export const Route = createFileRoute("/youth-empowerment-guide")({
           "Practical frameworks for launching mentorship, sports, and education programs that empower young people.",
       },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://fireproject.lovable.app/youth-empowerment-guide" },
+      { property: "og:url", content: "https://freeinspiration.org/youth-empowerment-guide" },
     ],
-    links: [{ rel: "canonical", href: "https://fireproject.lovable.app/youth-empowerment-guide" }],
+    links: [{ rel: "canonical", href: "https://freeinspiration.org/youth-empowerment-guide" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -30,9 +30,12 @@ export const Route = createFileRoute("/youth-empowerment-guide")({
           publisher: {
             "@type": "Organization",
             name: "F.I.R.E.",
-            logo: { "@type": "ImageObject", url: "https://fireproject.lovable.app/favicon.ico" },
+            logo: {
+              "@type": "ImageObject",
+              url: "https://freeinspiration.org/images/firelogo.png",
+            },
           },
-          mainEntityOfPage: "https://fireproject.lovable.app/youth-empowerment-guide",
+          mainEntityOfPage: "https://freeinspiration.org/youth-empowerment-guide",
         }),
       },
     ],

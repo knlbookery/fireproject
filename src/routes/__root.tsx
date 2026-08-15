@@ -5,11 +5,9 @@ import {
   createRootRouteWithContext,
   useRouter,
   HeadContent,
-  Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
 
-import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -72,18 +70,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+// charset/viewport/font-preconnect/stylesheet tags live statically in
+// index.html (no SSR to render them into) — this head() only covers what
+// genuinely varies per route and benefits from HeadContent's dynamic
+// management (title/OG/Twitter overrides, e.g. youth-empowerment-guide.tsx
+// and the homepage's own og:image override).
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
       {
         name: "description",
         content:
           "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, and community development across Ghana and the United States.",
       },
-      { name: "author", content: "F.I.R.E." },
       { property: "og:title", content: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
       {
         property: "og:description",
@@ -99,16 +99,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Creating opportunity through education, technology, sports, and community development in Ghana and the US.",
       },
-      {
-        property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9a18bd54-7e2a-4811-a465-878023ea8c65/id-preview-ee652be3--d4dbc668-1f42-4990-9b22-efe9c850e51a.lovable.app-1782667702795.png",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9a18bd54-7e2a-4811-a465-878023ea8c65/id-preview-ee652be3--d4dbc668-1f42-4990-9b22-efe9c850e51a.lovable.app-1782667702795.png",
-      },
+      { property: "og:image", content: "https://freeinspiration.org/images/firelogo.png" },
+      { name: "twitter:image", content: "https://freeinspiration.org/images/firelogo.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -142,25 +134,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
-
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <HeadContent />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>

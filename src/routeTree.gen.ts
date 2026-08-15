@@ -10,21 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as YouthEmpowermentGuideRouteImport } from './routes/youth-empowerment-guide'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermsOfUseRouteImport } from './routes/terms-of-use'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiRsvpRouteImport } from './routes/api/rsvp'
-import { Route as ApiOrganizationRouteImport } from './routes/api/organization'
-import { Route as ApiInquireRouteImport } from './routes/api/inquire'
-import { Route as ApiEventsRouteImport } from './routes/api/events'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
   id: '/youth-empowerment-guide',
   path: '/youth-empowerment-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const TermsOfUseRoute = TermsOfUseRouteImport.update({
+  id: '/terms-of-use',
+  path: '/terms-of-use',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -32,93 +34,45 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiRsvpRoute = ApiRsvpRouteImport.update({
-  id: '/api/rsvp',
-  path: '/api/rsvp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiOrganizationRoute = ApiOrganizationRouteImport.update({
-  id: '/api/organization',
-  path: '/api/organization',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiInquireRoute = ApiInquireRouteImport.update({
-  id: '/api/inquire',
-  path: '/api/inquire',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiEventsRoute = ApiEventsRouteImport.update({
-  id: '/api/events',
-  path: '/api/events',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-of-use': typeof TermsOfUseRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
-  '/api/events': typeof ApiEventsRoute
-  '/api/inquire': typeof ApiInquireRoute
-  '/api/organization': typeof ApiOrganizationRoute
-  '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-of-use': typeof TermsOfUseRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
-  '/api/events': typeof ApiEventsRoute
-  '/api/inquire': typeof ApiInquireRoute
-  '/api/organization': typeof ApiOrganizationRoute
-  '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/terms-of-use': typeof TermsOfUseRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
-  '/api/events': typeof ApiEventsRoute
-  '/api/inquire': typeof ApiInquireRoute
-  '/api/organization': typeof ApiOrganizationRoute
-  '/api/rsvp': typeof ApiRsvpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/sitemap.xml'
-    | '/youth-empowerment-guide'
-    | '/api/events'
-    | '/api/inquire'
-    | '/api/organization'
-    | '/api/rsvp'
+    '/' | '/privacy-policy' | '/terms-of-use' | '/youth-empowerment-guide'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/sitemap.xml'
-    | '/youth-empowerment-guide'
-    | '/api/events'
-    | '/api/inquire'
-    | '/api/organization'
-    | '/api/rsvp'
+  to: '/' | '/privacy-policy' | '/terms-of-use' | '/youth-empowerment-guide'
   id:
     | '__root__'
     | '/'
-    | '/sitemap.xml'
+    | '/privacy-policy'
+    | '/terms-of-use'
     | '/youth-empowerment-guide'
-    | '/api/events'
-    | '/api/inquire'
-    | '/api/organization'
-    | '/api/rsvp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  TermsOfUseRoute: typeof TermsOfUseRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
-  ApiEventsRoute: typeof ApiEventsRoute
-  ApiInquireRoute: typeof ApiInquireRoute
-  ApiOrganizationRoute: typeof ApiOrganizationRoute
-  ApiRsvpRoute: typeof ApiRsvpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -130,11 +84,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof YouthEmpowermentGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
+    '/terms-of-use': {
+      id: '/terms-of-use'
+      path: '/terms-of-use'
+      fullPath: '/terms-of-use'
+      preLoaderRoute: typeof TermsOfUseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -144,45 +105,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/rsvp': {
-      id: '/api/rsvp'
-      path: '/api/rsvp'
-      fullPath: '/api/rsvp'
-      preLoaderRoute: typeof ApiRsvpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/organization': {
-      id: '/api/organization'
-      path: '/api/organization'
-      fullPath: '/api/organization'
-      preLoaderRoute: typeof ApiOrganizationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/inquire': {
-      id: '/api/inquire'
-      path: '/api/inquire'
-      fullPath: '/api/inquire'
-      preLoaderRoute: typeof ApiInquireRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/events': {
-      id: '/api/events'
-      path: '/api/events'
-      fullPath: '/api/events'
-      preLoaderRoute: typeof ApiEventsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  TermsOfUseRoute: TermsOfUseRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
-  ApiEventsRoute: ApiEventsRoute,
-  ApiInquireRoute: ApiInquireRoute,
-  ApiOrganizationRoute: ApiOrganizationRoute,
-  ApiRsvpRoute: ApiRsvpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

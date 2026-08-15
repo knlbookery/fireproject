@@ -6,7 +6,12 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", ".output", ".vinxi"] },
+  // `archive/` holds intentionally-dead legacy code (the pre-migration
+  // TanStack Start SSR app and its API routes), kept only as a rollback
+  // reference — see archive/*/README.md. It is never built, imported, or
+  // deployed, so linting it produces noise about code we deliberately do
+  // not maintain.
+  { ignores: ["dist", ".output", ".vinxi", "archive"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -34,6 +39,18 @@ export default tseslint.config(
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  // shadcn/ui components are generated to a fixed convention that exports a
+  // component alongside its variant helper (Button + buttonVariants, etc.).
+  // react-refresh/only-export-components flags that pattern, but it only
+  // affects hot-reload granularity in dev — there is no production impact,
+  // and splitting every such file would mean hand-editing generated
+  // components we otherwise leave untouched.
+  {
+    files: ["src/components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
     },
   },
   eslintPluginPrettier,

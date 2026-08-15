@@ -1,0 +1,32 @@
+# Keep LF line endings in the working tree on every platform.
+#
+# Without this, Git on Windows (core.autocrlf=true, which is the default from
+# Git for Windows' installer) rewrites text files as CRLF during checkout.
+# Only files that actually differ between the branches get rewritten, so a
+# branch switch leaves the tree in a *mixed* state — some files LF, some CRLF.
+# Prettier defaults to endOfLine: "lf" and then reports every line of every
+# converted file as an error, which looks like the whole codebase broke at
+# once. This happened on 2026-08-10 during the dev -> main merge: 10 files
+# were converted and lint went from 0 errors to 3290.
+#
+# `eol=lf` overrides core.autocrlf for this repository, so contributors on
+# Windows, macOS, and Linux all get the same bytes.
+* text=auto eol=lf
+
+# Binary files: never apply line-ending conversion.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.svg   text eol=lf
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.pdf   binary
+*.phar  binary
+*.zip   binary
+*.gz    binary
