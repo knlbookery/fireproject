@@ -1,11 +1,16 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, CalendarDays, User } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, User } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section, BTN } from "@/components/site/ui";
 import { absoluteUrl, pageHead } from "@/lib/seo";
-import { FALLBACK_ARTICLES, fetchPressArticle, type PressArticle } from "@/lib/press";
+import {
+  FALLBACK_ARTICLES,
+  fetchPressArticle,
+  fetchPressArticles,
+  type PressArticle,
+} from "@/lib/press";
 
 export const Route = createFileRoute("/press/$slug")({
   head: ({ params }) => {
