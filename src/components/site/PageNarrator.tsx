@@ -88,11 +88,18 @@ export function PageNarrator() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [voiceUri, setVoiceUri] = useState("");
   const [rate, setRate] = useState(1);
+  const [activeSentence, setActiveSentence] = useState(-1);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const cacheRef = useRef<Record<string, string>>({});
   const voiceUriRef = useRef("");
   const rateRef = useRef(1);
+  const sentencesRef = useRef<Sentence[]>([]);
+  const activeRef = useRef<HTMLSpanElement | null>(null);
+
+  const sentences = useMemo(() => splitSentences(script), [script]);
+  sentencesRef.current = sentences;
+
 
   voiceUriRef.current = voiceUri;
   rateRef.current = rate;
