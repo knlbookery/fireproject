@@ -28,6 +28,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PressIndexRouteImport } from './routes/press.index'
 import { Route as LeadershipIndexRouteImport } from './routes/leadership.index'
 import { Route as PressSlugRouteImport } from './routes/press.$slug'
+import { Route as LeadershipSlugRouteImport } from './routes/leadership.$slug'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
   id: '/youth-empowerment-guide',
@@ -124,6 +125,11 @@ const PressSlugRoute = PressSlugRouteImport.update({
   path: '/press/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LeadershipSlugRoute = LeadershipSlugRouteImport.update({
+  id: '/leadership/$slug',
+  path: '/leadership/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/us-initiatives': typeof UsInitiativesRoute
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/leadership/$slug': typeof LeadershipSlugRoute
   '/press/$slug': typeof PressSlugRoute
   '/leadership/': typeof LeadershipIndexRoute
   '/press/': typeof PressIndexRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/us-initiatives': typeof UsInitiativesRoute
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/leadership/$slug': typeof LeadershipSlugRoute
   '/press/$slug': typeof PressSlugRoute
   '/leadership': typeof LeadershipIndexRoute
   '/press': typeof PressIndexRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/us-initiatives': typeof UsInitiativesRoute
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/leadership/$slug': typeof LeadershipSlugRoute
   '/press/$slug': typeof PressSlugRoute
   '/leadership/': typeof LeadershipIndexRoute
   '/press/': typeof PressIndexRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/us-initiatives'
     | '/volunteer'
     | '/youth-empowerment-guide'
+    | '/leadership/$slug'
     | '/press/$slug'
     | '/leadership/'
     | '/press/'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/us-initiatives'
     | '/volunteer'
     | '/youth-empowerment-guide'
+    | '/leadership/$slug'
     | '/press/$slug'
     | '/leadership'
     | '/press'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/us-initiatives'
     | '/volunteer'
     | '/youth-empowerment-guide'
+    | '/leadership/$slug'
     | '/press/$slug'
     | '/leadership/'
     | '/press/'
@@ -272,6 +284,7 @@ export interface RootRouteChildren {
   UsInitiativesRoute: typeof UsInitiativesRoute
   VolunteerRoute: typeof VolunteerRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
+  LeadershipSlugRoute: typeof LeadershipSlugRoute
   PressSlugRoute: typeof PressSlugRoute
   LeadershipIndexRoute: typeof LeadershipIndexRoute
   PressIndexRoute: typeof PressIndexRoute
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PressSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/leadership/$slug': {
+      id: '/leadership/$slug'
+      path: '/leadership/$slug'
+      fullPath: '/leadership/$slug'
+      preLoaderRoute: typeof LeadershipSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -432,6 +452,7 @@ const rootRouteChildren: RootRouteChildren = {
   UsInitiativesRoute: UsInitiativesRoute,
   VolunteerRoute: VolunteerRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
+  LeadershipSlugRoute: LeadershipSlugRoute,
   PressSlugRoute: PressSlugRoute,
   LeadershipIndexRoute: LeadershipIndexRoute,
   PressIndexRoute: PressIndexRoute,

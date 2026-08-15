@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Quote } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand, BTN } from "@/components/site/ui";
