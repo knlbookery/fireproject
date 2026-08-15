@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState, type FormEvent } from "react";
-import { CalendarDays, CheckCircle2, Clock, Mail, MapPin } from "lucide-react";
+import { useMemo, useRef, useState, type FormEvent } from "react";
+import { CalendarDays, CheckCircle2, Clock, Mail, MapPin, Search } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, BTN } from "@/components/site/ui";
