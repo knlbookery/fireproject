@@ -129,7 +129,8 @@ export const VOLUNTEER_ROLES = [
     title: "Skills Volunteer",
     location: "Remote",
     commitment: "Flexible",
-    description: "Design, legal, accounting, translation, or curriculum support for our programmes.",
+    description:
+      "Design, legal, accounting, translation, or curriculum support for our programmes.",
   },
 ];
 
@@ -190,7 +191,8 @@ export const PRESS_ITEMS = [
     outlet: "F.I.R.E. Media",
     date: "2026-01-20",
     type: "Video",
-    excerpt: "A short documentary following four founders through eight weeks of business training.",
+    excerpt:
+      "A short documentary following four founders through eight weeks of business training.",
     href: "#",
   },
   {
@@ -198,8 +200,7 @@ export const PRESS_ITEMS = [
     outlet: "F.I.R.E.",
     date: "2025-12-11",
     type: "Announcement",
-    excerpt:
-      "Full-year figures on reach, spending, and programme outcomes across both countries.",
+    excerpt: "Full-year figures on reach, spending, and programme outcomes across both countries.",
     href: "#",
   },
 ];
