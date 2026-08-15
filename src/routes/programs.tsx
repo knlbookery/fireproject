@@ -140,11 +140,15 @@ function ProgramsPage() {
                     </li>
                   ))}
                 </ul>
+
+                <ProgrammeFunding funding={summary[p.slug]} goal={p.fundingGoal} />
+
                 <div className="mt-8 flex flex-wrap gap-3">
                   <ProgramDonateDialog
                     programSlug={p.slug}
                     programTitle={p.title}
                     triggerClassName={BTN.primary}
+                    onCompleted={refresh}
                   />
                   <Link to="/contact" className={BTN.secondary}>
                     Ask about this programme <ArrowRight className="h-4 w-4" aria-hidden="true" />
