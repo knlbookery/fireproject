@@ -88,27 +88,41 @@ export function PageHero({
 }) {
   return (
     <section className="relative isolate overflow-hidden bg-[#0b1230] px-6 pb-20 pt-36 text-white lg:px-10 lg:pb-28 lg:pt-44">
-      <img
-        src={image}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 h-full w-full object-cover opacity-35"
-        loading="eager"
-      />
+      <Parallax strength={70} className="absolute inset-x-0 -bottom-[12%] -top-[12%] -z-10">
+        <img
+          src={image}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full scale-105 object-cover opacity-35"
+          loading="eager"
+        />
+      </Parallax>
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0b1230] via-[#0b1230]/85 to-[#0b1230]/40"
       />
       <div className={SHELL}>
         <div className="max-w-3xl">
-          <div className="text-sm font-semibold uppercase tracking-[0.22em] text-accent">
-            {eyebrow}
-          </div>
-          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.03] tracking-tight sm:text-5xl lg:text-7xl">
-            {title}
-          </h1>
-          {intro && <p className="mt-6 max-w-2xl text-lg text-white/75">{intro}</p>}
-          {actions && <div className="mt-9 flex flex-wrap gap-3">{actions}</div>}
+          <Reveal variant="right" duration={700}>
+            <div className="text-sm font-semibold uppercase tracking-[0.22em] text-accent">
+              {eyebrow}
+            </div>
+          </Reveal>
+          <Reveal variant="blur" delay={90}>
+            <h1 className="mt-5 font-display text-4xl font-bold leading-[1.03] tracking-tight sm:text-5xl lg:text-7xl">
+              {title}
+            </h1>
+          </Reveal>
+          {intro && (
+            <Reveal variant="up" delay={200}>
+              <p className="mt-6 max-w-2xl text-lg text-white/75">{intro}</p>
+            </Reveal>
+          )}
+          {actions && (
+            <Reveal variant="up" delay={300}>
+              <div className="mt-9 flex flex-wrap gap-3">{actions}</div>
+            </Reveal>
+          )}
         </div>
       </div>
     </section>
@@ -125,8 +139,13 @@ export function StatGrid({
 }) {
   return (
     <div className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-      {stats.map((s) => (
-        <div key={s.label} className={`p-8 ${onDark ? "bg-[#0b1230] text-white" : "bg-card"}`}>
+      {stats.map((s, i) => (
+        <Reveal
+          key={s.label}
+          variant="up"
+          delay={i * 110}
+          className={`p-8 ${onDark ? "bg-[#0b1230] text-white" : "bg-card"}`}
+        >
           <div className="font-display text-4xl font-bold tracking-tight lg:text-5xl">
             {s.value}
           </div>
@@ -136,11 +155,12 @@ export function StatGrid({
               {s.detail}
             </p>
           )}
-        </div>
+        </Reveal>
       ))}
     </div>
   );
 }
+
 
 /* ---------------------- Closing CTA band -------------------------------- */
 export function CTABand({
