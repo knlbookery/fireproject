@@ -256,6 +256,51 @@ export function PageNarrator() {
             {loading ? "Preparing a summary of this page…" : script}
           </p>
 
+          <div className="mt-4 space-y-3 border-t border-border pt-4">
+            <div className="space-y-1.5">
+              <label
+                htmlFor="narrator-voice"
+                className="text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground"
+              >
+                Voice
+              </label>
+              <select
+                id="narrator-voice"
+                value={voiceUri}
+                onChange={(e) => changeVoice(e.target.value)}
+                className="w-full rounded-full border border-border bg-background px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value="">Browser default</option>
+                {voices.map((v) => (
+                  <option key={v.voiceURI} value={v.voiceURI}>
+                    {v.name} ({v.lang})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label
+                htmlFor="narrator-rate"
+                className="flex items-center justify-between text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground"
+              >
+                <span>Speaking rate</span>
+                <span className="tabular-nums normal-case text-foreground">{rate.toFixed(1)}×</span>
+              </label>
+              <input
+                id="narrator-rate"
+                type="range"
+                min={0.5}
+                max={2}
+                step={0.1}
+                value={rate}
+                onChange={(e) => changeRate(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+            </div>
+          </div>
+
+
           {!loading && script !== "" && (
             <div className="mt-4 flex gap-2">
               <button
