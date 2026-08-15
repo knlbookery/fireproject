@@ -267,8 +267,11 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
 
 
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-24 pt-52 text-white sm:pt-56 lg:px-10 lg:pb-40 lg:pt-56">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85">
+        <div className="max-w-2xl" key={safeIdx}>
+          <span
+            className="animate-hero-text inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85"
+            style={{ animationDelay: "60ms" }}
+          >
             <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[safeIdx].eyebrow}
           </span>
           {/*
@@ -282,18 +285,30 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             that public Airtable content is sanitized.
           */}
           {safeIdx === 0 ? (
-            <h1 className="mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1
+              className="animate-hero-text mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              style={{ animationDelay: "160ms" }}
+            >
               {SLIDES[safeIdx].title}
             </h1>
           ) : (
-            <p className="mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            <p
+              className="animate-hero-text mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              style={{ animationDelay: "160ms" }}
+            >
               {SLIDES[safeIdx].title}
             </p>
           )}
-          <p className="mt-5 max-w-xl whitespace-pre-line text-base text-white/85 sm:text-lg">
+          <p
+            className="animate-hero-text mt-5 max-w-xl whitespace-pre-line text-base text-white/85 sm:text-lg"
+            style={{ animationDelay: "280ms" }}
+          >
             {SLIDES[safeIdx].subtitle}
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div
+            className="animate-hero-text mt-8 flex flex-wrap items-center gap-3"
+            style={{ animationDelay: "400ms" }}
+          >
             {SLIDES[safeIdx].cta.map((c) => (
               <a
                 key={c.label}
@@ -309,6 +324,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             ))}
           </div>
         </div>
+
 
         <div className="mt-12 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2" role="tablist" aria-label="Select slide">
