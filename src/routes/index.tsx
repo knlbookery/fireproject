@@ -249,12 +249,15 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           aria-roledescription="slide"
           aria-label={`${i + 1} of ${SLIDES.length}: ${s.eyebrow}`}
           aria-hidden={i !== safeIdx}
-          className={`absolute inset-0 transition-opacity duration-1000 ${i === safeIdx ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            i === safeIdx ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
+          }`}
         >
           <img
+            key={`${s.title}-${i === safeIdx ? "on" : "off"}`}
             src={s.image}
             alt={s.alt}
-            className="absolute inset-0 h-full w-full object-cover"
+            className={`absolute inset-0 h-full w-full object-cover ${i === safeIdx ? "animate-ken-burns" : "scale-[1.06]"}`}
             loading={i === 0 ? "eager" : "lazy"}
             fetchPriority={i === 0 ? "high" : "auto"}
           />
@@ -262,9 +265,13 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
         </div>
       ))}
 
+
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-24 pt-52 text-white sm:pt-56 lg:px-10 lg:pb-40 lg:pt-56">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85">
+        <div className="max-w-2xl" key={safeIdx}>
+          <span
+            className="animate-hero-text inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85"
+            style={{ animationDelay: "60ms" }}
+          >
             <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[safeIdx].eyebrow}
           </span>
           {/*
@@ -278,18 +285,30 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             that public Airtable content is sanitized.
           */}
           {safeIdx === 0 ? (
-            <h1 className="mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1
+              className="animate-hero-text mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              style={{ animationDelay: "160ms" }}
+            >
               {SLIDES[safeIdx].title}
             </h1>
           ) : (
-            <p className="mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            <p
+              className="animate-hero-text mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              style={{ animationDelay: "160ms" }}
+            >
               {SLIDES[safeIdx].title}
             </p>
           )}
-          <p className="mt-5 max-w-xl whitespace-pre-line text-base text-white/85 sm:text-lg">
+          <p
+            className="animate-hero-text mt-5 max-w-xl whitespace-pre-line text-base text-white/85 sm:text-lg"
+            style={{ animationDelay: "280ms" }}
+          >
             {SLIDES[safeIdx].subtitle}
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div
+            className="animate-hero-text mt-8 flex flex-wrap items-center gap-3"
+            style={{ animationDelay: "400ms" }}
+          >
             {SLIDES[safeIdx].cta.map((c) => (
               <a
                 key={c.label}
@@ -306,6 +325,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           </div>
         </div>
 
+
         <div className="mt-12 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2" role="tablist" aria-label="Select slide">
             {SLIDES.map((s, i) => (
@@ -316,9 +336,24 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
                 aria-selected={i === safeIdx}
                 aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className={`h-1.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === safeIdx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
-              />
+                className={`relative h-1.5 overflow-hidden rounded-full transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === safeIdx ? "w-12 bg-white/30" : "w-5 bg-white/40 hover:bg-white/70"}`}
+              >
+                {i === safeIdx && (
+                  <span
+                    key={`${safeIdx}-${paused}`}
+                    aria-hidden="true"
+                    className="absolute inset-0 origin-left rounded-full bg-white"
+                    style={{
+                      animation: paused
+                        ? undefined
+                        : "slide-progress 6500ms linear forwards",
+                      transform: paused ? "scaleX(1)" : undefined,
+                    }}
+                  />
+                )}
+              </button>
             ))}
+
           </div>
           <div className="flex items-center gap-2">
             <button
