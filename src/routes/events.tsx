@@ -279,8 +279,7 @@ function EventsPage() {
   const hero = copy("hero", {
     eyebrow: "Events",
     title: "Show up. Bring someone with you.",
-    intro:
-      "Tournaments, workshops, fundraisers and community days across Philadelphia and Ghana.",
+    intro: "Tournaments, workshops, fundraisers and community days across Philadelphia and Ghana.",
     image: "/images/events.jpg",
   });
   const calendar = copy("calendar", { eyebrow: "Calendar", title: "Upcoming events." });
