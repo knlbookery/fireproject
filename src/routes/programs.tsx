@@ -1,4 +1,5 @@
 import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 
@@ -19,13 +20,22 @@ export const Route = createFileRoute("/programs")({
 });
 
 function ProgramsPage() {
+  const copy = usePageCopy("/programs");
+  const hero = copy("hero", {
+    eyebrow: "Programs",
+    title: "Six programmes. One throughline: opportunity.",
+    intro:
+      "Each programme is built with local leadership, measured against a public number, and designed to outlast the funding cycle that started it.",
+    image: "/images/sport.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Programs"
-        title="Six programmes. One throughline: opportunity."
-        intro="Each programme is built with local leadership, measured against a public number, and designed to outlast the funding cycle that started it."
-        image="/images/sport.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
         actions={
           <>
             <Link to="/donate" className={BTN.onDarkSolid}>

@@ -1,4 +1,5 @@
 import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, Phone } from "lucide-react";
 
@@ -19,13 +20,22 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const copy = usePageCopy("/contact");
+  const hero = copy("hero", {
+    eyebrow: "Contact",
+    title: "Start a conversation.",
+    intro:
+      "Whether you want to partner, volunteer, or simply understand the work better — we read every message.",
+    image: "/images/impact.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Contact"
-        title="Start a conversation."
-        intro="Whether you want to partner, volunteer, or simply understand the work better — we read every message."
-        image="/images/impact.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
       />
 
       <Section>

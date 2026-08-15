@@ -1,4 +1,5 @@
 import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Heart, Lock, ShieldCheck } from "lucide-react";
@@ -19,6 +20,15 @@ export const Route = createFileRoute("/donate")({
 });
 
 function DonatePage() {
+  const copy = usePageCopy("/donate");
+  const hero = copy("hero", {
+    eyebrow: "Donate",
+    title: "Give inspiration that changes lives.",
+    intro:
+      "Join us in creating change. Every act of kindness, every dollar, and every moment of your time brings us closer to our mission.",
+    image: "/images/donate.jpg",
+  });
+
   useEffect(() => {
     const s = document.createElement("script");
     s.src = "https://www.zeffy.com/embed/v2/zeffy-embed.js";
@@ -32,10 +42,10 @@ function DonatePage() {
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Donate"
-        title="Give inspiration that changes lives."
-        intro="Join us in creating change. Every act of kindness, every dollar, and every moment of your time brings us closer to our mission."
-        image="/images/donate.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
       />
 
       <Section className="bg-surface">

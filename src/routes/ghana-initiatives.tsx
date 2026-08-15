@@ -1,4 +1,5 @@
 import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -37,13 +38,22 @@ const WORK = [
 ];
 
 function GhanaPage() {
+  const copy = usePageCopy("/ghana-initiatives");
+  const hero = copy("hero", {
+    eyebrow: "Ghana initiatives",
+    title: "Accra, and everywhere the work travels next.",
+    intro:
+      "Locally led programmes in sport, education, and enterprise — built with Ghanaian coaches, teachers, and founders.",
+    image: "/images/community_dev.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Ghana initiatives"
-        title="Accra, and everywhere the work travels next."
-        intro="Locally led programmes in sport, education, and enterprise — built with Ghanaian coaches, teachers, and founders."
-        image="/images/community_dev.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
         actions={
           <Link to="/donate" className={BTN.onDarkSolid}>
             Support Ghana programmes

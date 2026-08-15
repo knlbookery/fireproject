@@ -1,4 +1,5 @@
 import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -36,13 +37,22 @@ const WORK = [
 ];
 
 function UsPage() {
+  const copy = usePageCopy("/us-initiatives");
+  const hero = copy("hero", {
+    eyebrow: "Philadelphia / U.S. initiatives",
+    title: "The neighbourhood where it started.",
+    intro:
+      "Philadelphia remains our home base — leagues, mentorship, and family support running block by block.",
+    image: "/images/basketball.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Philadelphia / U.S. initiatives"
-        title="The neighbourhood where it started."
-        intro="Philadelphia remains our home base — leagues, mentorship, and family support running block by block."
-        image="/images/basketball.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
         actions={
           <Link to="/volunteer" className={BTN.onDarkSolid}>
             Volunteer in Philadelphia
