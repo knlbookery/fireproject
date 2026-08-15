@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteLayout } from "@/components/site/SiteLayout";
+import { CTABand, Section as SiteSection } from "@/components/site/ui";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
@@ -163,7 +165,7 @@ function Landing() {
         secondary={{ label: "Become a sponsor", to: "/sponsors" }}
       />
 
-      <Section
+      <SiteSection
         eyebrow="Get involved"
         title="Become part of the mission."
         intro="Volunteer your time, partner with us, or start a conversation — there's a way in for everyone."
@@ -180,7 +182,7 @@ function Landing() {
             Contact us
           </Link>
         </div>
-      </Section>
+      </SiteSection>
     </SiteLayout>
   );
 }
