@@ -118,14 +118,19 @@ export function Header() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Link to="/volunteer" className={`hidden xl:inline-flex ${BTN.secondary}`}>
-            Volunteer
-          </Link>
-          <Link to="/donate" className={`hidden lg:inline-flex ${BTN.primary}`}>
-            <Heart className="h-4 w-4" aria-hidden="true" />
-            Donate
-          </Link>
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="hidden xl:block">
+            <Link to="/volunteer" className={BTN.secondary}>
+              Volunteer
+            </Link>
+          </span>
+          <span className="hidden lg:block">
+            <Link to="/donate" className={BTN.primary}>
+              <Heart className="h-4 w-4" aria-hidden="true" />
+              Donate
+            </Link>
+          </span>
+
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
