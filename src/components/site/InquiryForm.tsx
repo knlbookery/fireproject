@@ -45,7 +45,8 @@ export function InquiryForm({
     if (!EMAIL_REGEX.test(values.email.trim())) next.email = "Enter a valid email address.";
     if (values.message.trim().length < 20)
       next.message = "Please write at least 20 characters so we can help properly.";
-    if (values.message.trim().length > 1500) next.message = "Please keep this under 1500 characters.";
+    if (values.message.trim().length > 1500)
+      next.message = "Please keep this under 1500 characters.";
     return next;
   }
 
@@ -100,7 +101,11 @@ export function InquiryForm({
     "mt-2 w-full rounded-2xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 
   return (
-    <form onSubmit={onSubmit} noValidate className="rounded-3xl border border-border bg-card p-6 sm:p-10">
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="rounded-3xl border border-border bg-card p-6 sm:p-10"
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="if-name" className="text-sm font-medium">
@@ -225,12 +230,19 @@ export function InquiryForm({
       />
 
       {serverError && (
-        <p role="alert" className="mt-5 rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <p
+          role="alert"
+          className="mt-5 rounded-2xl bg-destructive/10 px-4 py-3 text-sm text-destructive"
+        >
           {serverError}
         </p>
       )}
 
-      <button type="submit" disabled={state === "sending"} className={`mt-7 ${BTN.primary} disabled:opacity-60`}>
+      <button
+        type="submit"
+        disabled={state === "sending"}
+        className={`mt-7 ${BTN.primary} disabled:opacity-60`}
+      >
         {state === "sending" ? "Sending…" : submitLabel}
         <Send className="h-4 w-4" aria-hidden="true" />
       </button>

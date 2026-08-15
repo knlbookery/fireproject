@@ -33,7 +33,10 @@ function SponsorsPage() {
       <Section eyebrow="Tiers" title="Sponsorship levels.">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {SPONSOR_TIERS.map((t) => (
-            <div key={t.name} className="flex flex-col rounded-3xl border border-border bg-card p-8">
+            <div
+              key={t.name}
+              className="flex flex-col rounded-3xl border border-border bg-card p-8"
+            >
               <h3 className="font-display text-2xl font-bold tracking-tight">{t.name}</h3>
               <div className="mt-2 text-primary">{t.amount}</div>
               <ul className="mt-6 space-y-2.5">
@@ -57,7 +60,9 @@ function SponsorsPage() {
             messageLabel="What you'd like to support"
             messagePlaceholder="Tell us about your organization, the programmes you're drawn to, and your timeline…"
             submitLabel="Request sponsorship pack"
-            extraFields={[{ name: "tier", label: "Interested tier", options: SPONSOR_TIERS.map((t) => t.name) }]}
+            extraFields={[
+              { name: "tier", label: "Interested tier", options: SPONSOR_TIERS.map((t) => t.name) },
+            ]}
           />
         </div>
       </Section>

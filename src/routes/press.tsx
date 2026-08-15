@@ -51,9 +51,13 @@ function PressPage() {
         <div className="divide-y divide-border border-y border-border">
           {RELEASES.map((r) => (
             <article key={r.title} className="grid gap-4 py-10 md:grid-cols-[180px_1fr]">
-              <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">{r.date}</div>
+              <div className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
+                {r.date}
+              </div>
               <div>
-                <h2 className="font-display text-2xl font-bold tracking-tight lg:text-3xl">{r.title}</h2>
+                <h2 className="font-display text-2xl font-bold tracking-tight lg:text-3xl">
+                  {r.title}
+                </h2>
                 <p className="mt-3 max-w-2xl text-muted-foreground">{r.body}</p>
               </div>
             </article>

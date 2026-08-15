@@ -81,7 +81,12 @@ function EventsPage() {
                 className="overflow-hidden rounded-3xl border border-border bg-card transition hover:shadow-lg"
               >
                 {e.image && (
-                  <img src={e.image} alt={e.title} className="h-52 w-full object-cover" loading="lazy" />
+                  <img
+                    src={e.image}
+                    alt={e.title}
+                    className="h-52 w-full object-cover"
+                    loading="lazy"
+                  />
                 )}
                 <div className="p-7">
                   <h2 className="font-display text-2xl font-bold tracking-tight">{e.title}</h2>
@@ -106,7 +111,9 @@ function EventsPage() {
                     )}
                   </div>
                   {e.description && (
-                    <p className="mt-4 line-clamp-4 text-sm text-muted-foreground">{e.description}</p>
+                    <p className="mt-4 line-clamp-4 text-sm text-muted-foreground">
+                      {e.description}
+                    </p>
                   )}
                 </div>
               </article>

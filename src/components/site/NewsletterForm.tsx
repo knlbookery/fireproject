@@ -81,7 +81,6 @@ export function NewsletterForm() {
           value={website}
           onChange={(e) => setWebsite(e.target.value)}
           className="hidden"
-
         />
         <button
           type="submit"
