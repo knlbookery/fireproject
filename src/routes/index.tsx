@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ORGANIZATION_JSONLD, pageHead } from "@/lib/seo";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { CTABand, Section as SiteSection } from "@/components/site/ui";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";

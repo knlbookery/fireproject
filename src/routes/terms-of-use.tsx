@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms-of-use")({
+  head: () =>
+    pageHead({
+      title: "Terms of Use | F.I.R.E.",
+      description:
+        "The terms that govern your use of the F.I.R.E. (Free Inspiration Reaching Everyone) website and its services.",
+      path: "/terms-of-use",
+    }),
   component: TermsOfUse,
 });
 
