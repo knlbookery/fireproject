@@ -16,6 +16,7 @@ import { Route as TermsOfUseRouteImport } from './routes/terms-of-use'
 import { Route as SponsorsRouteImport } from './routes/sponsors'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as LeadershipRouteImport } from './routes/leadership'
 import { Route as GhanaInitiativesRouteImport } from './routes/ghana-initiatives'
 import { Route as EventsRouteImport } from './routes/events'
@@ -59,6 +60,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeadershipRoute = LeadershipRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/leadership': typeof LeadershipRoute
+  '/partners': typeof PartnersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/programs': typeof ProgramsRoute
   '/sponsors': typeof SponsorsRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/leadership': typeof LeadershipRoute
+  '/partners': typeof PartnersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/programs': typeof ProgramsRoute
   '/sponsors': typeof SponsorsRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
   '/leadership': typeof LeadershipRoute
+  '/partners': typeof PartnersRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/programs': typeof ProgramsRoute
   '/sponsors': typeof SponsorsRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/ghana-initiatives'
     | '/leadership'
+    | '/partners'
     | '/privacy-policy'
     | '/programs'
     | '/sponsors'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/ghana-initiatives'
     | '/leadership'
+    | '/partners'
     | '/privacy-policy'
     | '/programs'
     | '/sponsors'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/ghana-initiatives'
     | '/leadership'
+    | '/partners'
     | '/privacy-policy'
     | '/programs'
     | '/sponsors'
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   EventsRoute: typeof EventsRoute
   GhanaInitiativesRoute: typeof GhanaInitiativesRoute
   LeadershipRoute: typeof LeadershipRoute
+  PartnersRoute: typeof PartnersRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProgramsRoute: typeof ProgramsRoute
   SponsorsRoute: typeof SponsorsRoute
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leadership': {
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsRoute: EventsRoute,
   GhanaInitiativesRoute: GhanaInitiativesRoute,
   LeadershipRoute: LeadershipRoute,
+  PartnersRoute: PartnersRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProgramsRoute: ProgramsRoute,
   SponsorsRoute: SponsorsRoute,
