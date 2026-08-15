@@ -138,7 +138,7 @@ function PressPage() {
         ) : (
           <ul className="grid list-none gap-8 p-0 md:grid-cols-2 lg:grid-cols-3">
 
-            {articles.map((article) => (
+            {filtered.map((article) => (
               <li key={article.id}>
                 <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition hover:shadow-lg">
                   {article.image && (
