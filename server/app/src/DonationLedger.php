@@ -190,7 +190,7 @@ final class DonationLedger
 
     private static function cacheFile(): string
     {
-        $domainRoot = dirname(__DIR__, 3);
+        $domainRoot = dirname(__DIR__, 2);
         return $domainRoot . '/storage/donations/summary.json';
     }
 }
