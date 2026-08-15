@@ -336,9 +336,24 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
                 aria-selected={i === safeIdx}
                 aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className={`h-1.5 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === safeIdx ? "w-10 bg-white" : "w-5 bg-white/40 hover:bg-white/70"}`}
-              />
+                className={`relative h-1.5 overflow-hidden rounded-full transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === safeIdx ? "w-12 bg-white/30" : "w-5 bg-white/40 hover:bg-white/70"}`}
+              >
+                {i === safeIdx && (
+                  <span
+                    key={`${safeIdx}-${paused}`}
+                    aria-hidden="true"
+                    className="absolute inset-0 origin-left rounded-full bg-white"
+                    style={{
+                      animation: paused
+                        ? undefined
+                        : "slide-progress 6500ms linear forwards",
+                      transform: paused ? "scaleX(1)" : undefined,
+                    }}
+                  />
+                )}
+              </button>
             ))}
+
           </div>
           <div className="flex items-center gap-2">
             <button
