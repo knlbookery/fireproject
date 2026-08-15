@@ -249,18 +249,22 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           aria-roledescription="slide"
           aria-label={`${i + 1} of ${SLIDES.length}: ${s.eyebrow}`}
           aria-hidden={i !== safeIdx}
-          className={`absolute inset-0 transition-opacity duration-1000 ${i === safeIdx ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            i === safeIdx ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
+          }`}
         >
           <img
+            key={`${s.title}-${i === safeIdx ? "on" : "off"}`}
             src={s.image}
             alt={s.alt}
-            className="absolute inset-0 h-full w-full object-cover"
+            className={`absolute inset-0 h-full w-full object-cover ${i === safeIdx ? "animate-ken-burns" : "scale-[1.06]"}`}
             loading={i === 0 ? "eager" : "lazy"}
             fetchPriority={i === 0 ? "high" : "auto"}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/15" />
         </div>
       ))}
+
 
       <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-24 pt-52 text-white sm:pt-56 lg:px-10 lg:pb-40 lg:pt-56">
         <div className="max-w-2xl">
