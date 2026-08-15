@@ -1,11 +1,16 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, CalendarDays, User } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CalendarDays, User } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section, BTN } from "@/components/site/ui";
 import { absoluteUrl, pageHead } from "@/lib/seo";
-import { FALLBACK_ARTICLES, fetchPressArticle, type PressArticle } from "@/lib/press";
+import {
+  FALLBACK_ARTICLES,
+  fetchPressArticle,
+  fetchPressArticles,
+  type PressArticle,
+} from "@/lib/press";
 
 export const Route = createFileRoute("/press/$slug")({
   head: ({ params }) => {
@@ -60,8 +65,22 @@ function PressArticlePage() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const { data: allArticles } = useQuery({
+    queryKey: ["press-articles"],
+    queryFn: fetchPressArticles,
+    staleTime: 5 * 60 * 1000,
+  });
+
   const article: PressArticle | null =
     data ?? FALLBACK_ARTICLES.find((a) => a.slug === slug) ?? null;
+
+  const pool = allArticles && allArticles.length > 0 ? allArticles : FALLBACK_ARTICLES;
+  const others = pool.filter((a) => a.slug !== slug);
+  const related = [
+    ...others.filter((a) => article?.category && a.category === article.category),
+    ...others.filter((a) => !article?.category || a.category !== article.category),
+  ].slice(0, 3);
+
 
   if (isLoading && !article) {
     return (
@@ -169,7 +188,55 @@ function PressArticlePage() {
             </Link>
           </div>
         </Section>
+
+        {related.length > 0 && (
+          <Section eyebrow="Keep reading" title="Related articles." className="bg-surface">
+            <ul className="grid list-none gap-8 p-0 md:grid-cols-2 lg:grid-cols-3">
+              {related.map((item) => (
+                <li key={item.id}>
+                  <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition hover:shadow-lg">
+                    {item.image && (
+                      <img
+                        src={item.image}
+                        alt=""
+                        aria-hidden="true"
+                        className="h-44 w-full object-cover"
+                        loading="lazy"
+                      />
+                    )}
+                    <div className="flex flex-1 flex-col p-6">
+                      <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                        <span>{item.displayDate}</span>
+                        {item.category && (
+                          <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] tracking-[0.12em]">
+                            {item.category}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="mt-3 font-display text-xl font-bold leading-tight tracking-tight">
+                        <Link
+                          to="/press/$slug"
+                          params={{ slug: item.slug }}
+                          className="rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 group-hover:text-primary"
+                        >
+                          {item.title}
+                        </Link>
+                      </h3>
+                      <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">
+                        {item.excerpt}
+                      </p>
+                      <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                        Read the story <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                      </span>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          </Section>
+        )}
       </article>
+
     </SiteLayout>
   );
 }
