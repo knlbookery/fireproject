@@ -90,23 +90,15 @@ const fireLogoFullOnDark = { url: `/images/firelogo-full-dark.png` };
 const fireLogoIcon = { url: `/images/firelogo2.png` }; // icon/avatar — mobile header
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
-      {
-        name: "description",
-        content:
-          "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, entrepreneurship, and community development across Ghana and the United States.",
-      },
-      { property: "og:title", content: "F.I.R.E. — Empowering Communities. Inspiring Futures." },
-      {
-        property: "og:description",
-        content:
-          "Creating opportunity through education, technology, sports, entrepreneurship, and community development.",
-      },
-      { property: "og:image", content: volunteers },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "F.I.R.E. — Empowering Communities. Inspiring Futures.",
+      description:
+        "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, entrepreneurship, and community development across Ghana and the United States.",
+      path: "/",
+      image: volunteers,
+      jsonLd: ORGANIZATION_JSONLD,
+    }),
   loader: ({ context }) => context.queryClient.ensureQueryData(landingContentQuery),
   component: Landing,
 });
