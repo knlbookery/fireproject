@@ -7,7 +7,7 @@ import { LEADERS } from "@/data/team";
 import { usePageCopy } from "@/lib/page-content";
 import { pageHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/leadership")({
+export const Route = createFileRoute("/leadership/")({
   head: () =>
     pageHead({
       title: "Leadership — the team behind F.I.R.E.",
