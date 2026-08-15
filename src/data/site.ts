@@ -68,6 +68,7 @@ export const IMPACT_STATS = [
 export const PROGRAMS = [
   {
     slug: "sports",
+    fundingGoal: 60000,
     title: "Sports & Wellness",
     summary:
       "Courts, coaching, and competition that keep young people connected to a team, a routine, and a reason to show up.",
@@ -76,6 +77,7 @@ export const PROGRAMS = [
   },
   {
     slug: "entrepreneurship",
+    fundingGoal: 75000,
     title: "Entrepreneurship",
     summary:
       "Practical business training, mentorship, and micro-capital for founders building livelihoods in their own communities.",
@@ -84,6 +86,7 @@ export const PROGRAMS = [
   },
   {
     slug: "community-development",
+    fundingGoal: 90000,
     title: "Community Development",
     summary:
       "Neighbourhood-scale projects — from clean water to shared spaces — designed with residents, not for them.",
@@ -92,6 +95,7 @@ export const PROGRAMS = [
   },
   {
     slug: "education",
+    fundingGoal: 50000,
     title: "Education & Mentorship",
     summary:
       "Scholarships, tutoring, and one-to-one mentorship that carry students from classroom to career.",
@@ -100,6 +104,7 @@ export const PROGRAMS = [
   },
   {
     slug: "technology",
+    fundingGoal: 45000,
     title: "Technology Access",
     summary:
       "Digital literacy labs and device access so the next generation builds with technology rather than around it.",
@@ -108,6 +113,7 @@ export const PROGRAMS = [
   },
   {
     slug: "outreach",
+    fundingGoal: 30000,
     title: "Community Outreach",
     summary:
       "Direct, seasonal support — meals, supplies, and health drives — delivered where the need is most immediate.",
