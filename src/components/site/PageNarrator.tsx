@@ -55,6 +55,9 @@ function localScript(pathname: string) {
   return "This is a page on the F.I.R.E. website. F.I.R.E. empowers communities through education, technology, entrepreneurship, sports and youth development in Ghana and the United States. Read through the page, then explore our programmes, join an event, volunteer or support the work with a gift.";
 }
 
+const VOICE_KEY = "fire.narrator.voice";
+const RATE_KEY = "fire.narrator.rate";
+
 export function PageNarrator() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -63,12 +66,42 @@ export function PageNarrator() {
   const [loading, setLoading] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [script, setScript] = useState("");
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [voiceUri, setVoiceUri] = useState("");
+  const [rate, setRate] = useState(1);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const cacheRef = useRef<Record<string, string>>({});
+  const voiceUriRef = useRef("");
+  const rateRef = useRef(1);
+
+  voiceUriRef.current = voiceUri;
+  rateRef.current = rate;
 
   useEffect(() => {
     setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
+  }, []);
+
+  // Restore saved preferences and keep the voice list in sync (it loads async).
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    const savedVoice = window.localStorage.getItem(VOICE_KEY);
+    if (savedVoice) setVoiceUri(savedVoice);
+    const savedRate = Number(window.localStorage.getItem(RATE_KEY));
+    if (Number.isFinite(savedRate) && savedRate >= 0.5 && savedRate <= 2) {
+      setRate(savedRate);
+    }
+
+    const load = () => {
+      const list = window.speechSynthesis
+        .getVoices()
+        .filter((v) => v.lang.toLowerCase().startsWith("en"));
+      setVoices(list.length > 0 ? list : window.speechSynthesis.getVoices());
+    };
+    load();
+    window.speechSynthesis.addEventListener("voiceschanged", load);
+    return () => window.speechSynthesis.removeEventListener("voiceschanged", load);
   }, []);
 
   const stop = useCallback(() => {
@@ -92,15 +125,44 @@ export function PageNarrator() {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1;
+    utterance.rate = rateRef.current;
     utterance.pitch = 1;
-    utterance.lang = "en-US";
+    const selected = window.speechSynthesis
+      .getVoices()
+      .find((v) => v.voiceURI === voiceUriRef.current);
+    if (selected) {
+      utterance.voice = selected;
+      utterance.lang = selected.lang;
+    } else {
+      utterance.lang = "en-US";
+    }
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
     utteranceRef.current = utterance;
     setSpeaking(true);
     window.speechSynthesis.speak(utterance);
   }, []);
+
+  const changeVoice = useCallback(
+    (uri: string) => {
+      setVoiceUri(uri);
+      voiceUriRef.current = uri;
+      if (typeof window !== "undefined") window.localStorage.setItem(VOICE_KEY, uri);
+      if (speaking && script) speak(script);
+    },
+    [script, speak, speaking],
+  );
+
+  const changeRate = useCallback(
+    (value: number) => {
+      setRate(value);
+      rateRef.current = value;
+      if (typeof window !== "undefined") window.localStorage.setItem(RATE_KEY, String(value));
+      if (speaking && script) speak(script);
+    },
+    [script, speak, speaking],
+  );
+
 
   const fetchScript = useCallback(async () => {
     const cached = cacheRef.current[pathname];
@@ -193,6 +255,51 @@ export function PageNarrator() {
           <p aria-live="polite" className="mt-3 max-h-56 overflow-y-auto text-sm leading-relaxed text-muted-foreground">
             {loading ? "Preparing a summary of this page…" : script}
           </p>
+
+          <div className="mt-4 space-y-3 border-t border-border pt-4">
+            <div className="space-y-1.5">
+              <label
+                htmlFor="narrator-voice"
+                className="text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground"
+              >
+                Voice
+              </label>
+              <select
+                id="narrator-voice"
+                value={voiceUri}
+                onChange={(e) => changeVoice(e.target.value)}
+                className="w-full rounded-full border border-border bg-background px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value="">Browser default</option>
+                {voices.map((v) => (
+                  <option key={v.voiceURI} value={v.voiceURI}>
+                    {v.name} ({v.lang})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label
+                htmlFor="narrator-rate"
+                className="flex items-center justify-between text-[0.7rem] font-semibold uppercase tracking-wide text-muted-foreground"
+              >
+                <span>Speaking rate</span>
+                <span className="tabular-nums normal-case text-foreground">{rate.toFixed(1)}×</span>
+              </label>
+              <input
+                id="narrator-rate"
+                type="range"
+                min={0.5}
+                max={2}
+                step={0.1}
+                value={rate}
+                onChange={(e) => changeRate(Number(e.target.value))}
+                className="w-full accent-primary"
+              />
+            </div>
+          </div>
+
 
           {!loading && script !== "" && (
             <div className="mt-4 flex gap-2">
