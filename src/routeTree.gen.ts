@@ -10,8 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as YouthEmpowermentGuideRouteImport } from './routes/youth-empowerment-guide'
+import { Route as VolunteerRouteImport } from './routes/volunteer'
+import { Route as UsInitiativesRouteImport } from './routes/us-initiatives'
 import { Route as TermsOfUseRouteImport } from './routes/terms-of-use'
+import { Route as SponsorsRouteImport } from './routes/sponsors'
+import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as PressRouteImport } from './routes/press'
+import { Route as GhanaInitiativesRouteImport } from './routes/ghana-initiatives'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as DonateRouteImport } from './routes/donate'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
@@ -19,14 +29,64 @@ const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
   path: '/youth-empowerment-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VolunteerRoute = VolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsInitiativesRoute = UsInitiativesRouteImport.update({
+  id: '/us-initiatives',
+  path: '/us-initiatives',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsOfUseRoute = TermsOfUseRouteImport.update({
   id: '/terms-of-use',
   path: '/terms-of-use',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SponsorsRoute = SponsorsRouteImport.update({
+  id: '/sponsors',
+  path: '/sponsors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsRoute = ProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PressRoute = PressRouteImport.update({
+  id: '/press',
+  path: '/press',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GhanaInitiativesRoute = GhanaInitiativesRouteImport.update({
+  id: '/ghana-initiatives',
+  path: '/ghana-initiatives',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,41 +97,118 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/events': typeof EventsRoute
+  '/ghana-initiatives': typeof GhanaInitiativesRoute
+  '/press': typeof PressRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/programs': typeof ProgramsRoute
+  '/sponsors': typeof SponsorsRoute
   '/terms-of-use': typeof TermsOfUseRoute
+  '/us-initiatives': typeof UsInitiativesRoute
+  '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/events': typeof EventsRoute
+  '/ghana-initiatives': typeof GhanaInitiativesRoute
+  '/press': typeof PressRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/programs': typeof ProgramsRoute
+  '/sponsors': typeof SponsorsRoute
   '/terms-of-use': typeof TermsOfUseRoute
+  '/us-initiatives': typeof UsInitiativesRoute
+  '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
+  '/events': typeof EventsRoute
+  '/ghana-initiatives': typeof GhanaInitiativesRoute
+  '/press': typeof PressRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/programs': typeof ProgramsRoute
+  '/sponsors': typeof SponsorsRoute
   '/terms-of-use': typeof TermsOfUseRoute
+  '/us-initiatives': typeof UsInitiativesRoute
+  '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/privacy-policy' | '/terms-of-use' | '/youth-empowerment-guide'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/donate'
+    | '/events'
+    | '/ghana-initiatives'
+    | '/press'
+    | '/privacy-policy'
+    | '/programs'
+    | '/sponsors'
+    | '/terms-of-use'
+    | '/us-initiatives'
+    | '/volunteer'
+    | '/youth-empowerment-guide'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privacy-policy' | '/terms-of-use' | '/youth-empowerment-guide'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/donate'
+    | '/events'
+    | '/ghana-initiatives'
+    | '/press'
+    | '/privacy-policy'
+    | '/programs'
+    | '/sponsors'
+    | '/terms-of-use'
+    | '/us-initiatives'
+    | '/volunteer'
+    | '/youth-empowerment-guide'
   id:
     | '__root__'
     | '/'
+    | '/about'
+    | '/contact'
+    | '/donate'
+    | '/events'
+    | '/ghana-initiatives'
+    | '/press'
     | '/privacy-policy'
+    | '/programs'
+    | '/sponsors'
     | '/terms-of-use'
+    | '/us-initiatives'
+    | '/volunteer'
     | '/youth-empowerment-guide'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  DonateRoute: typeof DonateRoute
+  EventsRoute: typeof EventsRoute
+  GhanaInitiativesRoute: typeof GhanaInitiativesRoute
+  PressRoute: typeof PressRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  ProgramsRoute: typeof ProgramsRoute
+  SponsorsRoute: typeof SponsorsRoute
   TermsOfUseRoute: typeof TermsOfUseRoute
+  UsInitiativesRoute: typeof UsInitiativesRoute
+  VolunteerRoute: typeof VolunteerRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
 }
 
@@ -84,6 +221,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof YouthEmpowermentGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/volunteer': {
+      id: '/volunteer'
+      path: '/volunteer'
+      fullPath: '/volunteer'
+      preLoaderRoute: typeof VolunteerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/us-initiatives': {
+      id: '/us-initiatives'
+      path: '/us-initiatives'
+      fullPath: '/us-initiatives'
+      preLoaderRoute: typeof UsInitiativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms-of-use': {
       id: '/terms-of-use'
       path: '/terms-of-use'
@@ -91,11 +242,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsOfUseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sponsors': {
+      id: '/sponsors'
+      path: '/sponsors'
+      fullPath: '/sponsors'
+      preLoaderRoute: typeof SponsorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs': {
+      id: '/programs'
+      path: '/programs'
+      fullPath: '/programs'
+      preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy-policy': {
       id: '/privacy-policy'
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/press': {
+      id: '/press'
+      path: '/press'
+      fullPath: '/press'
+      preLoaderRoute: typeof PressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ghana-initiatives': {
+      id: '/ghana-initiatives'
+      path: '/ghana-initiatives'
+      fullPath: '/ghana-initiatives'
+      preLoaderRoute: typeof GhanaInitiativesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -110,8 +317,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  DonateRoute: DonateRoute,
+  EventsRoute: EventsRoute,
+  GhanaInitiativesRoute: GhanaInitiativesRoute,
+  PressRoute: PressRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  ProgramsRoute: ProgramsRoute,
+  SponsorsRoute: SponsorsRoute,
   TermsOfUseRoute: TermsOfUseRoute,
+  UsInitiativesRoute: UsInitiativesRoute,
+  VolunteerRoute: VolunteerRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
 }
 export const routeTree = rootRouteImport
