@@ -49,6 +49,27 @@ function PressPage() {
 
   const articles = data && data.length > 0 ? data : FALLBACK_ARTICLES;
 
+  const [query, setQuery] = useState("");
+  const [topic, setTopic] = useState("All topics");
+
+  const topics = useMemo(() => {
+    const set = new Set(articles.map((a) => a.category).filter(Boolean) as string[]);
+    return ["All topics", ...Array.from(set).sort((a, b) => a.localeCompare(b))];
+  }, [articles]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return articles.filter((a) => {
+      const matchesTopic = topic === "All topics" || a.category === topic;
+      const matchesQuery =
+        q === "" ||
+        [a.title, a.excerpt, a.body, a.category, a.author]
+          .filter(Boolean)
+          .some((v) => (v as string).toLowerCase().includes(q));
+      return matchesTopic && matchesQuery;
+    });
+  }, [articles, query, topic]);
+
   return (
     <SiteLayout>
       <PageHero
@@ -59,14 +80,64 @@ function PressPage() {
       />
 
       <Section eyebrow={releases.eyebrow} title={releases.title}>
+        <div className="mb-10 flex flex-col gap-5">
+          <div className="relative max-w-md">
+            <Search
+              className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <label htmlFor="press-search" className="sr-only">
+              Search press releases
+            </label>
+            <input
+              id="press-search"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search press releases…"
+              className="w-full rounded-full border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by topic">
+            {topics.map((t) => {
+              const active = t === topic;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTopic(t)}
+                  aria-pressed={active}
+                  className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                    active
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {t}
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="text-sm text-muted-foreground" aria-live="polite">
+            {filtered.length} {filtered.length === 1 ? "release" : "releases"}
+          </p>
+        </div>
+
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
             {[0, 1, 2].map((i) => (
               <div key={i} className="h-80 animate-pulse rounded-3xl bg-muted" />
             ))}
           </div>
+        ) : filtered.length === 0 ? (
+          <p className="text-lg text-muted-foreground">
+            No releases match your search. Try a different keyword or topic.
+          </p>
         ) : (
           <ul className="grid list-none gap-8 p-0 md:grid-cols-2 lg:grid-cols-3">
+
             {articles.map((article) => (
               <li key={article.id}>
                 <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition hover:shadow-lg">
