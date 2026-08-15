@@ -459,12 +459,12 @@ function Mission() {
             and entrepreneurship to build practical pathways forward — and we walk those pathways
             with the people we serve.
           </p>
-          <a
-            href="/programs"
+          <Link
+            to="/mission"
             className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-primary"
           >
-            See how we work <ArrowRight className="h-4 w-4" />
-          </a>
+            Read our mission <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
         <div className="lg:col-span-7">
           <CapsuleCollage />
