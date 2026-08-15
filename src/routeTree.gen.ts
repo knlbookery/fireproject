@@ -96,9 +96,9 @@ const PressIndexRoute = PressIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const PressSlugRoute = PressSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => PressRoute,
+  id: '/press/$slug',
+  path: '/press/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -221,6 +221,7 @@ export interface RootRouteChildren {
   UsInitiativesRoute: typeof UsInitiativesRoute
   VolunteerRoute: typeof VolunteerRoute
   YouthEmpowermentGuideRoute: typeof YouthEmpowermentGuideRoute
+  PressSlugRoute: typeof PressSlugRoute
   PressIndexRoute: typeof PressIndexRoute
 }
 
@@ -326,10 +327,10 @@ declare module '@tanstack/react-router' {
     }
     '/press/$slug': {
       id: '/press/$slug'
-      path: '/$slug'
+      path: '/press/$slug'
       fullPath: '/press/$slug'
       preLoaderRoute: typeof PressSlugRouteImport
-      parentRoute: typeof PressRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -348,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   UsInitiativesRoute: UsInitiativesRoute,
   VolunteerRoute: VolunteerRoute,
   YouthEmpowermentGuideRoute: YouthEmpowermentGuideRoute,
+  PressSlugRoute: PressSlugRoute,
   PressIndexRoute: PressIndexRoute,
 }
 export const routeTree = rootRouteImport
