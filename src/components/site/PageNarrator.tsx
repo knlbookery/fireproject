@@ -96,6 +96,8 @@ export function PageNarrator() {
   const rateRef = useRef(1);
   const sentencesRef = useRef<Sentence[]>([]);
   const activeRef = useRef<HTMLSpanElement | null>(null);
+  const fallbackRef = useRef<number | null>(null);
+
 
   const sentences = useMemo(() => splitSentences(script), [script]);
   sentencesRef.current = sentences;
