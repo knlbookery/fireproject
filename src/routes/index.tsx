@@ -187,7 +187,6 @@ function Landing() {
   );
 }
 
-
 /* ---------------------- Hero Slider ---------------------- */
 function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
   const [idx, setIdx] = useState(0);
@@ -1668,8 +1667,6 @@ function EventDetailModal({ event, onClose }: { event: LiveEvent | null; onClose
     </Dialog>
   );
 }
-
-
 
 /* ---------------------- Partners ---------------------- */
 const exxonLogo = { url: `/images/partners/exxonLogo.png` };
