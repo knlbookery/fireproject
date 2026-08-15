@@ -111,7 +111,7 @@ TXT;
 
         if ($raw === false || $status < 200 || $status >= 300) {
             Logger::warning('assistant', 'gateway request failed', ['status' => $status]);
-            return self::ok(self::fallbackAnswer($question), true);
+            return self::ok(self::fallbackAnswer($question, $live), true);
         }
 
         $decoded = json_decode((string) $raw, true);
@@ -120,7 +120,7 @@ TXT;
             : null;
 
         if (!is_string($reply) || trim($reply) === '') {
-            return self::ok(self::fallbackAnswer($question), true);
+            return self::ok(self::fallbackAnswer($question, $live), true);
         }
 
         return self::ok(trim($reply), false);
@@ -138,19 +138,47 @@ TXT;
         ]];
     }
 
-    private static function systemPrompt(string $route): string
+    private static function systemPrompt(string $route, string $live = ''): string
     {
+        $liveBlock = $live === '' ? '' : "\n\nLIVE SITE DATA (from the organisation's Airtable, newer than the "
+            . "summary above — prefer it when the two disagree):\n" . $live;
+
         return "You are the F.I.R.E. website assistant, helping visitors on the page {$route}.\n"
             . "Answer only from the knowledge below. If something is not covered (donation totals, "
             . "personal data, legal or financial advice), say you do not have that detail and point the "
             . "visitor to /contact or info@freeinspiration.org.\n"
             . "Be warm, concise and factual: two to four short sentences, plain text (no markdown), and "
-            . "mention the relevant page path when it helps.\n\nKNOWLEDGE:\n" . self::KNOWLEDGE;
+            . "mention the relevant page path when it helps.\n\nKNOWLEDGE:\n" . self::KNOWLEDGE . $liveBlock;
     }
 
-    private static function fallbackAnswer(string $question): string
+    /** Extracts one labelled block from the live Airtable briefing. */
+    private static function liveSection(string $live, string $heading): ?string
+    {
+        foreach (explode("\n\n", $live) as $block) {
+            if (str_starts_with($block, $heading)) {
+                return mb_substr(trim($block), 0, 900);
+            }
+        }
+        return null;
+    }
+
+    private static function fallbackAnswer(string $question, string $live = ''): string
     {
         $q = mb_strtolower($question);
+
+        // With live Airtable data available, answer event/news questions from
+        // the real records instead of the generic pointer.
+        if ($live !== '') {
+            $section = null;
+            if (str_contains($q, 'event') || str_contains($q, 'rsvp') || str_contains($q, 'happening')) {
+                $section = self::liveSection($live, 'CURRENT EVENTS');
+            } elseif (str_contains($q, 'news') || str_contains($q, 'press') || str_contains($q, 'article')) {
+                $section = self::liveSection($live, 'RECENT NEWS');
+            }
+            if ($section !== null) {
+                return $section;
+            }
+        }
         $map = [
             'donat' => 'You can give securely on our donation page at /donate — one-time or monthly.',
             'give' => 'You can give securely on our donation page at /donate — one-time or monthly.',
