@@ -123,6 +123,15 @@ LOVABLE_API_KEY=
 server-side only — never `VITE_`-prefixed. If it is absent, the endpoint still
 answers from the curated keyword knowledge base in `Fire\AssistantService`.
 
+The assistant also reads live Airtable data through `Fire\AssistantKnowledge`:
+active Events, published Press Articles and active Page Content rows are
+flattened into a plain-text briefing appended to the system prompt, cached for
+5 minutes at `storage/assistant/knowledge.json`. Any Airtable failure degrades
+silently to the static knowledge base — no new environment variables are needed
+(`AIRTABLE_TABLE_PRESS` / `AIRTABLE_TABLE_PAGE_CONTENT` are optional overrides
+already used by the public endpoints).
+
+
 Verify before changing this list:
 
 ```bash
