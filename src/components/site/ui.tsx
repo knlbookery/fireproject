@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import { Reveal, Parallax } from "./motion";
+
+
 /* ---------------------- Button system (shared with the homepage) ------- */
 export const BTN_BASE =
   "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
