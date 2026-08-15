@@ -171,13 +171,23 @@ export function AssistantWidget() {
           ref={panelRef}
           role="dialog"
           aria-label="F.I.R.E. assistant"
-          className="fixed bottom-24 right-5 z-50 flex h-[min(70vh,540px)] w-[min(92vw,380px)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl"
+          className="fixed bottom-24 right-3 z-[60] flex max-h-[calc(100dvh-8rem)] h-[min(70vh,540px)] w-[min(94vw,380px)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl sm:right-5"
         >
-          <div className="border-b border-border px-5 py-4">
-            <p className="font-display text-lg font-bold tracking-tight">Ask F.I.R.E.</p>
-            <p className="text-xs text-muted-foreground">
-              Quick answers about our work, events and how to get involved.
-            </p>
+          <div className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
+            <div>
+              <p className="font-display text-lg font-bold tracking-tight">Ask F.I.R.E.</p>
+              <p className="text-xs text-muted-foreground">
+                Quick answers about our work, events and how to get involved.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close the F.I.R.E. assistant"
+              className="-mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
           </div>
 
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
