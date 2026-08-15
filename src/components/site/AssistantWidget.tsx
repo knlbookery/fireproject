@@ -97,8 +97,18 @@ export function AssistantWidget() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (panelRef.current?.contains(target)) return;
+      if (toggleRef.current?.contains(target)) return;
+      setOpen(false);
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointerDown);
+    };
   }, [open]);
 
   const canSend = useMemo(() => input.trim().length > 1 && !busy, [input, busy]);
