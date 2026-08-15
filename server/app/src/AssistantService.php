@@ -69,18 +69,21 @@ TXT;
             }
         }
 
+        $live = AssistantKnowledge::summary();
+
         $apiKey = Config::require('LOVABLE_API_KEY');
         if ($apiKey === null) {
-            return self::ok(self::fallbackAnswer($question), true);
+            return self::ok(self::fallbackAnswer($question, $live), true);
         }
 
         $payload = [
             'model' => self::MODEL,
             'messages' => array_merge(
-                [['role' => 'system', 'content' => self::systemPrompt($route)]],
+                [['role' => 'system', 'content' => self::systemPrompt($route, $live)]],
                 $messages,
             ),
         ];
+
 
         $ch = curl_init(self::GATEWAY_URL);
         curl_setopt_array($ch, [
