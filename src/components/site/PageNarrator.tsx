@@ -58,6 +58,25 @@ function localScript(pathname: string) {
 const VOICE_KEY = "fire.narrator.voice";
 const RATE_KEY = "fire.narrator.rate";
 
+type Sentence = { text: string; start: number; end: number };
+
+/** Split a script into sentences, keeping each one's offset in the source text. */
+function splitSentences(text: string): Sentence[] {
+  const out: Sentence[] = [];
+  const re = /[^.!?]+[.!?]*\s*/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(text)) !== null) {
+    const raw = match[0];
+    if (raw.trim() === "") continue;
+    out.push({ text: raw.trim(), start: match.index, end: match.index + raw.length });
+  }
+  if (out.length === 0 && text.trim() !== "") {
+    out.push({ text: text.trim(), start: 0, end: text.length });
+  }
+  return out;
+}
+
+
 export function PageNarrator() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -69,11 +88,20 @@ export function PageNarrator() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [voiceUri, setVoiceUri] = useState("");
   const [rate, setRate] = useState(1);
+  const [activeSentence, setActiveSentence] = useState(-1);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const cacheRef = useRef<Record<string, string>>({});
   const voiceUriRef = useRef("");
   const rateRef = useRef(1);
+  const sentencesRef = useRef<Sentence[]>([]);
+  const activeRef = useRef<HTMLSpanElement | null>(null);
+  const fallbackRef = useRef<number | null>(null);
+
+
+  const sentences = useMemo(() => splitSentences(script), [script]);
+  sentencesRef.current = sentences;
+
 
   voiceUriRef.current = voiceUri;
   rateRef.current = rate;
@@ -104,13 +132,22 @@ export function PageNarrator() {
     return () => window.speechSynthesis.removeEventListener("voiceschanged", load);
   }, []);
 
+  const clearFallback = useCallback(() => {
+    if (fallbackRef.current !== null) {
+      window.clearInterval(fallbackRef.current);
+      fallbackRef.current = null;
+    }
+  }, []);
+
   const stop = useCallback(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
     utteranceRef.current = null;
+    clearFallback();
     setSpeaking(false);
-  }, []);
+    setActiveSentence(-1);
+  }, [clearFallback]);
 
   // Stop and reset whenever the visitor navigates to another page.
   useEffect(() => {
@@ -121,27 +158,66 @@ export function PageNarrator() {
 
   useEffect(() => stop, [stop]);
 
-  const speak = useCallback((text: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = rateRef.current;
-    utterance.pitch = 1;
-    const selected = window.speechSynthesis
-      .getVoices()
-      .find((v) => v.voiceURI === voiceUriRef.current);
-    if (selected) {
-      utterance.voice = selected;
-      utterance.lang = selected.lang;
-    } else {
-      utterance.lang = "en-US";
-    }
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    utteranceRef.current = utterance;
-    setSpeaking(true);
-    window.speechSynthesis.speak(utterance);
-  }, []);
+  const speak = useCallback(
+    (text: string) => {
+      if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      clearFallback();
+
+      const parts = splitSentences(text);
+      sentencesRef.current = parts;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = rateRef.current;
+      utterance.pitch = 1;
+      const selected = window.speechSynthesis
+        .getVoices()
+        .find((v) => v.voiceURI === voiceUriRef.current);
+      if (selected) {
+        utterance.voice = selected;
+        utterance.lang = selected.lang;
+      } else {
+        utterance.lang = "en-US";
+      }
+
+      const indexAtChar = (charIndex: number) => {
+        const found = parts.findIndex((s) => charIndex >= s.start && charIndex < s.end);
+        return found === -1 ? parts.length - 1 : found;
+      };
+
+      let sawBoundary = false;
+      utterance.onboundary = (event) => {
+        sawBoundary = true;
+        clearFallback();
+        setActiveSentence(indexAtChar(event.charIndex ?? 0));
+      };
+
+      const finish = () => {
+        clearFallback();
+        setSpeaking(false);
+        setActiveSentence(-1);
+      };
+      utterance.onend = finish;
+      utterance.onerror = finish;
+
+      utteranceRef.current = utterance;
+      setSpeaking(true);
+      setActiveSentence(parts.length > 0 ? 0 : -1);
+      window.speechSynthesis.speak(utterance);
+
+      // Some browsers never fire `boundary`; approximate progress from the
+      // elapsed time and the characters spoken so far.
+      const startedAt = Date.now();
+      const charsPerMs = (14 * rateRef.current) / 1000;
+      fallbackRef.current = window.setInterval(() => {
+        if (sawBoundary || !window.speechSynthesis.speaking) return;
+        const spoken = (Date.now() - startedAt) * charsPerMs;
+        setActiveSentence(indexAtChar(Math.min(spoken, text.length - 1)));
+      }, 250);
+    },
+    [clearFallback],
+  );
+
 
   const changeVoice = useCallback(
     (uri: string) => {
@@ -209,6 +285,13 @@ export function PageNarrator() {
     return "Listen to a summary of this page";
   }, [loading, speaking]);
 
+  // Keep the spoken sentence in view inside the scrollable transcript.
+  useEffect(() => {
+    if (activeSentence < 0) return;
+    activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [activeSentence]);
+
+
   if (!supported) return null;
 
   return (
@@ -253,8 +336,23 @@ export function PageNarrator() {
           </div>
 
           <p aria-live="polite" className="mt-3 max-h-56 overflow-y-auto text-sm leading-relaxed text-muted-foreground">
-            {loading ? "Preparing a summary of this page…" : script}
+            {loading
+              ? "Preparing a summary of this page…"
+              : sentences.map((sentence, i) => (
+                  <span
+                    key={`${sentence.start}-${i}`}
+                    ref={i === activeSentence ? activeRef : undefined}
+                    className={
+                      i === activeSentence
+                        ? "rounded bg-primary/15 px-0.5 font-medium text-foreground transition-colors"
+                        : "transition-colors"
+                    }
+                  >
+                    {sentence.text}{" "}
+                  </span>
+                ))}
           </p>
+
 
           <div className="mt-4 space-y-3 border-t border-border pt-4">
             <div className="space-y-1.5">
