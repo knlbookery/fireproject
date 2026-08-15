@@ -113,7 +113,9 @@ export function StatGrid({
     <div className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((s) => (
         <div key={s.label} className={`p-8 ${onDark ? "bg-[#0b1230] text-white" : "bg-card"}`}>
-          <div className="font-display text-4xl font-bold tracking-tight lg:text-5xl">{s.value}</div>
+          <div className="font-display text-4xl font-bold tracking-tight lg:text-5xl">
+            {s.value}
+          </div>
           <div className="mt-3 text-sm font-semibold uppercase tracking-[0.14em]">{s.label}</div>
           {s.detail && (
             <p className={`mt-2 text-sm ${onDark ? "text-white/60" : "text-muted-foreground"}`}>

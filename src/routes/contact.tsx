@@ -36,7 +36,10 @@ function ContactPage() {
               <Mail className="mt-1 h-5 w-5 text-primary" aria-hidden="true" />
               <div>
                 <div className="font-semibold">Email</div>
-                <a href="mailto:info@freeinspiration.org" className="text-muted-foreground hover:text-primary">
+                <a
+                  href="mailto:info@freeinspiration.org"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   info@freeinspiration.org
                 </a>
               </div>

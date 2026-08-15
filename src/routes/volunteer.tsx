@@ -19,10 +19,22 @@ export const Route = createFileRoute("/volunteer")({
 });
 
 const ROLES = [
-  { title: "Coach", body: "Lead training sessions and game days for youth leagues. Seasonal commitment." },
-  { title: "Mentor", body: "Support one student for a year with monthly guidance and goal setting." },
-  { title: "Event crew", body: "Set-up, registration, and hospitality at tournaments and community days." },
-  { title: "Skills volunteer", body: "Design, legal, accounting, translation, or software — remote friendly." },
+  {
+    title: "Coach",
+    body: "Lead training sessions and game days for youth leagues. Seasonal commitment.",
+  },
+  {
+    title: "Mentor",
+    body: "Support one student for a year with monthly guidance and goal setting.",
+  },
+  {
+    title: "Event crew",
+    body: "Set-up, registration, and hospitality at tournaments and community days.",
+  },
+  {
+    title: "Skills volunteer",
+    body: "Design, legal, accounting, translation, or software — remote friendly.",
+  },
 ];
 
 function VolunteerPage() {
@@ -56,7 +68,11 @@ function VolunteerPage() {
             submitLabel="Submit application"
             extraFields={[
               { name: "role", label: "Preferred role", options: ROLES.map((r) => r.title) },
-              { name: "location", label: "Location", options: ["Philadelphia / U.S.", "Ghana", "Remote"] },
+              {
+                name: "location",
+                label: "Location",
+                options: ["Philadelphia / U.S.", "Ghana", "Remote"],
+              },
             ]}
           />
         </div>

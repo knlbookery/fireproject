@@ -32,9 +32,9 @@ function AboutPage() {
         <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-start">
           <div className="space-y-5 text-lg leading-relaxed text-muted-foreground">
             <p>
-              F.I.R.E. began the way most durable things do — small, local and stubborn. A handful of
-              volunteers in Philadelphia running a weekend basketball programme for young people who
-              had the talent but not the team.
+              F.I.R.E. began the way most durable things do — small, local and stubborn. A handful
+              of volunteers in Philadelphia running a weekend basketball programme for young people
+              who had the talent but not the team.
             </p>
             <p>
               What started on one court became a set of programmes: mentorship for students,
