@@ -18,6 +18,16 @@ export function Header() {
     setOpenGroup(null);
   }, [pathname]);
 
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      setOpenGroup(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   const isActive = (item: (typeof NAV)[number]) =>
     pathname === item.to || (item.children?.some((c) => c.to === pathname) ?? false);
 
@@ -53,6 +63,7 @@ export function Header() {
                 <Link
                   key={item.to}
                   to={item.to}
+                  aria-current={pathname === item.to ? "page" : undefined}
                   className={`relative rounded-sm py-1 transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                     active ? "font-medium text-primary" : "text-foreground/75"
                   }`}
@@ -91,7 +102,8 @@ export function Header() {
                         <Link
                           key={c.to}
                           to={c.to}
-                          className={`block rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-primary/5 hover:text-primary ${
+                          aria-current={pathname === c.to ? "page" : undefined}
+                          className={`block rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                             pathname === c.to ? "text-primary" : "text-foreground/80"
                           }`}
                         >
@@ -120,7 +132,7 @@ export function Header() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
-            className="relative z-50 grid h-10 w-10 place-items-center rounded-full bg-white text-foreground shadow-md lg:hidden"
+            className="relative z-50 grid h-10 w-10 place-items-center rounded-full bg-white text-foreground shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:hidden"
           >
             <span className="text-2xl font-bold leading-none">{open ? "×" : "≡"}</span>
           </button>
@@ -133,7 +145,11 @@ export function Header() {
           aria-label="Mobile navigation"
           className="mx-auto mt-2 flex max-h-[75vh] max-w-[1400px] flex-col gap-1 overflow-y-auto rounded-2xl border border-black/10 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:hidden"
         >
-          <Link to="/" className="rounded-lg px-3 py-2.5 text-base text-foreground/80">
+          <Link
+            to="/"
+            aria-current={pathname === "/" ? "page" : undefined}
+            className="rounded-lg px-3 py-2.5 text-base text-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
             Home
           </Link>
           {NAV.flatMap((item) =>
@@ -144,7 +160,8 @@ export function Header() {
             <Link
               key={i.to}
               to={i.to}
-              className={`rounded-lg px-3 py-2.5 text-base transition-colors ${
+              aria-current={pathname === i.to ? "page" : undefined}
+              className={`rounded-lg px-3 py-2.5 text-base transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 pathname === i.to
                   ? "bg-primary/10 font-semibold text-primary"
                   : "text-foreground/80 hover:bg-black/5"
