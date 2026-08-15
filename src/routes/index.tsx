@@ -460,7 +460,7 @@ function Mission() {
             with the people we serve.
           </p>
           <a
-            href="#programs"
+            href="/programs"
             className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-primary"
           >
             See how we work <ArrowRight className="h-4 w-4" />
@@ -599,9 +599,9 @@ function Impact() {
               From education access to youth sports and entrepreneurship support, we meet
               communities where they are — and build forward together.
             </p>
-            <a href="#team" className={`mt-8 ${BTN.onDarkOutline}`}>
-              Read the team <ArrowRight className="h-4 w-4" />
-            </a>
+            <Link to="/impact" className={`mt-8 ${BTN.onDarkOutline}`}>
+              Read our impact <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
           <div className="relative lg:col-span-7">
             <img
@@ -1160,12 +1160,12 @@ function Team() {
       </div>
 
       <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-        <a href="#volunteer" className={BTN.primary}>
-          Join the next chapter <ArrowRight className="h-4 w-4" />
-        </a>
-        <a href="#impact" className={BTN.secondary}>
+        <Link to="/leadership" className={BTN.primary}>
+          Meet all our leaders <ArrowRight className="h-4 w-4" />
+        </Link>
+        <Link to="/impact" className={BTN.secondary}>
           See our impact
-        </a>
+        </Link>
       </div>
 
       {/* Story detail modal */}
@@ -1782,9 +1782,9 @@ function Partners() {
             founders.
           </p>
         </div>
-        <a href="#contact" className={`${BTN_BASE} bg-accent text-foreground hover:bg-accent/90`}>
+        <Link to="/partners" className={`${BTN_BASE} bg-accent text-foreground hover:bg-accent/90`}>
           Partner with F.I.R.E. <ArrowRight className="h-4 w-4" />
-        </a>
+        </Link>
       </div>
 
       <style>{`
