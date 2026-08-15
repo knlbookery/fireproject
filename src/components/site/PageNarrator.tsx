@@ -263,15 +263,16 @@ export function PageNarrator() {
   }, [pathname]);
 
   const start = useCallback(async () => {
-    setOpen(true);
     if (speaking) {
       stop();
       return;
     }
     if (script) {
+      setOpen(true);
       speak(script);
       return;
     }
+    setOpen(true);
     setLoading(true);
     const text = await fetchScript();
     setScript(text);
@@ -279,11 +280,22 @@ export function PageNarrator() {
     speak(text);
   }, [fetchScript, script, speak, speaking, stop]);
 
+  const toggle = useCallback(() => {
+    if (open) {
+      stop();
+      setOpen(false);
+    } else {
+      void start();
+    }
+  }, [open, start, stop]);
+
   const label = useMemo(() => {
+    if (open) return "Close the page summary";
     if (loading) return "Preparing the page summary";
     if (speaking) return "Stop the page summary";
     return "Listen to a summary of this page";
-  }, [loading, speaking]);
+  }, [loading, open, speaking]);
+
 
   // Keep the spoken sentence in view inside the scrollable transcript.
   useEffect(() => {
