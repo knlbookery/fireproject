@@ -1,3 +1,5 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,16 +7,14 @@ import { PageHero, Section } from "@/components/site/ui";
 import { InquiryForm } from "@/components/site/InquiryForm";
 
 export const Route = createFileRoute("/volunteer")({
-  head: () => ({
-    meta: [
-      { title: "Volunteer with F.I.R.E. — Give your time" },
-      {
-        name: "description",
-        content:
-          "Volunteer with F.I.R.E. as a coach, mentor, event lead, or skills volunteer in Philadelphia and Ghana. Tell us how you'd like to help.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Volunteer with F.I.R.E. — Give your time",
+      description:
+        "Volunteer with F.I.R.E. as a coach, mentor, event lead, or skills volunteer in Philadelphia and Ghana. Tell us how you'd like to help.",
+      path: "/volunteer",
+      image: "/images/impact.jpg",
+    }),
   component: VolunteerPage,
 });
 
@@ -38,13 +38,22 @@ const ROLES = [
 ];
 
 function VolunteerPage() {
+  const copy = usePageCopy("/volunteer");
+  const hero = copy("hero", {
+    eyebrow: "Volunteer",
+    title: "Time is the gift that scales.",
+    intro:
+      "Volunteers run our leagues, mentor our students, and hold our events together. Here's where you'd fit.",
+    image: "/images/volunteer.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Volunteer"
-        title="Time is the gift that scales."
-        intro="Volunteers run our leagues, mentor our students, and hold our events together. Here's where you'd fit."
-        image="/images/volunteer.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
       />
 
       <Section eyebrow="Roles" title="Ways to help.">

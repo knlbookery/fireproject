@@ -21,6 +21,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/bootstrap-loader.php';
 
 use Fire\AirtableClient;
+use Fire\BrevoMailService;
 use Fire\Config;
 use Fire\HttpResponse;
 use Fire\Security;
@@ -46,6 +47,14 @@ $eventId = Security::trimmedString($payload['eventId'] ?? null);
 $fullName = Security::trimmedString($payload['fullName'] ?? null);
 $email = Security::trimmedString($payload['email'] ?? null);
 $phone = Security::trimmedString($payload['phone'] ?? null);
+
+// Display-only event details echoed back in the confirmation email. They are
+// never written to Airtable (the Event link field is the source of truth) and
+// are length-capped before being placed in mail headers/body.
+$eventName = mb_substr(Security::trimmedString($payload['eventName'] ?? null) ?? '', 0, 160);
+$eventDate = mb_substr(Security::trimmedString($payload['eventDate'] ?? null) ?? '', 0, 120);
+$eventTime = mb_substr(Security::trimmedString($payload['eventTime'] ?? null) ?? '', 0, 120);
+$eventLocation = mb_substr(Security::trimmedString($payload['eventLocation'] ?? null) ?? '', 0, 200);
 
 $valid = $eventId !== null && $eventId !== '' && mb_strlen($eventId) <= 64
     && $fullName !== null && mb_strlen($fullName) >= 2 && mb_strlen($fullName) <= 120
@@ -90,4 +99,18 @@ if ($result['status'] < 200 || $result['status'] >= 300) {
     exit;
 }
 
-HttpResponse::success();
+// Confirmation email to the attendee. Best-effort: the RSVP is already
+// recorded, so a mail failure must not turn into an RSVP failure — it is
+// logged inside BrevoMailService and reported as emailSent:false.
+$emailSent = BrevoMailService::sendRsvpConfirmation([
+    'name' => $fullName,
+    'email' => $email,
+    'phone' => $phone,
+    'eventName' => $eventName,
+    'eventDate' => $eventDate,
+    'eventTime' => $eventTime,
+    'eventLocation' => $eventLocation,
+    'submittedAt' => gmdate('c'),
+]);
+
+HttpResponse::success(['emailSent' => $emailSent]);

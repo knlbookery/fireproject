@@ -1,3 +1,5 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 
@@ -6,27 +8,34 @@ import { PageHero, Section, CTABand, BTN } from "@/components/site/ui";
 import { PROGRAMS } from "@/data/site";
 
 export const Route = createFileRoute("/programs")({
-  head: () => ({
-    meta: [
-      { title: "Programs — Sports, enterprise, education and outreach | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Explore F.I.R.E. programmes: youth sports and wellness, entrepreneurship training, community development, education and mentorship, technology access, and community outreach.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Programs — Sports, enterprise, education and outreach | F.I.R.E.",
+      description:
+        "Explore F.I.R.E. programmes: youth sports and wellness, entrepreneurship training, community development, education and mentorship, technology access, and community outreach.",
+      path: "/programs",
+      image: "/images/sport.jpg",
+    }),
   component: ProgramsPage,
 });
 
 function ProgramsPage() {
+  const copy = usePageCopy("/programs");
+  const hero = copy("hero", {
+    eyebrow: "Programs",
+    title: "Six programmes. One throughline: opportunity.",
+    intro:
+      "Each programme is built with local leadership, measured against a public number, and designed to outlast the funding cycle that started it.",
+    image: "/images/sport.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Programs"
-        title="Six programmes. One throughline: opportunity."
-        intro="Each programme is built with local leadership, measured against a public number, and designed to outlast the funding cycle that started it."
-        image="/images/sport.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
         actions={
           <>
             <Link to="/donate" className={BTN.onDarkSolid}>

@@ -1,3 +1,5 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,16 +7,14 @@ import { PageHero, Section, StatGrid, CTABand, BTN } from "@/components/site/ui"
 import { GALLERY } from "@/data/site";
 
 export const Route = createFileRoute("/ghana-initiatives")({
-  head: () => ({
-    meta: [
-      { title: "Ghana Initiatives — Youth, sports and enterprise in Accra | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "F.I.R.E.'s Ghana initiatives: community courts, school partnerships, founder training, and outreach across Greater Accra and beyond.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Ghana Initiatives — Youth, sports and enterprise in Accra | F.I.R.E.",
+      description:
+        "F.I.R.E.'s Ghana initiatives: community courts, school partnerships, founder training, and outreach across Greater Accra and beyond.",
+      path: "/ghana-initiatives",
+      image: "/images/community_dev.jpg",
+    }),
   component: GhanaPage,
 });
 
@@ -38,13 +38,22 @@ const WORK = [
 ];
 
 function GhanaPage() {
+  const copy = usePageCopy("/ghana-initiatives");
+  const hero = copy("hero", {
+    eyebrow: "Ghana initiatives",
+    title: "Accra, and everywhere the work travels next.",
+    intro:
+      "Locally led programmes in sport, education, and enterprise — built with Ghanaian coaches, teachers, and founders.",
+    image: "/images/community_dev.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Ghana initiatives"
-        title="Accra, and everywhere the work travels next."
-        intro="Locally led programmes in sport, education, and enterprise — built with Ghanaian coaches, teachers, and founders."
-        image="/images/community_dev.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
         actions={
           <Link to="/donate" className={BTN.onDarkSolid}>
             Support Ghana programmes

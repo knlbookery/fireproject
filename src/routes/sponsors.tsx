@@ -1,3 +1,5 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 
@@ -7,27 +9,34 @@ import { InquiryForm } from "@/components/site/InquiryForm";
 import { SPONSOR_TIERS } from "@/data/site";
 
 export const Route = createFileRoute("/sponsors")({
-  head: () => ({
-    meta: [
-      { title: "Sponsors & Partners | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Partner with F.I.R.E. Corporate sponsorship tiers fund youth sports, enterprise training, and community programmes in Philadelphia and Ghana.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Sponsors & Partners | F.I.R.E.",
+      description:
+        "Partner with F.I.R.E. Corporate sponsorship tiers fund youth sports, enterprise training, and community programmes in Philadelphia and Ghana.",
+      path: "/sponsors",
+      image: "/images/partners.jpg",
+    }),
   component: SponsorsPage,
 });
 
 function SponsorsPage() {
+  const copy = usePageCopy("/sponsors");
+  const hero = copy("hero", {
+    eyebrow: "Sponsors & partners",
+    title: "Put your brand behind real outcomes.",
+    intro:
+      "Sponsorship funds named cohorts, courts, and events — with reporting you can show your board.",
+    image: "/images/partners.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Sponsors & partners"
-        title="Put your brand behind real outcomes."
-        intro="Sponsorship funds named cohorts, courts, and events — with reporting you can show your board."
-        image="/images/partners.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
       />
 
       <Section eyebrow="Tiers" title="Sponsorship levels.">

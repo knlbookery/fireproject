@@ -1,3 +1,5 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,27 +7,34 @@ import { PageHero, Section, StatGrid, CTABand } from "@/components/site/ui";
 import { IMPACT_STATS, VALUES } from "@/data/site";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About F.I.R.E. — Our story, values and leadership" },
-      {
-        name: "description",
-        content:
-          "F.I.R.E. (Free Inspiration Reaching Everyone) is a 501(c)(3) nonprofit with roots in Philadelphia and Ghana, creating opportunity for young people through sports, education, enterprise and community development.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "About F.I.R.E. — Our story, values and leadership",
+      description:
+        "F.I.R.E. (Free Inspiration Reaching Everyone) is a 501(c)(3) nonprofit with roots in Philadelphia and Ghana, creating opportunity for young people through sports, education, enterprise and community development.",
+      path: "/about",
+      image: "/images/impact.jpg",
+    }),
   component: AboutPage,
 });
 
 function AboutPage() {
+  const copy = usePageCopy("/about");
+  const hero = copy("hero", {
+    eyebrow: "About us",
+    title: "Rooted in Philadelphia. Growing in Ghana.",
+    intro:
+      "F.I.R.E. — Free Inspiration Reaching Everyone — exists to put opportunity within reach of young people, wherever they start.",
+    image: "/images/impact.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="About us"
-        title="Rooted in Philadelphia. Growing in Ghana."
-        intro="F.I.R.E. — Free Inspiration Reaching Everyone — exists to put opportunity within reach of young people, wherever they start."
-        image="/images/impact.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
       />
 
       <Section eyebrow="Our story" title="One idea, carried across two countries.">

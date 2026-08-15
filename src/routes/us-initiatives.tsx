@@ -1,19 +1,19 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, StatGrid, CTABand, BTN } from "@/components/site/ui";
 
 export const Route = createFileRoute("/us-initiatives")({
-  head: () => ({
-    meta: [
-      { title: "Philadelphia & U.S. Initiatives | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "F.I.R.E.'s U.S. work: Philadelphia youth leagues, mentorship cohorts, family support drives, and career pathways for students.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Philadelphia & U.S. Initiatives | F.I.R.E.",
+      description:
+        "F.I.R.E.'s U.S. work: Philadelphia youth leagues, mentorship cohorts, family support drives, and career pathways for students.",
+      path: "/us-initiatives",
+      image: "/images/impact.jpg",
+    }),
   component: UsPage,
 });
 
@@ -37,13 +37,22 @@ const WORK = [
 ];
 
 function UsPage() {
+  const copy = usePageCopy("/us-initiatives");
+  const hero = copy("hero", {
+    eyebrow: "Philadelphia / U.S. initiatives",
+    title: "The neighbourhood where it started.",
+    intro:
+      "Philadelphia remains our home base — leagues, mentorship, and family support running block by block.",
+    image: "/images/basketball.jpg",
+  });
+
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Philadelphia / U.S. initiatives"
-        title="The neighbourhood where it started."
-        intro="Philadelphia remains our home base — leagues, mentorship, and family support running block by block."
-        image="/images/basketball.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
         actions={
           <Link to="/volunteer" className={BTN.onDarkSolid}>
             Volunteer in Philadelphia

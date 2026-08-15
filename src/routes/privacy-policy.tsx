@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy-policy")({
+  head: () =>
+    pageHead({
+      title: "Privacy Policy | F.I.R.E.",
+      description:
+        "How F.I.R.E. (Free Inspiration Reaching Everyone) collects, uses, and protects personal information submitted through this website.",
+      path: "/privacy-policy",
+    }),
   component: PrivacyPolicy,
 });
 

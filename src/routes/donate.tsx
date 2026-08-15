@@ -1,3 +1,5 @@
+import { pageHead } from "@/lib/seo";
+import { usePageCopy } from "@/lib/page-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Heart, Lock, ShieldCheck } from "lucide-react";
@@ -6,20 +8,27 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/ui";
 
 export const Route = createFileRoute("/donate")({
-  head: () => ({
-    meta: [
-      { title: "Donate — Give inspiration that changes lives | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Support F.I.R.E. with a secure one-time or monthly gift. 100% of your donation reaches youth sports, education, and enterprise programmes in Philadelphia and Ghana.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Donate — Give inspiration that changes lives | F.I.R.E.",
+      description:
+        "Support F.I.R.E. with a secure one-time or monthly gift. 100% of your donation reaches youth sports, education, and enterprise programmes in Philadelphia and Ghana.",
+      path: "/donate",
+      image: "/images/impact.jpg",
+    }),
   component: DonatePage,
 });
 
 function DonatePage() {
+  const copy = usePageCopy("/donate");
+  const hero = copy("hero", {
+    eyebrow: "Donate",
+    title: "Give inspiration that changes lives.",
+    intro:
+      "Join us in creating change. Every act of kindness, every dollar, and every moment of your time brings us closer to our mission.",
+    image: "/images/donate.jpg",
+  });
+
   useEffect(() => {
     const s = document.createElement("script");
     s.src = "https://www.zeffy.com/embed/v2/zeffy-embed.js";
@@ -33,10 +42,10 @@ function DonatePage() {
   return (
     <SiteLayout>
       <PageHero
-        eyebrow="Donate"
-        title="Give inspiration that changes lives."
-        intro="Join us in creating change. Every act of kindness, every dollar, and every moment of your time brings us closer to our mission."
-        image="/images/donate.jpg"
+        eyebrow={hero.eyebrow!}
+        title={hero.title!}
+        intro={hero.intro}
+        image={hero.image!}
       />
 
       <Section className="bg-surface">
