@@ -5,6 +5,7 @@ import { ArrowRight, Check } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand, BTN } from "@/components/site/ui";
+import { ProgramDonateDialog } from "@/components/site/ProgramDonateDialog";
 import { PROGRAMS } from "@/data/site";
 
 export const Route = createFileRoute("/programs")({
