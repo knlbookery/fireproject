@@ -12,13 +12,17 @@ const COLUMNS: { heading: string; links: { label: string; to: string }[] }[] = [
     links: [
       { label: "Home", to: "/" },
       { label: "About", to: "/about" },
+      { label: "Our Mission", to: "/mission" },
+      { label: "Our Impact", to: "/impact" },
       { label: "Programs", to: "/programs" },
       { label: "Events", to: "/events" },
     ],
   },
   {
-    heading: "Initiatives",
+    heading: "Organisation",
     links: [
+      { label: "Organisation Leaders", to: "/leadership" },
+      { label: "Our Partners", to: "/partners" },
       { label: "Ghana", to: "/ghana-initiatives" },
       { label: "Philadelphia / U.S.", to: "/us-initiatives" },
       { label: "Press & Media", to: "/press" },
@@ -34,6 +38,7 @@ const COLUMNS: { heading: string; links: { label: string; to: string }[] }[] = [
     ],
   },
 ];
+
 
 export function Footer() {
   return (
