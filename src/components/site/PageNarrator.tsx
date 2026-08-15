@@ -329,8 +329,23 @@ export function PageNarrator() {
           </div>
 
           <p aria-live="polite" className="mt-3 max-h-56 overflow-y-auto text-sm leading-relaxed text-muted-foreground">
-            {loading ? "Preparing a summary of this page…" : script}
+            {loading
+              ? "Preparing a summary of this page…"
+              : sentences.map((sentence, i) => (
+                  <span
+                    key={`${sentence.start}-${i}`}
+                    ref={i === activeSentence ? activeRef : undefined}
+                    className={
+                      i === activeSentence
+                        ? "rounded bg-primary/15 px-0.5 font-medium text-foreground transition-colors"
+                        : "transition-colors"
+                    }
+                  >
+                    {sentence.text}{" "}
+                  </span>
+                ))}
           </p>
+
 
           <div className="mt-4 space-y-3 border-t border-border pt-4">
             <div className="space-y-1.5">
