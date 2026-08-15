@@ -310,19 +310,22 @@ export function PageNarrator() {
     <>
       <button
         type="button"
-        onClick={() => void start()}
+        onClick={() => void toggle()}
         aria-label={label}
-        title="Listen to this page"
+        title={open ? "Close page summary" : "Listen to this page"}
         className="fixed bottom-24 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-lg transition hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {loading ? (
           <Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" />
         ) : speaking ? (
           <Square className="h-5 w-5 fill-current" aria-hidden="true" />
+        ) : open ? (
+          <X className="h-6 w-6" aria-hidden="true" />
         ) : (
           <Headphones className="h-6 w-6" aria-hidden="true" />
         )}
       </button>
+
 
       {open && (
         <div
