@@ -13,24 +13,23 @@ export const Route = createFileRoute("/press/$slug")({
     return pageHead({
       title: fallback ? `${fallback.title} | F.I.R.E. Press` : "Press release | F.I.R.E.",
       description:
-        fallback?.excerpt ??
-        "A press release from F.I.R.E. (Free Inspiration Reaching Everyone).",
+        fallback?.excerpt ?? "A press release from F.I.R.E. (Free Inspiration Reaching Everyone).",
       path: `/press/${params.slug}`,
       image: fallback?.image ?? "/images/press.jpg",
       type: "article",
       jsonLd: {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-            { "@type": "ListItem", position: 2, name: "Press", item: absoluteUrl("/press") },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: fallback?.title ?? "Press release",
-              item: absoluteUrl(`/press/${params.slug}`),
-            },
-          ],
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+          { "@type": "ListItem", position: 2, name: "Press", item: absoluteUrl("/press") },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: fallback?.title ?? "Press release",
+            item: absoluteUrl(`/press/${params.slug}`),
+          },
+        ],
       },
     });
   },
