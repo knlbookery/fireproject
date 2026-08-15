@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { AssistantWidget } from "./AssistantWidget";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   return (
@@ -15,6 +16,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <Header />
       <main id="main-content">{children}</main>
       <Footer />
+      <AssistantWidget />
     </div>
   );
 }
+

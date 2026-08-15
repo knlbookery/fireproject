@@ -88,6 +88,7 @@ GET  /api/events.php    → active events, sorted by date
 POST /api/rsvp.php      → creates linked Event RSVP record
 POST /api/contact.php   → Airtable record + Brevo notification
 GET  /api/health.php    → { "status": "ok" }
+POST /api/assistant.php → { success, reply, offline }   # visitor AI assistant
 ```
 
 Adding an endpoint means: new file in `server/public-api/`, logic in `server/app/src/`, documented here and in `DEPLOYMENT.md`, and added to the deployment mapping. Removing or renaming one is a breaking change to the deployed frontend.
@@ -114,7 +115,13 @@ MAIL_TO_ADDRESS=
 
 CONTACT_RATE_LIMIT_MAX=5
 CONTACT_RATE_LIMIT_WINDOW_SECONDS=900
+
+LOVABLE_API_KEY=
 ```
+
+`LOVABLE_API_KEY` powers `/api/assistant.php` (site-wide visitor assistant). It is
+server-side only — never `VITE_`-prefixed. If it is absent, the endpoint still
+answers from the curated keyword knowledge base in `Fire\AssistantService`.
 
 Verify before changing this list:
 
