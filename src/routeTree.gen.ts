@@ -23,6 +23,7 @@ import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PressSlugRouteImport } from './routes/press.$slug'
 
 const YouthEmpowermentGuideRoute = YouthEmpowermentGuideRouteImport.update({
   id: '/youth-empowerment-guide',
@@ -94,6 +95,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PressSlugRoute = PressSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PressRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,7 +108,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof DonateRoute
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
-  '/press': typeof PressRoute
+  '/press': typeof PressRouteWithChildren
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/programs': typeof ProgramsRoute
   '/sponsors': typeof SponsorsRoute
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/us-initiatives': typeof UsInitiativesRoute
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/press/$slug': typeof PressSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,7 +125,7 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
-  '/press': typeof PressRoute
+  '/press': typeof PressRouteWithChildren
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/programs': typeof ProgramsRoute
   '/sponsors': typeof SponsorsRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/us-initiatives': typeof UsInitiativesRoute
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/press/$slug': typeof PressSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -135,7 +143,7 @@ export interface FileRoutesById {
   '/donate': typeof DonateRoute
   '/events': typeof EventsRoute
   '/ghana-initiatives': typeof GhanaInitiativesRoute
-  '/press': typeof PressRoute
+  '/press': typeof PressRouteWithChildren
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/programs': typeof ProgramsRoute
   '/sponsors': typeof SponsorsRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/us-initiatives': typeof UsInitiativesRoute
   '/volunteer': typeof VolunteerRoute
   '/youth-empowerment-guide': typeof YouthEmpowermentGuideRoute
+  '/press/$slug': typeof PressSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/us-initiatives'
     | '/volunteer'
     | '/youth-empowerment-guide'
+    | '/press/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/us-initiatives'
     | '/volunteer'
     | '/youth-empowerment-guide'
+    | '/press/$slug'
   id:
     | '__root__'
     | '/'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/us-initiatives'
     | '/volunteer'
     | '/youth-empowerment-guide'
+    | '/press/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,7 +214,7 @@ export interface RootRouteChildren {
   DonateRoute: typeof DonateRoute
   EventsRoute: typeof EventsRoute
   GhanaInitiativesRoute: typeof GhanaInitiativesRoute
-  PressRoute: typeof PressRoute
+  PressRoute: typeof PressRouteWithChildren
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ProgramsRoute: typeof ProgramsRoute
   SponsorsRoute: typeof SponsorsRoute
@@ -312,8 +324,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/press/$slug': {
+      id: '/press/$slug'
+      path: '/$slug'
+      fullPath: '/press/$slug'
+      preLoaderRoute: typeof PressSlugRouteImport
+      parentRoute: typeof PressRoute
+    }
   }
 }
+
+interface PressRouteChildren {
+  PressSlugRoute: typeof PressSlugRoute
+}
+
+const PressRouteChildren: PressRouteChildren = {
+  PressSlugRoute: PressSlugRoute,
+}
+
+const PressRouteWithChildren = PressRoute._addFileChildren(PressRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -322,7 +351,7 @@ const rootRouteChildren: RootRouteChildren = {
   DonateRoute: DonateRoute,
   EventsRoute: EventsRoute,
   GhanaInitiativesRoute: GhanaInitiativesRoute,
-  PressRoute: PressRoute,
+  PressRoute: PressRouteWithChildren,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ProgramsRoute: ProgramsRoute,
   SponsorsRoute: SponsorsRoute,
