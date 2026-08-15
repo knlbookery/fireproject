@@ -43,19 +43,30 @@ export function Section({
         {(eyebrow || title) && (
           <div className={`mb-14 max-w-3xl ${align === "center" ? "mx-auto text-center" : ""}`}>
             {eyebrow && (
-              <div className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
-                {eyebrow}
-              </div>
+              <Reveal variant="right" duration={700}>
+                <div className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
+                  {eyebrow}
+                </div>
+              </Reveal>
             )}
             {title && (
-              <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                {title}
-              </h2>
+              <Reveal variant="blur" delay={80}>
+                <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+                  {title}
+                </h2>
+              </Reveal>
             )}
-            {intro && <p className="mt-6 text-lg text-muted-foreground">{intro}</p>}
+            {intro && (
+              <Reveal variant="up" delay={180}>
+                <p className="mt-6 text-lg text-muted-foreground">{intro}</p>
+              </Reveal>
+            )}
           </div>
         )}
-        {children}
+        <Reveal variant="up" delay={120} threshold={0.05}>
+          {children}
+        </Reveal>
+
       </div>
     </section>
   );
