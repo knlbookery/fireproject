@@ -21,6 +21,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/bootstrap-loader.php';
 
 use Fire\AirtableClient;
+use Fire\BrevoMailService;
 use Fire\Config;
 use Fire\HttpResponse;
 use Fire\Security;
