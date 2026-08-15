@@ -65,8 +65,22 @@ function PressArticlePage() {
     staleTime: 5 * 60 * 1000,
   });
 
+  const { data: allArticles } = useQuery({
+    queryKey: ["press-articles"],
+    queryFn: fetchPressArticles,
+    staleTime: 5 * 60 * 1000,
+  });
+
   const article: PressArticle | null =
     data ?? FALLBACK_ARTICLES.find((a) => a.slug === slug) ?? null;
+
+  const pool = allArticles && allArticles.length > 0 ? allArticles : FALLBACK_ARTICLES;
+  const others = pool.filter((a) => a.slug !== slug);
+  const related = [
+    ...others.filter((a) => article?.category && a.category === article.category),
+    ...others.filter((a) => !article?.category || a.category !== article.category),
+  ].slice(0, 3);
+
 
   if (isLoading && !article) {
     return (
