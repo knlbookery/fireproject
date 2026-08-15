@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { AssistantWidget } from "./AssistantWidget";
+import { PageNarrator } from "./PageNarrator";
 import { ScrollProgress } from "./motion";
 
 export function SiteLayout({ children }: { children: ReactNode }) {
@@ -18,6 +19,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <Header />
       <main id="main-content">{children}</main>
       <Footer />
+      <PageNarrator />
       <AssistantWidget />
     </div>
   );

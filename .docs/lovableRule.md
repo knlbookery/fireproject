@@ -89,6 +89,7 @@ POST /api/rsvp.php      → creates linked Event RSVP record
 POST /api/contact.php   → Airtable record + Brevo notification
 GET  /api/health.php    → { "status": "ok" }
 POST /api/assistant.php → { success, reply, offline }   # visitor AI assistant
+POST /api/page-summary.php → { success, script, offline }  # spoken page summary (read aloud in-browser via Web Speech API)
 GET  /api/donations.php → { success, programmes[] }     # live per-programme totals
 POST /api/zeffy-webhook.php → { success, recorded }     # Zeffy donation callback
 ```
