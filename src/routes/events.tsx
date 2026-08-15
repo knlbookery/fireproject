@@ -285,6 +285,8 @@ function EventsPage() {
   const calendar = copy("calendar", { eyebrow: "Calendar", title: "Upcoming events." });
 
   const [rsvpEvent, setRsvpEvent] = useState<EventItem | null>(null);
+  const [query, setQuery] = useState("");
+  const [place, setPlace] = useState("All locations");
 
   const { data, isLoading } = useQuery({
     queryKey: ["events"],
@@ -292,7 +294,26 @@ function EventsPage() {
     staleTime: 60 * 1000,
   });
 
-  const events = data ?? [];
+  const events = useMemo(() => data ?? [], [data]);
+
+  const places = useMemo(() => {
+    const set = new Set(events.map((e) => e.location).filter(Boolean) as string[]);
+    return ["All locations", ...Array.from(set).sort((a, b) => a.localeCompare(b))];
+  }, [events]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return events.filter((e) => {
+      const matchesPlace = place === "All locations" || e.location === place;
+      const matchesQuery =
+        q === "" ||
+        [e.name, e.description, e.location, e.date, e.time]
+          .filter(Boolean)
+          .some((v) => (v as string).toLowerCase().includes(q));
+      return matchesPlace && matchesQuery;
+    });
+  }, [events, place, query]);
+
 
   return (
     <SiteLayout>
