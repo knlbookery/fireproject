@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 
@@ -6,16 +7,14 @@ import { PageHero, Section, CTABand, BTN } from "@/components/site/ui";
 import { PROGRAMS } from "@/data/site";
 
 export const Route = createFileRoute("/programs")({
-  head: () => ({
-    meta: [
-      { title: "Programs — Sports, enterprise, education and outreach | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Explore F.I.R.E. programmes: youth sports and wellness, entrepreneurship training, community development, education and mentorship, technology access, and community outreach.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Programs — Sports, enterprise, education and outreach | F.I.R.E.",
+      description:
+        "Explore F.I.R.E. programmes: youth sports and wellness, entrepreneurship training, community development, education and mentorship, technology access, and community outreach.",
+      path: "/programs",
+      image: "/images/sport.jpg",
+    }),
   component: ProgramsPage,
 });
 

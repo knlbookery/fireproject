@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CalendarDays, Clock, MapPin } from "lucide-react";
@@ -6,16 +7,14 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/ui";
 
 export const Route = createFileRoute("/events")({
-  head: () => ({
-    meta: [
-      { title: "Events — Tournaments, workshops and community days | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Upcoming F.I.R.E. events in Philadelphia and Ghana: youth tournaments, founder workshops, fundraisers, and community days. RSVP online.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Events — Tournaments, workshops and community days | F.I.R.E.",
+      description:
+        "Upcoming F.I.R.E. events in Philadelphia and Ghana: youth tournaments, founder workshops, fundraisers, and community days. RSVP online.",
+      path: "/events",
+      image: "/images/events.jpg",
+    }),
   component: EventsPage,
 });
 

@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,16 +6,14 @@ import { PageHero, Section } from "@/components/site/ui";
 import { InquiryForm } from "@/components/site/InquiryForm";
 
 export const Route = createFileRoute("/volunteer")({
-  head: () => ({
-    meta: [
-      { title: "Volunteer with F.I.R.E. — Give your time" },
-      {
-        name: "description",
-        content:
-          "Volunteer with F.I.R.E. as a coach, mentor, event lead, or skills volunteer in Philadelphia and Ghana. Tell us how you'd like to help.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Volunteer with F.I.R.E. — Give your time",
+      description:
+        "Volunteer with F.I.R.E. as a coach, mentor, event lead, or skills volunteer in Philadelphia and Ghana. Tell us how you'd like to help.",
+      path: "/volunteer",
+      image: "/images/impact.jpg",
+    }),
   component: VolunteerPage,
 });
 

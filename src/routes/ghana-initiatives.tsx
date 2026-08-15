@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,16 +6,14 @@ import { PageHero, Section, StatGrid, CTABand, BTN } from "@/components/site/ui"
 import { GALLERY } from "@/data/site";
 
 export const Route = createFileRoute("/ghana-initiatives")({
-  head: () => ({
-    meta: [
-      { title: "Ghana Initiatives — Youth, sports and enterprise in Accra | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "F.I.R.E.'s Ghana initiatives: community courts, school partnerships, founder training, and outreach across Greater Accra and beyond.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Ghana Initiatives — Youth, sports and enterprise in Accra | F.I.R.E.",
+      description:
+        "F.I.R.E.'s Ghana initiatives: community courts, school partnerships, founder training, and outreach across Greater Accra and beyond.",
+      path: "/ghana-initiatives",
+      image: "/images/community_dev.jpg",
+    }),
   component: GhanaPage,
 });
 

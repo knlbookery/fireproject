@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, Phone } from "lucide-react";
 
@@ -6,16 +7,14 @@ import { PageHero, Section } from "@/components/site/ui";
 import { InquiryForm } from "@/components/site/InquiryForm";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact F.I.R.E. — Talk to our team" },
-      {
-        name: "description",
-        content:
-          "Get in touch with F.I.R.E. (Free Inspiration Reaching Everyone) about programmes, partnerships, media, or volunteering in Philadelphia and Ghana.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Contact F.I.R.E. — Talk to our team",
+      description:
+        "Get in touch with F.I.R.E. (Free Inspiration Reaching Everyone) about programmes, partnerships, media, or volunteering in Philadelphia and Ghana.",
+      path: "/contact",
+      image: "/images/impact.jpg",
+    }),
   component: ContactPage,
 });
 

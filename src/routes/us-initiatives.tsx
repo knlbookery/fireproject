@@ -1,19 +1,18 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, StatGrid, CTABand, BTN } from "@/components/site/ui";
 
 export const Route = createFileRoute("/us-initiatives")({
-  head: () => ({
-    meta: [
-      { title: "Philadelphia & U.S. Initiatives | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "F.I.R.E.'s U.S. work: Philadelphia youth leagues, mentorship cohorts, family support drives, and career pathways for students.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Philadelphia & U.S. Initiatives | F.I.R.E.",
+      description:
+        "F.I.R.E.'s U.S. work: Philadelphia youth leagues, mentorship cohorts, family support drives, and career pathways for students.",
+      path: "/us-initiatives",
+      image: "/images/impact.jpg",
+    }),
   component: UsPage,
 });
 

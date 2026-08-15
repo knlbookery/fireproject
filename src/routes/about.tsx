@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -5,16 +6,14 @@ import { PageHero, Section, StatGrid, CTABand } from "@/components/site/ui";
 import { IMPACT_STATS, VALUES } from "@/data/site";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About F.I.R.E. — Our story, values and leadership" },
-      {
-        name: "description",
-        content:
-          "F.I.R.E. (Free Inspiration Reaching Everyone) is a 501(c)(3) nonprofit with roots in Philadelphia and Ghana, creating opportunity for young people through sports, education, enterprise and community development.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "About F.I.R.E. — Our story, values and leadership",
+      description:
+        "F.I.R.E. (Free Inspiration Reaching Everyone) is a 501(c)(3) nonprofit with roots in Philadelphia and Ghana, creating opportunity for young people through sports, education, enterprise and community development.",
+      path: "/about",
+      image: "/images/impact.jpg",
+    }),
   component: AboutPage,
 });
 

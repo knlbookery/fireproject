@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
@@ -6,16 +7,14 @@ import { PageHero, Section } from "@/components/site/ui";
 import { InquiryForm } from "@/components/site/InquiryForm";
 
 export const Route = createFileRoute("/press")({
-  head: () => ({
-    meta: [
-      { title: "Press & Media | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Press releases, media coverage, and press contact details for F.I.R.E. (Free Inspiration Reaching Everyone).",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Press & Media | F.I.R.E.",
+      description:
+        "Press releases, media coverage, and press contact details for F.I.R.E. (Free Inspiration Reaching Everyone).",
+      path: "/press",
+      image: "/images/press.jpg",
+    }),
   component: PressPage,
 });
 

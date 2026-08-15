@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 
@@ -7,16 +8,14 @@ import { InquiryForm } from "@/components/site/InquiryForm";
 import { SPONSOR_TIERS } from "@/data/site";
 
 export const Route = createFileRoute("/sponsors")({
-  head: () => ({
-    meta: [
-      { title: "Sponsors & Partners | F.I.R.E." },
-      {
-        name: "description",
-        content:
-          "Partner with F.I.R.E. Corporate sponsorship tiers fund youth sports, enterprise training, and community programmes in Philadelphia and Ghana.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      title: "Sponsors & Partners | F.I.R.E.",
+      description:
+        "Partner with F.I.R.E. Corporate sponsorship tiers fund youth sports, enterprise training, and community programmes in Philadelphia and Ghana.",
+      path: "/sponsors",
+      image: "/images/partners.jpg",
+    }),
   component: SponsorsPage,
 });
 
