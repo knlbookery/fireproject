@@ -285,6 +285,13 @@ export function PageNarrator() {
     return "Listen to a summary of this page";
   }, [loading, speaking]);
 
+  // Keep the spoken sentence in view inside the scrollable transcript.
+  useEffect(() => {
+    if (activeSentence < 0) return;
+    activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [activeSentence]);
+
+
   if (!supported) return null;
 
   return (
