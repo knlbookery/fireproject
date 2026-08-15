@@ -130,13 +130,22 @@ export function PageNarrator() {
     return () => window.speechSynthesis.removeEventListener("voiceschanged", load);
   }, []);
 
+  const clearFallback = useCallback(() => {
+    if (fallbackRef.current !== null) {
+      window.clearInterval(fallbackRef.current);
+      fallbackRef.current = null;
+    }
+  }, []);
+
   const stop = useCallback(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
     utteranceRef.current = null;
+    clearFallback();
     setSpeaking(false);
-  }, []);
+    setActiveSentence(-1);
+  }, [clearFallback]);
 
   // Stop and reset whenever the visitor navigates to another page.
   useEffect(() => {
@@ -147,27 +156,66 @@ export function PageNarrator() {
 
   useEffect(() => stop, [stop]);
 
-  const speak = useCallback((text: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = rateRef.current;
-    utterance.pitch = 1;
-    const selected = window.speechSynthesis
-      .getVoices()
-      .find((v) => v.voiceURI === voiceUriRef.current);
-    if (selected) {
-      utterance.voice = selected;
-      utterance.lang = selected.lang;
-    } else {
-      utterance.lang = "en-US";
-    }
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    utteranceRef.current = utterance;
-    setSpeaking(true);
-    window.speechSynthesis.speak(utterance);
-  }, []);
+  const speak = useCallback(
+    (text: string) => {
+      if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      clearFallback();
+
+      const parts = splitSentences(text);
+      sentencesRef.current = parts;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = rateRef.current;
+      utterance.pitch = 1;
+      const selected = window.speechSynthesis
+        .getVoices()
+        .find((v) => v.voiceURI === voiceUriRef.current);
+      if (selected) {
+        utterance.voice = selected;
+        utterance.lang = selected.lang;
+      } else {
+        utterance.lang = "en-US";
+      }
+
+      const indexAtChar = (charIndex: number) => {
+        const found = parts.findIndex((s) => charIndex >= s.start && charIndex < s.end);
+        return found === -1 ? parts.length - 1 : found;
+      };
+
+      let sawBoundary = false;
+      utterance.onboundary = (event) => {
+        sawBoundary = true;
+        clearFallback();
+        setActiveSentence(indexAtChar(event.charIndex ?? 0));
+      };
+
+      const finish = () => {
+        clearFallback();
+        setSpeaking(false);
+        setActiveSentence(-1);
+      };
+      utterance.onend = finish;
+      utterance.onerror = finish;
+
+      utteranceRef.current = utterance;
+      setSpeaking(true);
+      setActiveSentence(parts.length > 0 ? 0 : -1);
+      window.speechSynthesis.speak(utterance);
+
+      // Some browsers never fire `boundary`; approximate progress from the
+      // elapsed time and the characters spoken so far.
+      const startedAt = Date.now();
+      const charsPerMs = (14 * rateRef.current) / 1000;
+      fallbackRef.current = window.setInterval(() => {
+        if (sawBoundary || !window.speechSynthesis.speaking) return;
+        const spoken = (Date.now() - startedAt) * charsPerMs;
+        setActiveSentence(indexAtChar(Math.min(spoken, text.length - 1)));
+      }, 250);
+    },
+    [clearFallback],
+  );
+
 
   const changeVoice = useCallback(
     (uri: string) => {
