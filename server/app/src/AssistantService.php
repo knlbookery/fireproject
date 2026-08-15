@@ -107,7 +107,7 @@ TXT;
         }
 
         if ($raw === false || $status < 200 || $status >= 300) {
-            Logger::warning('assistant.gateway_failed', ['status' => $status]);
+            Logger::warning('assistant', 'gateway request failed', ['status' => $status]);
             return self::ok(self::fallbackAnswer($question), true);
         }
 

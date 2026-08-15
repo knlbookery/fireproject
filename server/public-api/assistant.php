@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/bootstrap-loader.php';
 
-use Fire\AssistantService;
 use Fire\AssistantService as Assistant;
+
 use Fire\HttpResponse;
 use Fire\RateLimiter;
 use Fire\Security;
