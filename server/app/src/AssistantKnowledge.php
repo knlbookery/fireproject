@@ -49,9 +49,10 @@ final class AssistantKnowledge
 
         $parts = array_filter([
             self::events($client),
-            self::press($client, $pat === '' ? '' : (string) Config::get('AIRTABLE_TABLE_PRESS', 'Press Articles')),
+            self::press($client, (string) Config::get('AIRTABLE_TABLE_PRESS', 'Press Articles')),
             self::pageContent($client, (string) Config::get('AIRTABLE_TABLE_PAGE_CONTENT', 'Page Content')),
         ]);
+
 
         return $parts === [] ? '' : implode("\n\n", $parts);
     }
