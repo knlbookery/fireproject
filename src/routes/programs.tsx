@@ -5,6 +5,7 @@ import { ArrowRight, Check } from "lucide-react";
 
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand, BTN } from "@/components/site/ui";
+import { ProgramDonateDialog } from "@/components/site/ProgramDonateDialog";
 import { PROGRAMS } from "@/data/site";
 
 export const Route = createFileRoute("/programs")({
@@ -81,9 +82,16 @@ function ProgramsPage() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/contact" className={`mt-8 ${BTN.secondary}`}>
-                  Ask about this programme <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <ProgramDonateDialog
+                    programSlug={p.slug}
+                    programTitle={p.title}
+                    triggerClassName={BTN.primary}
+                  />
+                  <Link to="/contact" className={BTN.secondary}>
+                    Ask about this programme <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
               </div>
             </article>
           ))}
