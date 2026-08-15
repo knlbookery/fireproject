@@ -18,8 +18,7 @@ export const Route = createFileRoute("/press/$slug")({
       path: `/press/${params.slug}`,
       image: fallback?.image ?? "/images/press.jpg",
       type: "article",
-      jsonLd: [
-        {
+      jsonLd: {
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
@@ -32,8 +31,7 @@ export const Route = createFileRoute("/press/$slug")({
               item: absoluteUrl(`/press/${params.slug}`),
             },
           ],
-        },
-      ],
+      },
     });
   },
   component: PressArticlePage,
