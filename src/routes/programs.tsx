@@ -79,6 +79,7 @@ export const Route = createFileRoute("/programs")({
 
 function ProgramsPage() {
   const copy = usePageCopy("/programs");
+  const { summary, refresh } = useDonationSummary();
   const hero = copy("hero", {
     eyebrow: "Programs",
     title: "Six programmes. One throughline: opportunity.",
