@@ -621,7 +621,7 @@ function Impact() {
   ];
   return (
     <section id="impact" className="px-6 py-28 lg:px-10 lg:py-36">
-      <div className="mx-auto max-w-[1400px] overflow-hidden rounded-3xl bg-[#0b1230] text-white">
+      <div className="mx-auto max-w-[1400px] overflow-hidden rounded-3xl bg-ink text-white">
         <div className="grid grid-cols-1 lg:grid-cols-12">
           <div className="p-10 lg:col-span-5 lg:p-14">
             <div className="text-xs font-medium uppercase tracking-[0.22em] text-accent">
@@ -1807,7 +1807,7 @@ function Partners() {
         </div>
       </div>
 
-      <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl bg-gradient-to-br from-[#0b1230] via-[#0b1230] to-[#1a2a6b] px-8 py-10 text-white md:flex-row md:items-center md:px-12">
+      <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl bg-ink px-8 py-10 text-white md:flex-row md:items-center md:px-12">
         <div>
           <div className="font-display text-2xl font-medium tracking-tight text-white">
             Become a partner.

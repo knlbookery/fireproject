@@ -114,7 +114,7 @@ function PressArticlePage() {
   return (
     <SiteLayout>
       <article>
-        <header className="bg-[#0b1230] px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
+        <header className="bg-ink px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
           <div className="mx-auto max-w-3xl">
             <Link
               to="/press"
