@@ -77,7 +77,7 @@ export function Footer() {
           <div className="grid gap-10 sm:grid-cols-3">
             {COLUMNS.map((col) => (
               <nav key={col.heading} aria-label={col.heading}>
-                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                <h2 className="text-[0.7rem] font-medium uppercase tracking-[0.24em] text-white/45">
                   {col.heading}
                 </h2>
                 <ul className="mt-4 space-y-2.5 text-sm">
