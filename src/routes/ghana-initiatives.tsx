@@ -55,7 +55,7 @@ function GhanaPage() {
         intro={hero.intro}
         image={hero.image!}
         actions={
-          <Link to="/donate" className={BTN.onDarkSolid}>
+          <Link to="/donate" className={BTN.primary}>
             Support Ghana programmes
           </Link>
         }

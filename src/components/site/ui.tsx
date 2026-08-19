@@ -116,19 +116,19 @@ export function PageHero({
   actions?: ReactNode;
 }) {
   return (
-    <section className="relative isolate flex min-h-[62vh] items-end overflow-hidden bg-ink px-6 pb-16 pt-40 text-white lg:min-h-[70vh] lg:px-10 lg:pb-20 lg:pt-48">
+    <section className="relative isolate flex min-h-[62vh] items-end overflow-hidden bg-surface px-6 pb-16 pt-40 text-ink lg:min-h-[70vh] lg:px-10 lg:pb-20 lg:pt-48">
       <Parallax strength={60} className="absolute inset-x-0 -bottom-[10%] -top-[10%] -z-10">
         <img
           src={image}
           alt=""
           aria-hidden="true"
-          className="h-full w-full scale-105 object-cover opacity-60"
+          className="h-full w-full scale-105 object-cover opacity-55"
           loading="eager"
         />
       </Parallax>
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-ink via-ink/70 to-ink/20"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-surface/95 via-surface/60 to-transparent"
       />
       <div
         aria-hidden="true"
@@ -139,7 +139,7 @@ export function PageHero({
         <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-end">
           <div>
             <Reveal variant="right" duration={700}>
-              <Eyebrow onDark>{eyebrow}</Eyebrow>
+              <Eyebrow>{eyebrow}</Eyebrow>
             </Reveal>
             <Reveal variant="blur" delay={90}>
               <h1 className="mt-7 max-w-4xl font-display text-[2.6rem] font-light leading-[1] tracking-tight sm:text-6xl lg:text-[5rem]">
@@ -150,7 +150,7 @@ export function PageHero({
           <div>
             {intro && (
               <Reveal variant="up" delay={200}>
-                <p className="measure text-base leading-relaxed text-white/75">{intro}</p>
+                <p className="measure text-base leading-relaxed text-muted-foreground">{intro}</p>
               </Reveal>
             )}
             {actions && (
@@ -215,7 +215,7 @@ export function FullBleedBand({
       </div>
 
       <div
-        className={`flex items-center bg-ink px-6 py-20 text-white lg:px-16 lg:py-24 ${
+        className={`flex items-center bg-surface px-6 py-20 text-ink lg:px-16 lg:py-24 ${
           reverse ? "lg:order-1" : ""
         }`}
       >
@@ -236,17 +236,17 @@ export function PullQuote({
   image?: string;
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-ink px-6 py-28 text-white lg:px-10 lg:py-36">
+    <section className="relative isolate overflow-hidden bg-surface px-6 py-28 text-ink lg:px-10 lg:py-36">
       {image && (
         <>
           <img
             src={image}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 -z-10 h-full w-full object-cover opacity-30"
+            className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20"
             loading="lazy"
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/50" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-surface/70" />
         </>
       )}
       <div className={`${SHELL} max-w-4xl`}>
@@ -256,7 +256,7 @@ export function PullQuote({
           </blockquote>
         </Reveal>
         {attribution && (
-          <p className="mt-8 text-xs uppercase tracking-[0.2em] text-white/60">{attribution}</p>
+          <p className="mt-8 text-xs uppercase tracking-[0.2em] text-muted-foreground">{attribution}</p>
         )}
       </div>
     </section>
@@ -341,19 +341,19 @@ export function CTABand({
   secondary?: { label: string; to: string };
 }) {
   return (
-    <section className="bg-ink px-6 py-24 text-white lg:px-10 lg:py-32">
+    <section className="bg-surface px-6 py-24 text-ink lg:px-10 lg:py-32">
       <div className={`${SHELL} grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end`}>
         <h2 className="font-display text-4xl font-light leading-[1.03] tracking-tight sm:text-5xl lg:text-[4.5rem]">
           {title}
         </h2>
         <div>
-          <p className="measure text-base leading-relaxed text-white/70">{body}</p>
+          <p className="measure text-base leading-relaxed text-muted-foreground">{body}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to={primary.to} className={BTN.onDarkSolid}>
+            <Link to={primary.to} className={BTN.primary}>
               {primary.label}
             </Link>
             {secondary && (
-              <Link to={secondary.to} className={BTN.onDarkOutline}>
+              <Link to={secondary.to} className={BTN.secondary}>
                 {secondary.label}
               </Link>
             )}

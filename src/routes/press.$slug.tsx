@@ -114,11 +114,11 @@ function PressArticlePage() {
   return (
     <SiteLayout>
       <article>
-        <header className="bg-ink px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
+        <header className="bg-surface px-6 pb-16 pt-36 text-ink lg:px-10 lg:pb-20 lg:pt-44">
           <div className="mx-auto max-w-3xl">
             <Link
               to="/press"
-              className="inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-primary hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
               Press & media
@@ -126,7 +126,7 @@ function PressArticlePage() {
             <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight lg:text-6xl">
               {article.title}
             </h1>
-            <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-white/70">
+            <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
               {article.displayDate && (
                 <span className="inline-flex items-center gap-2">
                   <CalendarDays className="h-4 w-4" aria-hidden="true" />
@@ -140,7 +140,7 @@ function PressArticlePage() {
                 </span>
               )}
               {article.category && (
-                <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
+                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                   {article.category}
                 </span>
               )}

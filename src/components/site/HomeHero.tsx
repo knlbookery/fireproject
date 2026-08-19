@@ -55,7 +55,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative min-h-[680px] w-full overflow-hidden bg-ink focus:outline-none lg:h-[100svh]"
+      className="relative min-h-[680px] w-full overflow-hidden bg-surface focus:outline-none lg:h-[100svh]"
     >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         Slide {safeIdx + 1} of {SLIDES.length}: {slide.title}
@@ -84,11 +84,11 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-ink via-ink/65 to-transparent"
+            className="absolute inset-0 bg-gradient-to-r from-surface/95 via-surface/55 to-transparent"
           />
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/85 to-transparent"
+            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-surface/85 to-transparent"
           />
         </div>
       ))}
@@ -99,10 +99,10 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       />
 
 
-      <div className="relative z-10 mx-auto flex h-full min-h-[680px] max-w-[1600px] flex-col justify-end px-6 pb-12 pt-40 text-white lg:min-h-0 lg:px-10 lg:pb-14">
+      <div className="relative z-10 mx-auto flex h-full min-h-[680px] max-w-[1600px] flex-col justify-end px-6 pb-12 pt-40 text-ink lg:min-h-0 lg:px-10 lg:pb-14">
         <div className="max-w-3xl" key={safeIdx}>
           <span className="animate-hero-text" style={{ animationDelay: "60ms" }}>
-            <Eyebrow onDark>{slide.eyebrow}</Eyebrow>
+            <Eyebrow>{slide.eyebrow}</Eyebrow>
           </span>
           {safeIdx === 0 ? (
             <h1
@@ -120,7 +120,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             </p>
           )}
           <p
-            className="animate-hero-text mt-6 max-w-lg whitespace-pre-line text-base leading-relaxed text-white/75"
+            className="animate-hero-text mt-6 max-w-lg whitespace-pre-line text-base leading-relaxed text-ink/70"
             style={{ animationDelay: "280ms" }}
           >
             {slide.subtitle}
@@ -133,7 +133,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
               <a
                 key={c.label}
                 href={c.href}
-                className={`group ${c.primary ? BTN.onDarkSolid : BTN.onDarkOutline}`}
+                className={`group ${c.primary ? BTN.primary : BTN.secondary}`}
               >
                 {c.label}
                 <ArrowRight
@@ -145,7 +145,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           </div>
         </div>
 
-        <div className="mt-12 flex items-end justify-between gap-6 border-t border-white/15 pt-6">
+        <div className="mt-12 flex items-end justify-between gap-6 border-t border-ink/10 pt-6">
           <div className="flex items-center gap-3" role="tablist" aria-label="Select slide">
             {SLIDES.map((s, i) => (
               <button
@@ -155,21 +155,21 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
                 aria-selected={i === safeIdx}
                 aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className="group flex flex-col gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="group flex flex-col gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <span className="text-[11px] uppercase tracking-[0.18em] text-white/50 transition group-hover:text-white/80">
+                <span className="text-[11px] uppercase tracking-[0.18em] text-ink/50 transition group-hover:text-ink/80">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span
                   className={`relative h-px overflow-hidden transition-all duration-500 ${
-                    i === safeIdx ? "w-14 bg-white/30" : "w-7 bg-white/25 group-hover:bg-white/60"
+                    i === safeIdx ? "w-14 bg-ink/20" : "w-7 bg-ink/15 group-hover:bg-ink/50"
                   }`}
                 >
                   {i === safeIdx && (
                     <span
                       key={`${safeIdx}-${paused}`}
                       aria-hidden="true"
-                      className="absolute inset-0 origin-left bg-white"
+                      className="absolute inset-0 origin-left bg-primary"
                       style={{
                         animation: paused ? undefined : "slide-progress 6500ms linear forwards",
                         transform: paused ? "scaleX(1)" : undefined,
@@ -185,7 +185,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
               type="button"
               aria-label="Previous slide"
               onClick={() => go(safeIdx - 1)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="grid h-11 w-11 place-items-center rounded-full border border-ink/20 text-ink transition hover:bg-ink hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
@@ -193,7 +193,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
               type="button"
               aria-label="Next slide"
               onClick={() => go(safeIdx + 1)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="grid h-11 w-11 place-items-center rounded-full border border-ink/20 text-ink transition hover:bg-ink hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </button>

@@ -148,44 +148,44 @@ function WorkIndex() {
   const [hovered, setHovered] = useState(0);
 
   return (
-    <section className="bg-ink px-6 py-24 text-white lg:px-10 lg:py-36">
+    <section className="bg-surface px-6 py-24 text-ink lg:px-10 lg:py-36">
       <div className={SHELL}>
-        <div className="grid gap-8 border-t border-white/15 pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div className="grid gap-8 border-t border-ink/10 pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
-            <Eyebrow onDark>What we do</Eyebrow>
+            <Eyebrow>What we do</Eyebrow>
             <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
               Six programmes, one index.
             </h2>
           </div>
-          <p className="measure text-base leading-relaxed text-white/65 lg:pb-2">
+          <p className="measure text-base leading-relaxed text-muted-foreground lg:pb-2">
             Each line is a live programme with local leadership, a public number attached, and a way
             for you to fund it directly.
           </p>
         </div>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
-          <ul className="border-t border-white/15">
+          <ul className="border-t border-ink/10">
             {PROGRAMS.map((p, i) => (
               <li key={p.slug}>
                 <Link
                   to="/programs"
                   onMouseEnter={() => setHovered(i)}
                   onFocus={() => setHovered(i)}
-                  className="group flex items-baseline gap-6 border-b border-white/15 py-7 transition-colors hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-white lg:py-9"
+                  className="group flex items-baseline gap-6 border-b border-ink/10 py-7 transition-colors hover:bg-ink/[0.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:py-9"
                 >
-                  <span className="w-10 shrink-0 font-display text-xs tracking-[0.24em] text-white/40">
+                  <span className="w-10 shrink-0 font-display text-xs tracking-[0.24em] text-ink/40">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="flex-1">
                     <span className="block font-display text-2xl font-light tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-[2.25rem]">
                       {p.title}
                     </span>
-                    <span className="mt-2 block max-w-xl text-sm leading-relaxed text-white/55 lg:hidden">
+                    <span className="mt-2 block max-w-xl text-sm leading-relaxed text-muted-foreground lg:hidden">
                       {p.summary}
                     </span>
                   </span>
                   <ArrowUpRight
-                    className="h-5 w-5 shrink-0 text-white/40 transition group-hover:text-white"
+                    className="h-5 w-5 shrink-0 text-ink/40 transition group-hover:text-ink"
                     aria-hidden="true"
                   />
                 </Link>
@@ -195,7 +195,7 @@ function WorkIndex() {
 
           <div className="hidden lg:block">
             <div className="sticky top-32">
-              <div className="relative aspect-[4/5] overflow-hidden bg-white/5">
+              <div className="relative aspect-[4/5] overflow-hidden bg-ink/5">
                 {PROGRAMS.map((p, i) => (
                   <img
                     key={p.slug}
@@ -209,10 +209,10 @@ function WorkIndex() {
                   />
                 ))}
               </div>
-              <p className="mt-5 text-sm leading-relaxed text-white/60">
+              <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
                 {PROGRAMS[hovered].summary}
               </p>
-              <Link to="/programs" className={`mt-7 ${BTN.onDarkOutline}`}>
+              <Link to="/programs" className={`mt-7 ${BTN.secondary}`}>
                 All programmes
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
@@ -251,26 +251,27 @@ function TwoCountries() {
         <Link
           key={place.to}
           to={place.to}
-          className="group relative isolate flex min-h-[520px] items-end overflow-hidden px-6 py-14 text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white lg:min-h-[680px] lg:px-14 lg:py-16"
+          className="group relative isolate flex min-h-[520px] items-end overflow-hidden bg-surface px-6 py-14 text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary lg:min-h-[680px] lg:px-14 lg:py-16"
         >
           <img
             src={place.image}
             alt=""
             aria-hidden="true"
             loading="lazy"
-            className="absolute inset-0 -z-10 h-full w-full scale-105 object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+            className="absolute inset-0 -z-10 h-full w-full scale-105 object-cover opacity-60 transition-transform duration-[1200ms] group-hover:scale-110"
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/60" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-surface/60" />
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-surface/90 to-transparent" />
           <div className="w-full max-w-lg">
-            <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-white/70">
+            <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.24em] text-primary">
               <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
               {place.label}
             </span>
             <h2 className="mt-6 font-display text-[2rem] font-light leading-[1.05] tracking-tight lg:text-[3rem]">
               {place.title}
             </h2>
-            <p className="mt-5 text-sm leading-relaxed text-white/70">{place.body}</p>
-            <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium">
+            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{place.body}</p>
+            <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-primary">
               Explore the work
               <ArrowRight
                 className="h-4 w-4 transition group-hover:translate-x-1"
