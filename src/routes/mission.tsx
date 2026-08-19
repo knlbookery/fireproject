@@ -38,10 +38,10 @@ function MissionPage() {
         image={hero.image!}
         actions={
           <>
-            <Link to="/programs" className={BTN.onDarkSolid}>
+            <Link to="/programs" className={BTN.primary}>
               See how we work
             </Link>
-            <Link to="/impact" className={BTN.onDarkOutline}>
+            <Link to="/impact" className={BTN.secondary}>
               Read our impact
             </Link>
           </>

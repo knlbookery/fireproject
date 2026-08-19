@@ -49,10 +49,10 @@ function LeadershipPage() {
         image={hero.image!}
         actions={
           <>
-            <Link to="/volunteer" className={BTN.onDarkSolid}>
+            <Link to="/volunteer" className={BTN.primary}>
               Join the team
             </Link>
-            <Link to="/contact" className={BTN.onDarkOutline}>
+            <Link to="/contact" className={BTN.secondary}>
               Contact leadership
             </Link>
           </>
