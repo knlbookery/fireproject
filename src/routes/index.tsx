@@ -345,7 +345,9 @@ function Voices() {
           </Reveal>
 
           <div className="flex flex-col justify-center">
-            <Eyebrow>Leadership</Eyebrow>
+            <div>
+              <Eyebrow>Leadership</Eyebrow>
+            </div>
             <Reveal variant="blur" delay={80}>
               <blockquote className="mt-8 font-display text-[1.9rem] font-light leading-[1.12] tracking-tight sm:text-[2.5rem] lg:text-[3.25rem]">
                 “{lead.quote}”
