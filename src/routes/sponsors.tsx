@@ -15,7 +15,7 @@ export const Route = createFileRoute("/sponsors")({
       description:
         "Partner with F.I.R.E. Corporate sponsorship tiers fund youth sports, enterprise training, and community programmes in Philadelphia and Ghana.",
       path: "/sponsors",
-      image: "/images/partners.jpg",
+      image: "/images/editorial/partners.jpg",
     }),
   component: SponsorsPage,
 });
@@ -27,7 +27,7 @@ function SponsorsPage() {
     title: "Put your brand behind real outcomes.",
     intro:
       "Sponsorship funds named cohorts, courts, and events — with reporting you can show your board.",
-    image: "/images/partners.jpg",
+    image: "/images/editorial/partners.jpg",
   });
 
   return (

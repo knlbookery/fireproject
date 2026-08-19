@@ -13,7 +13,7 @@ export const Route = createFileRoute("/volunteer")({
       description:
         "Volunteer with F.I.R.E. as a coach, mentor, event lead, or skills volunteer in Philadelphia and Ghana. Tell us how you'd like to help.",
       path: "/volunteer",
-      image: "/images/impact.jpg",
+      image: "/images/editorial/impact.jpg",
     }),
   component: VolunteerPage,
 });
@@ -44,7 +44,7 @@ function VolunteerPage() {
     title: "Time is the gift that scales.",
     intro:
       "Volunteers run our leagues, mentor our students, and hold our events together. Here's where you'd fit.",
-    image: "/images/volunteer.jpg",
+    image: "/images/editorial/volunteer.jpg",
   });
 
   return (

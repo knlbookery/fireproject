@@ -17,7 +17,7 @@ export const Route = createFileRoute("/partners")({
       description:
         "The companies, foundations, and civic partners behind F.I.R.E. See who they are, how they support youth programmes in Philadelphia and Ghana, and how your organization can become a partner.",
       path: "/partners",
-      image: "/images/partners.jpg",
+      image: "/images/editorial/partners.jpg",
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
@@ -55,7 +55,7 @@ function PartnersPage() {
     title: "Nothing here was built alone.",
     intro:
       "Corporations, foundations, civic offices, and community advisors fund, supply, and advise the work F.I.R.E. delivers in Philadelphia and Ghana.",
-    image: "/images/partners.jpg",
+    image: "/images/editorial/partners.jpg",
   });
 
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>("All partners");

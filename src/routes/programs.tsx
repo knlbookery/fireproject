@@ -72,7 +72,7 @@ export const Route = createFileRoute("/programs")({
       description:
         "Explore F.I.R.E. programmes: youth sports and wellness, entrepreneurship training, community development, education and mentorship, technology access, and community outreach.",
       path: "/programs",
-      image: "/images/sport.jpg",
+      image: "/images/editorial/sports.jpg",
     }),
   component: ProgramsPage,
 });
@@ -85,7 +85,7 @@ function ProgramsPage() {
     title: "Six programmes. One throughline: opportunity.",
     intro:
       "Each programme is built with local leadership, measured against a public number, and designed to outlast the funding cycle that started it.",
-    image: "/images/sport.jpg",
+    image: "/images/editorial/sports.jpg",
   });
 
   return (

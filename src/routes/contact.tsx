@@ -14,7 +14,7 @@ export const Route = createFileRoute("/contact")({
       description:
         "Get in touch with F.I.R.E. (Free Inspiration Reaching Everyone) about programmes, partnerships, media, or volunteering in Philadelphia and Ghana.",
       path: "/contact",
-      image: "/images/impact.jpg",
+      image: "/images/editorial/impact.jpg",
     }),
   component: ContactPage,
 });
@@ -26,7 +26,7 @@ function ContactPage() {
     title: "Start a conversation.",
     intro:
       "Whether you want to partner, volunteer, or simply understand the work better — we read every message.",
-    image: "/images/impact.jpg",
+    image: "/images/editorial/impact.jpg",
   });
 
   return (

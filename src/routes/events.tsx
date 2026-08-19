@@ -22,7 +22,7 @@ export const Route = createFileRoute("/events")({
       description:
         "Upcoming F.I.R.E. events in Philadelphia and Ghana: youth tournaments, founder workshops, fundraisers, and community days. RSVP online.",
       path: "/events",
-      image: "/images/community.jpg",
+      image: "/images/editorial/community.jpg",
     }),
   component: EventsPage,
 });
@@ -280,7 +280,7 @@ function EventsPage() {
     eyebrow: "Events",
     title: "Show up. Bring someone with you.",
     intro: "Tournaments, workshops, fundraisers and community days across Philadelphia and Ghana.",
-    image: "/images/community.jpg",
+    image: "/images/editorial/community.jpg",
   });
   const calendar = copy("calendar", { eyebrow: "Calendar", title: "Upcoming events." });
 

@@ -42,7 +42,7 @@ export const FALLBACK_ARTICLES: PressArticle[] = [
     excerpt:
       "The new court will host weekly leagues and school tournaments for an estimated 400 young people in its first year.",
     body: "The new court will host weekly leagues and school tournaments for an estimated 400 young people in its first year.\n\nBuilt with local contractors and maintained by a resident-led council, the court is the third F.I.R.E. facility in Greater Accra.",
-    image: "/images/sport.jpg",
+    image: "/images/editorial/sports.jpg",
     category: "Announcement",
   },
   {
@@ -54,7 +54,7 @@ export const FALLBACK_ARTICLES: PressArticle[] = [
     excerpt:
       "The eight-week programme pairs training with micro-grants and twelve months of continued mentorship.",
     body: "The eight-week programme pairs training with micro-grants and twelve months of continued mentorship.\n\nGraduates leave with a costed business plan, a market network, and a mentor matched to their sector.",
-    image: "/images/mission_enterprenuer.jpg",
+    image: "/images/editorial/enterprise.jpg",
     category: "Programme",
   },
   {
@@ -66,7 +66,7 @@ export const FALLBACK_ARTICLES: PressArticle[] = [
     excerpt:
       "Sixty-two students are matched with vetted mentors for a structured year of monthly guidance.",
     body: "Sixty-two students are matched with vetted mentors for a structured year of monthly guidance.\n\nThe expansion doubles the programme's footprint across Philadelphia.",
-    image: "/images/impact.jpg",
+    image: "/images/editorial/impact.jpg",
     category: "Announcement",
   },
 ];

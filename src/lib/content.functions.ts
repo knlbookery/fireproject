@@ -32,15 +32,15 @@ export type LandingContent = {
 /* ------------------------------------------------------------------ */
 
 const FALLBACK_IMAGES: SiteImages = {
-  ghanaAerial: `/images/community_dev.jpg`,
-  volunteers: `/images/impact.jpg`,
-  education: `/images/education.jpg`,
-  progTech: `/images/basketball.jpg`,
-  progYouth: `/images/basketballteam.jpg`,
-  progSports: `/images/sport.jpg`,
-  progBiz: `/images/mission_enterprenuer.jpg`,
-  mission: `/images/mission.jpg`,
-  enterprenuer: `/images/enterprenuers.jpg`,
+  ghanaAerial: `/images/editorial/ghana.jpg`,
+  volunteers: `/images/editorial/impact.jpg`,
+  education: `/images/editorial/education.jpg`,
+  progTech: `/images/editorial/tech.jpg`,
+  progYouth: `/images/editorial/youth.jpg`,
+  progSports: `/images/editorial/sports.jpg`,
+  progBiz: `/images/editorial/enterprise.jpg`,
+  mission: `/images/editorial/mission.jpg`,
+  enterprenuer: `/images/editorial/enterprise.jpg`,
 };
 
 const FALLBACK_HERO: HeroSlide[] = [

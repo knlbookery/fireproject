@@ -13,7 +13,7 @@ export const Route = createFileRoute("/impact")({
       description:
         "Impact is measured in changed lives. See the reach, resources, and outcomes of F.I.R.E. programmes across Philadelphia and Ghana, updated quarterly.",
       path: "/impact",
-      image: "/images/impact.jpg",
+      image: "/images/editorial/impact.jpg",
     }),
   component: ImpactPage,
 });
@@ -36,7 +36,7 @@ function ImpactPage() {
     title: "Impact is measured in changed lives.",
     intro:
       "From education access to youth sports and entrepreneurship support, we meet communities where they are — and publish what happens next.",
-    image: "/images/impact.jpg",
+    image: "/images/editorial/impact.jpg",
   });
 
   return (

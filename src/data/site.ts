@@ -72,7 +72,7 @@ export const PROGRAMS = [
     title: "Sports & Wellness",
     summary:
       "Courts, coaching, and competition that keep young people connected to a team, a routine, and a reason to show up.",
-    image: "/images/sport.jpg",
+    image: "/images/editorial/sports.jpg",
     points: ["Youth basketball leagues", "Coach development", "Equipment and facility grants"],
   },
   {
@@ -81,7 +81,7 @@ export const PROGRAMS = [
     title: "Entrepreneurship",
     summary:
       "Practical business training, mentorship, and micro-capital for founders building livelihoods in their own communities.",
-    image: "/images/mission_enterprenuer.jpg",
+    image: "/images/editorial/enterprise.jpg",
     points: ["Founder bootcamps", "Micro-grant fund", "Market access and mentorship"],
   },
   {
@@ -90,7 +90,7 @@ export const PROGRAMS = [
     title: "Community Development",
     summary:
       "Neighbourhood-scale projects — from clean water to shared spaces — designed with residents, not for them.",
-    image: "/images/community_dev.jpg",
+    image: "/images/editorial/ghana.jpg",
     points: ["Community infrastructure", "Family support drives", "Local leadership councils"],
   },
   {
@@ -99,7 +99,7 @@ export const PROGRAMS = [
     title: "Education & Mentorship",
     summary:
       "Scholarships, tutoring, and one-to-one mentorship that carry students from classroom to career.",
-    image: "/images/capsule1.jpg",
+    image: "/images/editorial/mission.jpg",
     points: ["Scholarship fund", "After-school tutoring", "Career mentorship pairs"],
   },
   {
@@ -108,7 +108,7 @@ export const PROGRAMS = [
     title: "Technology Access",
     summary:
       "Digital literacy labs and device access so the next generation builds with technology rather than around it.",
-    image: "/images/capsule2.jpg",
+    image: "/images/editorial/community.jpg",
     points: ["Computer labs", "Digital skills curriculum", "Device donation programme"],
   },
   {
@@ -117,7 +117,7 @@ export const PROGRAMS = [
     title: "Community Outreach",
     summary:
       "Direct, seasonal support — meals, supplies, and health drives — delivered where the need is most immediate.",
-    image: "/images/impact.jpg",
+    image: "/images/editorial/impact.jpg",
     points: ["Food and supply drives", "Health screenings", "Holiday family support"],
   },
 ];
@@ -222,14 +222,14 @@ export const PRESS_ITEMS = [
 ];
 
 export const GALLERY = [
-  "/images/capsule1.jpg",
-  "/images/capsule2.jpg",
-  "/images/capsule3.jpg",
-  "/images/capsule4.jpg",
-  "/images/basketball.jpg",
-  "/images/impact.jpg",
-  "/images/sport.jpg",
-  "/images/community_dev.jpg",
+  "/images/editorial/mission.jpg",
+  "/images/editorial/community.jpg",
+  "/images/editorial/youth.jpg",
+  "/images/editorial/us.jpg",
+  "/images/editorial/tech.jpg",
+  "/images/editorial/impact.jpg",
+  "/images/editorial/sports.jpg",
+  "/images/editorial/ghana.jpg",
 ];
 
 export const VALUES = [

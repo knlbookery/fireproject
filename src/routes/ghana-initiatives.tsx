@@ -13,7 +13,7 @@ export const Route = createFileRoute("/ghana-initiatives")({
       description:
         "F.I.R.E.'s Ghana initiatives: community courts, school partnerships, founder training, and outreach across Greater Accra and beyond.",
       path: "/ghana-initiatives",
-      image: "/images/community_dev.jpg",
+      image: "/images/editorial/ghana.jpg",
     }),
   component: GhanaPage,
 });
@@ -44,7 +44,7 @@ function GhanaPage() {
     title: "Accra, and everywhere the work travels next.",
     intro:
       "Locally led programmes in sport, education, and enterprise — built with Ghanaian coaches, teachers, and founders.",
-    image: "/images/community_dev.jpg",
+    image: "/images/editorial/ghana.jpg",
   });
 
   return (

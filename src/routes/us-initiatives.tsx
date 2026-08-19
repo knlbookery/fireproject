@@ -12,7 +12,7 @@ export const Route = createFileRoute("/us-initiatives")({
       description:
         "F.I.R.E.'s U.S. work: Philadelphia youth leagues, mentorship cohorts, family support drives, and career pathways for students.",
       path: "/us-initiatives",
-      image: "/images/impact.jpg",
+      image: "/images/editorial/impact.jpg",
     }),
   component: UsPage,
 });
@@ -43,7 +43,7 @@ function UsPage() {
     title: "The neighbourhood where it started.",
     intro:
       "Philadelphia remains our home base — leagues, mentorship, and family support running block by block.",
-    image: "/images/basketball.jpg",
+    image: "/images/editorial/tech.jpg",
   });
 
   return (
