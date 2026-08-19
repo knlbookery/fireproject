@@ -13,7 +13,7 @@ export const Route = createFileRoute("/about")({
       description:
         "F.I.R.E. (Free Inspiration Reaching Everyone) is a 501(c)(3) nonprofit with roots in Philadelphia and Ghana, creating opportunity for young people through sports, education, enterprise and community development.",
       path: "/about",
-      image: "/images/impact.jpg",
+      image: "/images/basketballteam.jpg",
     }),
   component: AboutPage,
 });
@@ -25,7 +25,7 @@ function AboutPage() {
     title: "Rooted in Philadelphia. Growing in Ghana.",
     intro:
       "F.I.R.E. — Free Inspiration Reaching Everyone — exists to put opportunity within reach of young people, wherever they start.",
-    image: "/images/impact.jpg",
+    image: "/images/basketballteam.jpg",
   });
 
   return (
