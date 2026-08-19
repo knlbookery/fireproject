@@ -75,10 +75,10 @@ function PartnersPage() {
         image={hero.image!}
         actions={
           <>
-            <a href="#become-a-partner" className={BTN.primary}>
+            <a href="#become-a-partner" className={BTN.onDarkSolid}>
               Become a partner
             </a>
-            <Link to="/sponsors" className={BTN.secondary}>
+            <Link to="/sponsors" className={BTN.onDarkOutline}>
               See sponsorship tiers
             </Link>
           </>

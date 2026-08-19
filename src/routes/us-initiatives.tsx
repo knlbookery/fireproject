@@ -54,7 +54,7 @@ function UsPage() {
         intro={hero.intro}
         image={hero.image!}
         actions={
-          <Link to="/volunteer" className={BTN.primary}>
+          <Link to="/volunteer" className={BTN.onDarkSolid}>
             Volunteer in Philadelphia
           </Link>
         }

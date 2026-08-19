@@ -47,8 +47,8 @@
   --radius: 4px;
 
   --background: #ffffff;
-  --surface: #e6f0ff;
-  --paper: #eef5ff;
+  --surface: #f4f6f8;
+  --paper: #f4f6f8;
   --ink: #0d1117;
   --foreground: #0d1117;
 
@@ -61,13 +61,13 @@
   --primary: #2f6fed;
   --primary-foreground: #ffffff;
 
-  --secondary: #e6f0ff;
+  --secondary: #f4f6f8;
   --secondary-foreground: #0d1117;
 
   --accent: #cfe0ff;
   --accent-foreground: #0d1117;
 
-  --muted: #eef5ff;
+  --muted: #f4f6f8;
   --muted-foreground: #5b6472;
 
   --destructive: #d64545;

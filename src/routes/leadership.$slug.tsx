@@ -45,11 +45,11 @@ function LeaderPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-surface px-6 pb-16 pt-36 text-ink lg:px-10 lg:pb-20 lg:pt-44">
+      <section className="bg-ink px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
         <div className="mx-auto max-w-[1400px]">
           <Link
             to="/leadership"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-ink"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             All leadership
@@ -58,17 +58,17 @@ function LeaderPage() {
             <img
               src={leader.img}
               alt={`${leader.name}, ${leader.role}`}
-              className="h-40 w-40 shrink-0 rounded-full object-cover ring-4 ring-ink/10"
+              className="h-40 w-40 shrink-0 rounded-full object-cover ring-4 ring-white/15"
               loading="eager"
             />
             <div>
-              <div className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
+              <div className="text-sm font-semibold uppercase tracking-[0.22em] text-accent">
                 {leader.role}
               </div>
               <h1 className="mt-4 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
                 {leader.name}
               </h1>
-              <p className="mt-4 flex items-center gap-1.5 text-sm text-muted-foreground">
+              <p className="mt-4 flex items-center gap-1.5 text-sm text-white/70">
                 <MapPin className="h-4 w-4" aria-hidden="true" />
                 {leader.location}
               </p>

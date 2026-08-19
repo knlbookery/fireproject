@@ -58,7 +58,7 @@ function ImpactPage() {
         intro="Published figures, updated each quarter alongside our public impact report."
         className="bg-surface"
       >
-        <StatGrid stats={IMPACT_STATS} />
+        <StatGrid stats={IMPACT_STATS} onDark />
       </Section>
 
       <Section

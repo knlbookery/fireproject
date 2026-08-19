@@ -48,8 +48,8 @@ export function NewsletterForm() {
 
   if (state === "done") {
     return (
-      <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-5 py-6 text-sm text-foreground">
-        <CheckCircle2 className="h-5 w-5 text-primary" aria-hidden="true" />
+      <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/5 px-5 py-6 text-sm text-white/85">
+        <CheckCircle2 className="h-5 w-5 text-accent" aria-hidden="true" />
         You're on the list. Look out for our next update.
       </div>
     );
@@ -71,7 +71,7 @@ export function NewsletterForm() {
           placeholder="you@example.com"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? "newsletter-error" : undefined}
-          className="w-full rounded-full border border-border bg-card px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="w-full rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm text-white placeholder:text-white/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         />
         <input
           type="text"
@@ -85,14 +85,14 @@ export function NewsletterForm() {
         <button
           type="submit"
           disabled={state === "sending"}
-          className={`${BTN_BASE} shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-60`}
+          className={`${BTN_BASE} shrink-0 bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-60`}
         >
           {state === "sending" ? "Signing up…" : "Subscribe"}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
       {error && (
-        <p id="newsletter-error" role="alert" className="mt-3 text-sm text-primary">
+        <p id="newsletter-error" role="alert" className="mt-3 text-sm text-accent">
           {error}
         </p>
       )}

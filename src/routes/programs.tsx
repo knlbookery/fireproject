@@ -97,10 +97,10 @@ function ProgramsPage() {
         image={hero.image!}
         actions={
           <>
-            <Link to="/donate" className={BTN.primary}>
+            <Link to="/donate" className={BTN.onDarkSolid}>
               Fund a programme
             </Link>
-            <Link to="/volunteer" className={BTN.secondary}>
+            <Link to="/volunteer" className={BTN.onDarkOutline}>
               Volunteer with us
             </Link>
           </>

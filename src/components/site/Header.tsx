@@ -5,6 +5,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { NAV } from "@/data/site";
 
 const fireLogoFull = "/images/firelogo-full.png";
+const fireLogoFullOnDark = "/images/firelogo-full-dark.png";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -44,6 +45,10 @@ export function Header() {
   const isActive = (item: (typeof NAV)[number]) =>
     pathname === item.to || (item.children?.some((c) => c.to === pathname) ?? false);
 
+  // Over the hero the header floats on dark imagery; once scrolled it settles
+  // onto a solid paper bar with ink text.
+  const onDark = !scrolled;
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
@@ -53,7 +58,7 @@ export function Header() {
       <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 py-4 lg:px-10 lg:py-5">
         <Link to="/" className="flex shrink-0 items-center" aria-label="F.I.R.E. home">
           <img
-            src={fireLogoFull}
+            src={onDark ? fireLogoFullOnDark : fireLogoFull}
             alt="F.I.R.E. — Free Inspiration Reaching Everyone"
             width={219}
             height={42}
@@ -125,7 +130,11 @@ export function Header() {
         <div className="flex shrink-0 items-center gap-2">
           <Link
             to="/donate"
-            className="hidden rounded-full border border-ink/20 px-6 py-2.5 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:inline-flex"
+            className={`hidden rounded-full border px-6 py-2.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:inline-flex ${
+              onDark
+                ? "border-white/50 text-white hover:bg-white hover:text-ink"
+                : "border-ink/20 text-ink hover:bg-ink hover:text-white"
+            }`}
           >
             Donate Now
           </Link>
@@ -139,7 +148,9 @@ export function Header() {
             className={`relative z-[60] grid h-11 w-11 place-items-center rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:hidden ${
               open
                 ? "border-ink/15 bg-white text-ink"
-                : "border-ink/15 text-ink"
+                : onDark
+                  ? "border-white/40 text-white"
+                  : "border-ink/15 text-ink"
             }`}
           >
             {open ? (
