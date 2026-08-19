@@ -99,8 +99,8 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       />
 
 
-      <div className="relative z-10 mx-auto flex h-full min-h-[680px] max-w-[1600px] flex-col justify-end px-6 pb-12 pt-40 text-white lg:min-h-0 lg:px-10 lg:pb-14">
-        <div className="max-w-3xl" key={safeIdx}>
+      <div className="relative z-10 mx-auto flex h-full min-h-[680px] max-w-[1600px] flex-col justify-end px-6 pb-12 pt-40 text-white lg:min-h-0 lg:px-10 lg:pb-14 lg:pt-48 xl:pt-56">
+        <div className="max-w-3xl xl:max-w-4xl" key={safeIdx}>
           <span className="animate-hero-text" style={{ animationDelay: "60ms" }}>
             <Eyebrow onDark>{slide.eyebrow}</Eyebrow>
           </span>
