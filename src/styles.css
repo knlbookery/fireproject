@@ -18,6 +18,8 @@
   --color-surface: var(--surface);
   --color-ink: var(--ink);
   --color-paper: var(--paper);
+  --color-sky: var(--sky);
+  --color-sky-deep: var(--sky-deep);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -49,6 +51,8 @@
   --background: #ffffff;
   --surface: #f4f6f8;
   --paper: #f4f6f8;
+  --sky: #e9f1fd;
+  --sky-deep: #d8e6fb;
   --ink: #0d1117;
   --foreground: #0d1117;
 
