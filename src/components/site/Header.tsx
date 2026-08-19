@@ -1,22 +1,29 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, Heart } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 
 import { NAV } from "@/data/site";
-import { BTN } from "./ui";
 
 const fireLogoFull = "/images/firelogo-full.png";
-const fireLogoIcon = "/images/firelogo2.png";
+const fireLogoFullOnDark = "/images/firelogo-full-dark.png";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
     setOpen(false);
     setOpenGroup(null);
   }, [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -28,34 +35,41 @@ export function Header() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const isActive = (item: (typeof NAV)[number]) =>
     pathname === item.to || (item.children?.some((c) => c.to === pathname) ?? false);
 
+  // Over the hero the header floats on dark imagery; once scrolled it settles
+  // onto a solid paper bar with ink text.
+  const onDark = !scrolled;
+
   return (
-    <header className="fixed inset-x-0 top-3 z-50 px-3 sm:top-4 sm:px-4">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between rounded-full border border-black/10 bg-white px-4 py-2.5 shadow-md sm:px-5">
-        <Link to="/" className="flex items-center gap-3" aria-label="F.I.R.E. home">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
+        scrolled ? "border-b border-border bg-background/95 backdrop-blur-md" : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 py-4 lg:px-10 lg:py-5">
+        <Link to="/" className="flex shrink-0 items-center" aria-label="F.I.R.E. home">
           <img
-            src={fireLogoFull}
+            src={onDark ? fireLogoFullOnDark : fireLogoFull}
             alt="F.I.R.E. — Free Inspiration Reaching Everyone"
             width={219}
             height={42}
-            className="hidden h-[42px] w-auto object-contain lg:block"
+            className="h-9 w-auto object-contain sm:h-10"
           />
-          <img
-            src={fireLogoIcon}
-            alt=""
-            aria-hidden="true"
-            width={39}
-            height={35}
-            className="h-[35px] w-auto object-contain lg:hidden"
-          />
-          <span className="font-display text-base font-extrabold leading-tight tracking-tight text-primary lg:hidden">
-            F.I.R.E.
-          </span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-6 text-sm lg:flex">
+        <nav
+          aria-label="Primary"
+          className="hidden rounded-full bg-white px-2 py-1.5 shadow-[0_10px_30px_-14px_rgba(13,17,23,0.35)] lg:flex lg:items-center"
+        >
           {NAV.map((item) => {
             const active = isActive(item);
             if (!item.children) {
@@ -64,16 +78,11 @@ export function Header() {
                   key={item.to}
                   to={item.to}
                   aria-current={pathname === item.to ? "page" : undefined}
-                  className={`relative rounded-sm py-1 transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                    active ? "font-medium text-primary" : "text-foreground/75"
+                  className={`rounded-full px-4 py-2 text-sm transition-colors hover:bg-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    active ? "bg-paper font-medium text-ink" : "text-ink/70"
                   }`}
                 >
                   {item.label}
-                  <span
-                    className={`pointer-events-none absolute -bottom-0.5 left-0 h-[2px] rounded-full bg-primary transition-all duration-300 ${
-                      active ? "w-full opacity-100" : "w-0 opacity-0"
-                    }`}
-                  />
                 </Link>
               );
             }
@@ -88,8 +97,8 @@ export function Header() {
                   type="button"
                   aria-expanded={openGroup === item.label}
                   onClick={() => setOpenGroup((g) => (g === item.label ? null : item.label))}
-                  className={`flex items-center gap-1 rounded-sm py-1 transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                    active ? "font-medium text-primary" : "text-foreground/75"
+                  className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm transition-colors hover:bg-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    active ? "bg-paper font-medium text-ink" : "text-ink/70"
                   }`}
                 >
                   {item.label}
@@ -97,14 +106,14 @@ export function Header() {
                 </button>
                 {openGroup === item.label && (
                   <div className="absolute left-1/2 top-full z-50 w-60 -translate-x-1/2 pt-3">
-                    <div className="overflow-hidden rounded-2xl border border-black/10 bg-white p-2 shadow-xl">
+                    <div className="overflow-hidden rounded-2xl border border-border bg-white p-1.5">
                       {item.children.map((c) => (
                         <Link
                           key={c.to}
                           to={c.to}
                           aria-current={pathname === c.to ? "page" : undefined}
-                          className={`block rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                            pathname === c.to ? "text-primary" : "text-foreground/80"
+                          className={`block rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                            pathname === c.to ? "text-primary" : "text-ink/75"
                           }`}
                         >
                           {c.label}
@@ -119,17 +128,16 @@ export function Header() {
         </nav>
 
         <div className="flex shrink-0 items-center gap-2">
-          <span className="hidden xl:block">
-            <Link to="/volunteer" className={BTN.secondary}>
-              Volunteer
-            </Link>
-          </span>
-          <span className="hidden lg:block">
-            <Link to="/donate" className={BTN.primary}>
-              <Heart className="h-4 w-4" aria-hidden="true" />
-              Donate
-            </Link>
-          </span>
+          <Link
+            to="/donate"
+            className={`hidden rounded-full border px-6 py-2.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:inline-flex ${
+              onDark
+                ? "border-white/50 text-white hover:bg-white hover:text-ink"
+                : "border-ink/20 text-ink hover:bg-ink hover:text-white"
+            }`}
+          >
+            Donate Now
+          </Link>
 
           <button
             type="button"
@@ -137,54 +145,70 @@ export function Header() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((o) => !o)}
-            className="relative z-50 grid h-10 w-10 place-items-center rounded-full bg-white text-foreground shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:hidden"
+            className={`relative z-[60] grid h-11 w-11 place-items-center rounded-full border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:hidden ${
+              open
+                ? "border-ink/15 bg-white text-ink"
+                : onDark
+                  ? "border-white/40 text-white"
+                  : "border-ink/15 text-ink"
+            }`}
           >
-            <span className="text-2xl font-bold leading-none">{open ? "×" : "≡"}</span>
+            {open ? (
+              <X className="h-5 w-5" aria-hidden="true" />
+            ) : (
+              <Menu className="h-5 w-5" aria-hidden="true" />
+            )}
           </button>
         </div>
       </div>
 
       {open && (
-        <nav
+        <div
           id="mobile-nav"
-          aria-label="Mobile navigation"
-          className="mx-auto mt-2 flex max-h-[75vh] max-w-[1400px] flex-col gap-1 overflow-y-auto rounded-2xl border border-black/10 bg-white/95 p-4 shadow-xl backdrop-blur-md lg:hidden"
+          className="fixed inset-0 z-50 flex h-[100dvh] flex-col bg-background lg:hidden"
         >
-          <Link
-            to="/"
-            aria-current={pathname === "/" ? "page" : undefined}
-            className="rounded-lg px-3 py-2.5 text-base text-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          <nav
+            aria-label="Mobile navigation"
+            className="flex-1 overflow-y-auto px-6 pb-6 pt-24"
           >
-            Home
-          </Link>
-          {NAV.flatMap((item) =>
-            item.children
-              ? item.children.map((c) => ({ label: c.label, to: c.to }))
-              : [{ label: item.label, to: item.to }],
-          ).map((i) => (
             <Link
-              key={i.to}
-              to={i.to}
-              aria-current={pathname === i.to ? "page" : undefined}
-              className={`rounded-lg px-3 py-2.5 text-base transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                pathname === i.to
-                  ? "bg-primary/10 font-semibold text-primary"
-                  : "text-foreground/80 hover:bg-black/5"
-              }`}
+              to="/"
+              className="block border-b border-border py-4 font-display text-3xl font-light tracking-tight text-ink"
             >
-              {i.label}
+              Home
             </Link>
-          ))}
-          <div className="mt-2 flex flex-col gap-2 border-t border-black/5 pt-3">
-            <Link to="/volunteer" className={`w-full ${BTN.secondary}`}>
+            {NAV.flatMap((item) =>
+              item.children
+                ? item.children.map((c) => ({ label: c.label, to: c.to }))
+                : [{ label: item.label, to: item.to }],
+            ).map((i) => (
+              <Link
+                key={i.to}
+                to={i.to}
+                aria-current={pathname === i.to ? "page" : undefined}
+                className={`block border-b border-border py-4 font-display text-3xl font-light tracking-tight transition-colors ${
+                  pathname === i.to ? "text-primary" : "text-ink"
+                }`}
+              >
+                {i.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex flex-col gap-3 border-t border-border px-6 py-6">
+            <Link
+              to="/volunteer"
+              className="rounded-full border border-ink/20 px-6 py-3 text-center text-sm font-medium text-ink"
+            >
               Volunteer with us
             </Link>
-            <Link to="/donate" className={`w-full ${BTN.primary}`}>
-              <Heart className="h-4 w-4" aria-hidden="true" />
-              Donate
+            <Link
+              to="/donate"
+              className="rounded-full bg-ink px-6 py-3 text-center text-sm font-medium text-white"
+            >
+              Donate Now
             </Link>
           </div>
-        </nav>
+        </div>
       )}
     </header>
   );
