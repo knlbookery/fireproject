@@ -45,9 +45,9 @@ export function Header() {
   const isActive = (item: (typeof NAV)[number]) =>
     pathname === item.to || (item.children?.some((c) => c.to === pathname) ?? false);
 
-  // Over the hero the header floats on dark imagery; once scrolled it settles
-  // onto a solid paper bar with ink text.
-  const onDark = !scrolled;
+  // Heroes now render on a light-blue canvas, so the header always uses ink
+  // treatment; scrolling only adds the solid bar + border.
+  const onDark = false;
 
   return (
     <header
