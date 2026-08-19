@@ -114,7 +114,7 @@ function PressArticlePage() {
   return (
     <SiteLayout>
       <article>
-        <header className="bg-ink px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
+        <header className="bg-sky px-6 pb-16 pt-36 text-ink lg:px-10 lg:pb-20 lg:pt-44">
           <div className="mx-auto max-w-3xl">
             <Link
               to="/press"
@@ -126,7 +126,7 @@ function PressArticlePage() {
             <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight lg:text-6xl">
               {article.title}
             </h1>
-            <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-white/70">
+            <div className="mt-6 flex flex-wrap items-center gap-5 text-sm text-ink/70">
               {article.displayDate && (
                 <span className="inline-flex items-center gap-2">
                   <CalendarDays className="h-4 w-4" aria-hidden="true" />
