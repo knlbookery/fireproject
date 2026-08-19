@@ -130,6 +130,11 @@ export function PageHero({
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-gradient-to-r from-ink via-ink/70 to-ink/20"
       />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-background to-transparent"
+      />
+
       <div className={`${SHELL} w-full`}>
         <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-end">
           <div>
@@ -199,9 +204,16 @@ export function FullBleedBand({
 }) {
   return (
     <section className="grid items-stretch lg:grid-cols-2">
-      <div className={`relative min-h-[320px] lg:min-h-[620px] ${reverse ? "lg:order-2" : ""}`}>
-        <img src={image} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+      <div className={`relative min-h-[320px] bg-background lg:min-h-[620px] ${reverse ? "lg:order-2" : ""}`}>
+        <img
+          src={image}
+          alt=""
+          aria-hidden="true"
+          className="fade-edges-white absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
       </div>
+
       <div
         className={`flex items-center bg-ink px-6 py-20 text-white lg:px-16 lg:py-24 ${
           reverse ? "lg:order-1" : ""
