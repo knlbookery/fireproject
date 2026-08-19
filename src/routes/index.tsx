@@ -22,7 +22,7 @@ export const Route = createFileRoute("/")({
       description:
         "F.I.R.E. (Free Inspiration Reaching Everyone) is a nonprofit creating opportunity through education, technology, sports, entrepreneurship, and community development across Ghana and the United States.",
       path: "/",
-      image: "/images/impact.jpg",
+      image: "/images/editorial/impact.jpg",
       jsonLd: ORGANIZATION_JSONLD,
     }),
   loader: ({ context }) => context.queryClient.ensureQueryData(landingContentQuery),
@@ -233,14 +233,14 @@ const PLACES = [
     label: "Philadelphia, U.S.",
     title: "Neighbourhood work, block by block.",
     body: "Coaching, mentorship, and family support delivered through schools, rec centres, and civic partners across the city.",
-    image: "/images/basketballteam.jpg",
+    image: "/images/editorial/youth.jpg",
   },
   {
     to: "/ghana-initiatives",
     label: "Accra, Ghana",
     title: "Courts, classrooms, and capital.",
     body: "Community courts, digital literacy labs, and micro-grants built with resident-led councils in Greater Accra.",
-    image: "/images/community_dev.jpg",
+    image: "/images/editorial/ghana.jpg",
   },
 ] as const;
 

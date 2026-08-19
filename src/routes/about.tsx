@@ -13,7 +13,7 @@ export const Route = createFileRoute("/about")({
       description:
         "F.I.R.E. (Free Inspiration Reaching Everyone) is a 501(c)(3) nonprofit with roots in Philadelphia and Ghana, creating opportunity for young people through sports, education, enterprise and community development.",
       path: "/about",
-      image: "/images/basketballteam.jpg",
+      image: "/images/editorial/youth.jpg",
     }),
   component: AboutPage,
 });
@@ -25,7 +25,7 @@ function AboutPage() {
     title: "Rooted in Philadelphia. Growing in Ghana.",
     intro:
       "F.I.R.E. — Free Inspiration Reaching Everyone — exists to put opportunity within reach of young people, wherever they start.",
-    image: "/images/basketballteam.jpg",
+    image: "/images/editorial/youth.jpg",
   });
 
   return (
@@ -59,19 +59,19 @@ function AboutPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <img
-              src="/images/capsule1.jpg"
+              src="/images/editorial/mission.jpg"
               alt="Young people at a F.I.R.E. community programme"
               className="col-span-2 h-64 w-full rounded-3xl object-cover"
               loading="lazy"
             />
             <img
-              src="/images/sport.jpg"
+              src="/images/editorial/sports.jpg"
               alt="Youth sports session in progress"
               className="h-48 w-full rounded-3xl object-cover"
               loading="lazy"
             />
             <img
-              src="/images/community_dev.jpg"
+              src="/images/editorial/ghana.jpg"
               alt="Community development project"
               className="h-48 w-full rounded-3xl object-cover"
               loading="lazy"

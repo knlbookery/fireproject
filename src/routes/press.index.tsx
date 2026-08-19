@@ -17,7 +17,7 @@ export const Route = createFileRoute("/press/")({
       description:
         "Press releases, media coverage, and press contact details for F.I.R.E. (Free Inspiration Reaching Everyone).",
       path: "/press",
-      image: "/images/press.jpg",
+      image: "/images/editorial/press.jpg",
     }),
   component: PressPage,
 });
@@ -29,7 +29,7 @@ function PressPage() {
     title: "The work, on the record.",
     intro:
       "Announcements, coverage, and everything a journalist needs to write about F.I.R.E. accurately.",
-    image: "/images/press.jpg",
+    image: "/images/editorial/press.jpg",
   });
   const releases = copy("releases", {
     eyebrow: "Announcements",

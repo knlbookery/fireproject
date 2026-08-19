@@ -14,7 +14,7 @@ export const Route = createFileRoute("/donate")({
       description:
         "Support F.I.R.E. with a secure one-time or monthly gift. 100% of your donation reaches youth sports, education, and enterprise programmes in Philadelphia and Ghana.",
       path: "/donate",
-      image: "/images/impact.jpg",
+      image: "/images/editorial/impact.jpg",
     }),
   component: DonatePage,
 });
@@ -26,7 +26,7 @@ function DonatePage() {
     title: "Give inspiration that changes lives.",
     intro:
       "Join us in creating change. Every act of kindness, every dollar, and every moment of your time brings us closer to our mission.",
-    image: "/images/donate.jpg",
+    image: "/images/editorial/community.jpg",
   });
 
   useEffect(() => {

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/mission")({
       description:
         "F.I.R.E. creates opportunity where potential already lives — investing in education, technology, sports, and entrepreneurship alongside communities in Ghana and the United States.",
       path: "/mission",
-      image: "/images/capsule1.jpg",
+      image: "/images/editorial/mission.jpg",
     }),
   component: MissionPage,
 });
@@ -26,7 +26,7 @@ function MissionPage() {
     title: "We create opportunity where potential already lives.",
     intro:
       "F.I.R.E. — Free Inspiration Reaching Everyone — works alongside communities in Ghana and the United States, investing in education, technology, sports, and entrepreneurship.",
-    image: "/images/capsule1.jpg",
+    image: "/images/editorial/mission.jpg",
   });
 
   return (

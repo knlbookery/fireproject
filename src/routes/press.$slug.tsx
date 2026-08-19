@@ -20,7 +20,7 @@ export const Route = createFileRoute("/press/$slug")({
       description:
         fallback?.excerpt ?? "A press release from F.I.R.E. (Free Inspiration Reaching Everyone).",
       path: `/press/${params.slug}`,
-      image: fallback?.image ?? "/images/press.jpg",
+      image: fallback?.image ?? "/images/editorial/press.jpg",
       type: "article",
       jsonLd: {
         "@context": "https://schema.org",

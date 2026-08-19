@@ -159,3 +159,13 @@
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-50%, 0, 0); }
 }
+
+/* --- Editorial image blending into the white page --------------------- */
+@utility fade-b-white {
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+}
+@utility fade-edges-white {
+  -webkit-mask-image: radial-gradient(120% 110% at 50% 45%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(120% 110% at 50% 45%, #000 58%, transparent 100%);
+}
