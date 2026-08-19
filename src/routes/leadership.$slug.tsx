@@ -45,7 +45,7 @@ function LeaderPage() {
 
   return (
     <SiteLayout>
-      <section className="bg-[#0b1230] px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
+      <section className="bg-ink px-6 pb-16 pt-36 text-white lg:px-10 lg:pb-20 lg:pt-44">
         <div className="mx-auto max-w-[1400px]">
           <Link
             to="/leadership"

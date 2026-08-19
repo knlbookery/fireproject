@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ORGANIZATION_JSONLD, pageHead } from "@/lib/seo";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { CTABand, Section as SiteSection } from "@/components/site/ui";
+import { CTABand, Eyebrow, Section as SiteSection } from "@/components/site/ui";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
@@ -108,11 +108,11 @@ export const Route = createFileRoute("/")({
 const BTN_BASE =
   "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 const BTN = {
-  primary: `${BTN_BASE} bg-primary text-primary-foreground hover:bg-primary/90`,
-  secondary: `${BTN_BASE} border border-foreground/15 text-foreground hover:bg-foreground/5`,
-  dark: `${BTN_BASE} bg-foreground text-background hover:opacity-90`,
-  onDarkOutline: `${BTN_BASE} border border-white/30 text-white hover:bg-white/10`,
-  onDarkSolid: `${BTN_BASE} bg-white text-primary hover:bg-white/90`,
+  primary: `${BTN_BASE} bg-ink text-white hover:bg-ink/90`,
+  secondary: `${BTN_BASE} border border-ink/20 text-ink hover:bg-paper`,
+  dark: `${BTN_BASE} bg-ink text-white hover:opacity-90`,
+  onDarkOutline: `${BTN_BASE} border border-white/40 text-white hover:bg-white hover:text-ink`,
+  onDarkSolid: `${BTN_BASE} bg-white text-ink hover:bg-white/90`,
 } as const;
 
 /* ---------------------- Landing Component ---------------------- */
@@ -237,7 +237,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative min-h-[760px] w-full overflow-hidden bg-black focus:outline-none lg:h-screen"
+      className="relative min-h-[720px] w-full overflow-hidden bg-ink focus:outline-none lg:h-[100svh]"
     >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         Slide {safeIdx + 1} of {SLIDES.length}: {SLIDES[safeIdx].title}
@@ -249,71 +249,71 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           aria-roledescription="slide"
           aria-label={`${i + 1} of ${SLIDES.length}: ${s.eyebrow}`}
           aria-hidden={i !== safeIdx}
-          className={`absolute inset-0 transition-[opacity,transform] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            i === safeIdx ? "scale-100 opacity-100" : "scale-[1.04] opacity-0"
+          className={`absolute inset-0 transition-opacity duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            i === safeIdx ? "opacity-100" : "opacity-0"
           }`}
         >
           <img
             key={`${s.title}-${i === safeIdx ? "on" : "off"}`}
             src={s.image}
             alt={s.alt}
-            className={`absolute inset-0 h-full w-full object-cover ${i === safeIdx ? "animate-ken-burns" : "scale-[1.06]"}`}
+            className={`absolute inset-0 h-full w-full object-cover ${i === safeIdx ? "animate-ken-burns" : "scale-[1.04]"}`}
             loading={i === 0 ? "eager" : "lazy"}
             fetchPriority={i === 0 ? "high" : "auto"}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/15" />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/80 to-transparent"
+          />
         </div>
       ))}
 
-
-      <div className="relative z-10 mx-auto flex h-full max-w-[1400px] flex-col justify-end px-6 pb-24 pt-52 text-white sm:pt-56 lg:px-10 lg:pb-40 lg:pt-56">
-        <div className="max-w-2xl" key={safeIdx}>
-          <span
-            className="animate-hero-text inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.22em] text-white/85"
-            style={{ animationDelay: "60ms" }}
-          >
-            <span className="h-px w-8 bg-white/60" aria-hidden="true" /> {SLIDES[safeIdx].eyebrow}
+      <div className="relative z-10 mx-auto flex h-full min-h-[720px] max-w-[1600px] flex-col justify-end px-6 pb-14 pt-40 text-white lg:min-h-0 lg:px-10 lg:pb-16">
+        <div className="max-w-3xl" key={safeIdx}>
+          <span className="animate-hero-text" style={{ animationDelay: "60ms" }}>
+            <Eyebrow onDark>{SLIDES[safeIdx].eyebrow}</Eyebrow>
           </span>
           {/*
             whitespace-pre-line renders real newlines typed into the Airtable
             field as line breaks, while still collapsing incidental runs of
-            spaces. This is deliberately not HTML: the values are interpolated
-            as text so React escapes them, and a <br/> typed into Airtable
-            shows up as literal characters rather than markup. Rendering these
-            as HTML would need dangerouslySetInnerHTML, which would make every
-            Airtable text field an XSS vector — see CLAUDE.md's requirement
-            that public Airtable content is sanitized.
+            spaces. Values are interpolated as text so React escapes them —
+            rendering them as HTML would make every Airtable field an XSS
+            vector (see CLAUDE.md).
           */}
           {safeIdx === 0 ? (
             <h1
-              className="animate-hero-text mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              className="animate-hero-text mt-7 whitespace-pre-line font-display text-[2.75rem] font-light leading-[0.98] tracking-tight sm:text-6xl lg:text-[5.5rem]"
               style={{ animationDelay: "160ms" }}
             >
               {SLIDES[safeIdx].title}
             </h1>
           ) : (
             <p
-              className="animate-hero-text mt-5 whitespace-pre-line font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+              className="animate-hero-text mt-7 whitespace-pre-line font-display text-[2.75rem] font-light leading-[0.98] tracking-tight sm:text-6xl lg:text-[5.5rem]"
               style={{ animationDelay: "160ms" }}
             >
               {SLIDES[safeIdx].title}
             </p>
           )}
           <p
-            className="animate-hero-text mt-5 max-w-xl whitespace-pre-line text-base text-white/85 sm:text-lg"
+            className="animate-hero-text mt-6 max-w-lg whitespace-pre-line text-base leading-relaxed text-white/75"
             style={{ animationDelay: "280ms" }}
           >
             {SLIDES[safeIdx].subtitle}
           </p>
           <div
-            className="animate-hero-text mt-8 flex flex-wrap items-center gap-3"
+            className="animate-hero-text mt-9 flex flex-wrap items-center gap-3"
             style={{ animationDelay: "400ms" }}
           >
             {SLIDES[safeIdx].cta.map((c) => (
               <a
                 key={c.label}
                 href={c.href}
-                className={`group ${c.primary ? BTN.primary : BTN.onDarkOutline}`}
+                className={`group ${c.primary ? BTN.onDarkSolid : BTN.onDarkOutline}`}
               >
                 {c.label}
                 <ArrowRight
@@ -325,9 +325,8 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           </div>
         </div>
 
-
-        <div className="mt-12 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2" role="tablist" aria-label="Select slide">
+        <div className="mt-14 flex items-end justify-between gap-6 border-t border-white/15 pt-6">
+          <div className="flex items-center gap-3" role="tablist" aria-label="Select slide">
             {SLIDES.map((s, i) => (
               <button
                 key={i}
@@ -336,31 +335,37 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
                 aria-selected={i === safeIdx}
                 aria-label={`Go to slide ${i + 1}: ${s.eyebrow}`}
                 onClick={() => go(i)}
-                className={`relative h-1.5 overflow-hidden rounded-full transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black ${i === safeIdx ? "w-12 bg-white/30" : "w-5 bg-white/40 hover:bg-white/70"}`}
+                className="group flex flex-col gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                {i === safeIdx && (
-                  <span
-                    key={`${safeIdx}-${paused}`}
-                    aria-hidden="true"
-                    className="absolute inset-0 origin-left rounded-full bg-white"
-                    style={{
-                      animation: paused
-                        ? undefined
-                        : "slide-progress 6500ms linear forwards",
-                      transform: paused ? "scaleX(1)" : undefined,
-                    }}
-                  />
-                )}
+                <span className="text-[11px] uppercase tracking-[0.18em] text-white/50 transition group-hover:text-white/80">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className={`relative h-px overflow-hidden transition-all duration-500 ${
+                    i === safeIdx ? "w-14 bg-white/30" : "w-7 bg-white/25 group-hover:bg-white/60"
+                  }`}
+                >
+                  {i === safeIdx && (
+                    <span
+                      key={`${safeIdx}-${paused}`}
+                      aria-hidden="true"
+                      className="absolute inset-0 origin-left bg-white"
+                      style={{
+                        animation: paused ? undefined : "slide-progress 6500ms linear forwards",
+                        transform: paused ? "scaleX(1)" : undefined,
+                      }}
+                    />
+                  )}
+                </span>
               </button>
             ))}
-
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
               aria-label="Previous slide"
               onClick={() => go(safeIdx - 1)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             </button>
@@ -368,7 +373,7 @@ function Hero({ slides: SLIDES }: { slides: HeroSlide[] }) {
               type="button"
               aria-label="Next slide"
               onClick={() => go(safeIdx + 1)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-white/5 text-white backdrop-blur transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             </button>
@@ -396,21 +401,23 @@ function Section({
   className?: string;
 }) {
   return (
-    <section id={id} className={`px-6 pt-24 pb-10 lg:px-10 lg:pt-32 lg:pb-10 ${className}`}>
+    <section id={id} className={`px-6 py-24 lg:px-10 lg:py-32 ${className}`}>
       <div className="mx-auto max-w-[1400px]">
         {(eyebrow || title) && (
-          <div className="mb-16 max-w-3xl">
-            {eyebrow && (
-              <div className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
-                {eyebrow}
-              </div>
+          <div className="mb-16 grid gap-8 border-t border-border pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+            <div>
+              {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+              {title && (
+                <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
+                  {title}
+                </h2>
+              )}
+            </div>
+            {intro && (
+              <p className="measure text-base leading-relaxed text-muted-foreground lg:pb-2">
+                {intro}
+              </p>
             )}
-            {title && (
-              <h2 className="mt-5 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
-                {title}
-              </h2>
-            )}
-            {intro && <p className="mt-6 text-lg text-muted-foreground">{intro}</p>}
           </div>
         )}
         {children}
@@ -621,7 +628,7 @@ function Impact() {
   ];
   return (
     <section id="impact" className="px-6 py-28 lg:px-10 lg:py-36">
-      <div className="mx-auto max-w-[1400px] overflow-hidden rounded-3xl bg-[#0b1230] text-white">
+      <div className="mx-auto max-w-[1400px] overflow-hidden rounded-3xl bg-ink text-white">
         <div className="grid grid-cols-1 lg:grid-cols-12">
           <div className="p-10 lg:col-span-5 lg:p-14">
             <div className="text-xs font-medium uppercase tracking-[0.22em] text-accent">
@@ -1807,7 +1814,7 @@ function Partners() {
         </div>
       </div>
 
-      <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl bg-gradient-to-br from-[#0b1230] via-[#0b1230] to-[#1a2a6b] px-8 py-10 text-white md:flex-row md:items-center md:px-12">
+      <div className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl bg-ink px-8 py-10 text-white md:flex-row md:items-center md:px-12">
         <div>
           <div className="font-display text-2xl font-medium tracking-tight text-white">
             Become a partner.

@@ -16,6 +16,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -34,44 +36,46 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-glass: 0 10px 30px -10px rgba(15, 23, 42, 0.12), 0 2px 6px -2px rgba(36, 87, 255, 0.08);
-  --shadow-soft: 0 30px 60px -30px rgba(36, 87, 255, 0.25);
+  --shadow-glass: 0 10px 30px -12px rgba(13, 17, 23, 0.14), 0 2px 6px -2px rgba(13, 17, 23, 0.06);
+  --shadow-soft: 0 30px 60px -30px rgba(13, 17, 23, 0.28);
 }
 
 :root {
-  --radius: 5px;
+  --radius: 4px;
 
-  --background: oklch(1 0 0);                /* #FFFFFF */
-  --surface: oklch(0.984 0.012 250);         /* #F7FAFF */
-  --foreground: oklch(0.21 0.04 264);        /* #0F172A */
+  --background: #ffffff;
+  --surface: #f4f6f8;
+  --paper: #f4f6f8;
+  --ink: #0d1117;
+  --foreground: #0d1117;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.04 264);
+  --card: #ffffff;
+  --card-foreground: #0d1117;
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.04 264);
+  --popover: #ffffff;
+  --popover-foreground: #0d1117;
 
-  --primary: oklch(0.55 0.25 263);           /* #2457FF */
-  --primary-foreground: oklch(1 0 0);
+  --primary: #2f6fed;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.97 0.015 250);
-  --secondary-foreground: oklch(0.21 0.04 264);
+  --secondary: #f4f6f8;
+  --secondary-foreground: #0d1117;
 
-  --accent: oklch(0.82 0.16 85);             /* #F5B400 */
-  --accent-foreground: oklch(0.21 0.04 264);
+  --accent: #cfe0ff;
+  --accent-foreground: #0d1117;
 
-  --muted: oklch(0.97 0.012 250);
-  --muted-foreground: oklch(0.5 0.03 257);
+  --muted: #f4f6f8;
+  --muted-foreground: #5b6472;
 
-  --destructive: oklch(0.62 0.22 27);
-  --destructive-foreground: oklch(1 0 0);
+  --destructive: #d64545;
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.55 0.25 263 / 0.08);
-  --input: oklch(0.55 0.25 263 / 0.12);
-  --ring: oklch(0.55 0.25 263 / 0.4);
+  --border: rgba(13, 17, 23, 0.1);
+  --input: rgba(13, 17, 23, 0.14);
+  --ring: rgba(47, 111, 237, 0.45);
 }
 
 @layer base {
@@ -82,27 +86,32 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "ss01", "cv11";
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    font-weight: 300;
   }
 }
 
+/* Editorial measure for long-form article bodies */
+@utility measure { max-width: 68ch; }
+
+@utility hairline { border-top: 1px solid var(--color-border); }
+
 @utility glass-card {
-  background: color-mix(in oklab, white 70%, transparent);
+  background: color-mix(in oklab, white 72%, transparent);
   backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(36, 87, 255, 0.08);
+  border: 1px solid rgba(13, 17, 23, 0.08);
   box-shadow: var(--shadow-glass);
 }
 
 @utility soft-surface {
-  background: linear-gradient(180deg, #ffffff 0%, #F7FAFF 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f4f6f8 100%);
 }
 
 @utility text-gradient-brand {
-  background: linear-gradient(135deg, #2457FF 0%, #6A8BFF 100%);
+  background: linear-gradient(135deg, #2f6fed 0%, #7ea6ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -121,11 +130,11 @@
 
 /* --- Advanced slide / scroll motion ---------------------------------- */
 @keyframes ken-burns {
-  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
-  100% { transform: scale(1.16) translate3d(-1.2%, -1.4%, 0); }
+  0%   { transform: scale(1.04) translate3d(0, 0, 0); }
+  100% { transform: scale(1.13) translate3d(-1%, -1.2%, 0); }
 }
 @keyframes hero-text-in {
-  0%   { opacity: 0; transform: translate3d(0, 26px, 0); filter: blur(6px); }
+  0%   { opacity: 0; transform: translate3d(0, 22px, 0); filter: blur(6px); }
   100% { opacity: 1; transform: none; filter: blur(0); }
 }
 @keyframes slide-progress {
@@ -133,7 +142,7 @@
   to   { transform: scaleX(1); }
 }
 
-@utility animate-ken-burns { animation: ken-burns 9s ease-out forwards; }
+@utility animate-ken-burns { animation: ken-burns 12s ease-out forwards; }
 @utility animate-hero-text {
   animation: hero-text-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -144,22 +153,4 @@
     animation: none !important;
   }
   html { scroll-behavior: auto; }
-}
-
-
-
-@layer base {
-  /* Enforce Montserrat 500 on all H2 headings */
-  h2, 
-  section h2 {
-    font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif !important;
-    font-weight: 500 !important;
-  }
-
-  /* Enforce Montserrat 500 on Hero paragraph elements */
-  .hero-slider p,
-  section:first-of-type p {
-    font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif !important;
-    font-weight: 500 !important;
-  }
 }

@@ -37,7 +37,7 @@ function LeadershipPage() {
     title: "The people accountable for the work.",
     intro:
       "A cross-border team of operators, builders, and community organisers leading F.I.R.E. across the United States and Ghana.",
-    image: "/images/impact.jpg",
+    image: "/images/portrait1.jpg",
   });
 
   return (

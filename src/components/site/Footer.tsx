@@ -42,7 +42,7 @@ const COLUMNS: { heading: string; links: { label: string; to: string }[] }[] = [
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[#0b1230] px-6 pb-10 pt-16 text-white lg:px-10 lg:pt-20">
+    <footer className="w-full bg-ink px-6 pb-10 pt-16 text-white lg:px-10 lg:pt-20">
       <div className="mx-auto max-w-[1400px]">
         <div className="grid gap-12 border-b border-white/10 pb-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
@@ -77,7 +77,7 @@ export function Footer() {
           <div className="grid gap-10 sm:grid-cols-3">
             {COLUMNS.map((col) => (
               <nav key={col.heading} aria-label={col.heading}>
-                <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                <h2 className="text-[0.7rem] font-medium uppercase tracking-[0.24em] text-white/45">
                   {col.heading}
                 </h2>
                 <ul className="mt-4 space-y-2.5 text-sm">
@@ -99,7 +99,7 @@ export function Footer() {
 
         <div className="grid gap-10 border-b border-white/10 py-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <h2 className="font-display text-2xl font-bold tracking-tight">Stay in the loop.</h2>
+            <h2 className="font-display text-3xl font-light tracking-tight">Stay in the loop.</h2>
             <p className="mt-2 max-w-sm text-sm text-white/65">
               Occasional updates on programmes, events, and impact. No noise.
             </p>
