@@ -108,11 +108,11 @@ export const Route = createFileRoute("/")({
 const BTN_BASE =
   "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 const BTN = {
-  primary: `${BTN_BASE} bg-primary text-primary-foreground hover:bg-primary/90`,
-  secondary: `${BTN_BASE} border border-foreground/15 text-foreground hover:bg-foreground/5`,
-  dark: `${BTN_BASE} bg-foreground text-background hover:opacity-90`,
-  onDarkOutline: `${BTN_BASE} border border-white/30 text-white hover:bg-white/10`,
-  onDarkSolid: `${BTN_BASE} bg-white text-primary hover:bg-white/90`,
+  primary: `${BTN_BASE} bg-ink text-white hover:bg-ink/90`,
+  secondary: `${BTN_BASE} border border-ink/20 text-ink hover:bg-paper`,
+  dark: `${BTN_BASE} bg-ink text-white hover:opacity-90`,
+  onDarkOutline: `${BTN_BASE} border border-white/40 text-white hover:bg-white hover:text-ink`,
+  onDarkSolid: `${BTN_BASE} bg-white text-ink hover:bg-white/90`,
 } as const;
 
 /* ---------------------- Landing Component ---------------------- */
