@@ -236,7 +236,7 @@ export function PullQuote({
   image?: string;
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-ink px-6 py-28 text-white lg:px-10 lg:py-36">
+    <section className="relative isolate overflow-hidden bg-pale-blue px-6 py-28 text-ink lg:px-10 lg:py-36">
       {image && (
         <>
           <img
@@ -246,7 +246,7 @@ export function PullQuote({
             className="absolute inset-0 -z-10 h-full w-full object-cover opacity-30"
             loading="lazy"
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/50" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-pale-blue/70" />
         </>
       )}
       <div className={`${SHELL} max-w-4xl`}>
@@ -256,7 +256,7 @@ export function PullQuote({
           </blockquote>
         </Reveal>
         {attribution && (
-          <p className="mt-8 text-xs uppercase tracking-[0.2em] text-white/60">{attribution}</p>
+          <p className="mt-8 text-xs uppercase tracking-[0.2em] text-ink/60">{attribution}</p>
         )}
       </div>
     </section>
