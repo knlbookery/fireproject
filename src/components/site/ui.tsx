@@ -215,7 +215,7 @@ export function FullBleedBand({
       </div>
 
       <div
-        className={`flex items-center bg-ink px-6 py-20 text-white lg:px-16 lg:py-24 ${
+        className={`flex items-center bg-pale-blue px-6 py-20 text-ink lg:px-16 lg:py-24 ${
           reverse ? "lg:order-1" : ""
         }`}
       >
@@ -236,7 +236,7 @@ export function PullQuote({
   image?: string;
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-ink px-6 py-28 text-white lg:px-10 lg:py-36">
+    <section className="relative isolate overflow-hidden bg-pale-blue px-6 py-28 text-ink lg:px-10 lg:py-36">
       {image && (
         <>
           <img
@@ -246,7 +246,7 @@ export function PullQuote({
             className="absolute inset-0 -z-10 h-full w-full object-cover opacity-30"
             loading="lazy"
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/50" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-pale-blue/70" />
         </>
       )}
       <div className={`${SHELL} max-w-4xl`}>
@@ -256,7 +256,7 @@ export function PullQuote({
           </blockquote>
         </Reveal>
         {attribution && (
-          <p className="mt-8 text-xs uppercase tracking-[0.2em] text-white/60">{attribution}</p>
+          <p className="mt-8 text-xs uppercase tracking-[0.2em] text-ink/60">{attribution}</p>
         )}
       </div>
     </section>
@@ -341,19 +341,19 @@ export function CTABand({
   secondary?: { label: string; to: string };
 }) {
   return (
-    <section className="bg-ink px-6 py-24 text-white lg:px-10 lg:py-32">
+    <section className="bg-pale-blue px-6 py-24 text-ink lg:px-10 lg:py-32">
       <div className={`${SHELL} grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end`}>
         <h2 className="font-display text-4xl font-light leading-[1.03] tracking-tight sm:text-5xl lg:text-[4.5rem]">
           {title}
         </h2>
         <div>
-          <p className="measure text-base leading-relaxed text-white/70">{body}</p>
+          <p className="measure text-base leading-relaxed text-ink/70">{body}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to={primary.to} className={BTN.onDarkSolid}>
+            <Link to={primary.to} className={BTN.primary}>
               {primary.label}
             </Link>
             {secondary && (
-              <Link to={secondary.to} className={BTN.onDarkOutline}>
+              <Link to={secondary.to} className={BTN.secondary}>
                 {secondary.label}
               </Link>
             )}

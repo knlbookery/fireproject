@@ -203,7 +203,7 @@ export function Header() {
             </Link>
             <Link
               to="/donate"
-              className="rounded-full bg-ink px-6 py-3 text-center text-sm font-medium text-white"
+              className="rounded-full bg-primary px-6 py-3 text-center text-sm font-medium text-white"
             >
               Donate Now
             </Link>
