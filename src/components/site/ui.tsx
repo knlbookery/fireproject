@@ -341,19 +341,19 @@ export function CTABand({
   secondary?: { label: string; to: string };
 }) {
   return (
-    <section className="bg-ink px-6 py-24 text-white lg:px-10 lg:py-32">
+    <section className="bg-pale-blue px-6 py-24 text-ink lg:px-10 lg:py-32">
       <div className={`${SHELL} grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end`}>
         <h2 className="font-display text-4xl font-light leading-[1.03] tracking-tight sm:text-5xl lg:text-[4.5rem]">
           {title}
         </h2>
         <div>
-          <p className="measure text-base leading-relaxed text-white/70">{body}</p>
+          <p className="measure text-base leading-relaxed text-ink/70">{body}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to={primary.to} className={BTN.onDarkSolid}>
+            <Link to={primary.to} className={BTN.primary}>
               {primary.label}
             </Link>
             {secondary && (
-              <Link to={secondary.to} className={BTN.onDarkOutline}>
+              <Link to={secondary.to} className={BTN.secondary}>
                 {secondary.label}
               </Link>
             )}
