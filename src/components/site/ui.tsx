@@ -215,7 +215,7 @@ export function FullBleedBand({
       </div>
 
       <div
-        className={`flex items-center bg-ink px-6 py-20 text-white lg:px-16 lg:py-24 ${
+        className={`flex items-center bg-pale-blue px-6 py-20 text-ink lg:px-16 lg:py-24 ${
           reverse ? "lg:order-1" : ""
         }`}
       >
