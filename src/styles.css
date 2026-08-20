@@ -17,6 +17,7 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-ink: var(--ink);
+  --color-pale-blue: var(--pale-blue);
   --color-paper: var(--paper);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
