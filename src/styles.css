@@ -97,10 +97,21 @@
   }
   /* Headings sit white on dark navy panels, dark navy on light sections */
   .bg-ink h1, .bg-ink h2, .bg-ink h3, .bg-ink h4,
-  .bg-primary h1, .bg-primary h2, .bg-primary h3, .bg-primary h4 {
+  .bg-primary h1, .bg-primary h2, .bg-primary h3, .bg-primary h4,
+  .on-navy h1, .on-navy h2, .on-navy h3, .on-navy h4,
+  .on-navy blockquote {
     color: #ffffff;
   }
 }
+
+/* Deep navy veil used behind the hero media and the footer panel ------- */
+@utility navy-veil {
+  background-color: #0b1a2e;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.045) 0 1px, transparent 1px 12.5%),
+    linear-gradient(105deg, rgba(11,26,46,0.96) 0%, rgba(11,26,46,0.7) 42%, rgba(11,26,46,0.25) 78%, rgba(11,26,46,0.1) 100%),
+    radial-gradient(120% 90% at 20% 0%, rgba(47,111,237,0.18) 0%, transparent 60%);
+
 
 /* Faint dotted grid used behind editorial sections (reference styling) */
 @utility dot-grid {
