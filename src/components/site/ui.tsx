@@ -116,7 +116,7 @@ export function PageHero({
   actions?: ReactNode;
 }) {
   return (
-    <section className="relative isolate flex min-h-[62vh] items-end overflow-hidden bg-ink px-6 pb-16 pt-40 text-white lg:min-h-[70vh] lg:px-10 lg:pb-20 lg:pt-48">
+    <section className="navy-veil on-navy relative isolate flex min-h-[62vh] items-end overflow-hidden px-6 pb-16 pt-40 text-white lg:min-h-[70vh] lg:px-10 lg:pb-20 lg:pt-48">
       <Parallax strength={60} className="absolute inset-x-0 -bottom-[10%] -top-[10%] -z-10">
         <img
           src={image}
@@ -126,10 +126,8 @@ export function PageHero({
           loading="eager"
         />
       </Parallax>
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-ink via-ink/70 to-ink/20"
-      />
+      <div aria-hidden="true" className="navy-veil-overlay absolute inset-0 -z-10" />
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-background to-transparent"
