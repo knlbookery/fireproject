@@ -53,6 +53,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       onKeyDown={onKeyDown}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
       className="relative min-h-[680px] w-full overflow-hidden bg-ink focus:outline-none lg:h-[100svh]"
