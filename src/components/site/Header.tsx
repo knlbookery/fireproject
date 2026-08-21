@@ -173,7 +173,7 @@ export function Header() {
           >
             <Link
               to="/"
-              className="block border-b border-border py-4 font-display text-3xl font-light tracking-tight text-ink"
+              className="block border-b border-border py-4 font-display text-3xl font-semibold tracking-tight text-ink"
             >
               Home
             </Link>
@@ -186,7 +186,7 @@ export function Header() {
                 key={i.to}
                 to={i.to}
                 aria-current={pathname === i.to ? "page" : undefined}
-                className={`block border-b border-border py-4 font-display text-3xl font-light tracking-tight transition-colors ${
+                className={`block border-b border-border py-4 font-display text-3xl font-semibold tracking-tight transition-colors ${
                   pathname === i.to ? "text-primary" : "text-ink"
                 }`}
               >
