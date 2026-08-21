@@ -82,14 +82,12 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             loading={i === 0 ? "eager" : "lazy"}
             fetchPriority={i === 0 ? "high" : "auto"}
           />
+          <div aria-hidden="true" className="navy-veil-overlay absolute inset-0" />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-ink via-ink/65 to-transparent"
+            className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0b1a2e] via-[#0b1a2e]/70 to-transparent"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/85 to-transparent"
-          />
+
         </div>
       ))}
 
