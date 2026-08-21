@@ -95,6 +95,11 @@
     font-weight: 600;
     color: var(--color-ink);
   }
+  /* Headings sit white on dark navy panels, dark navy on light sections */
+  .bg-ink h1, .bg-ink h2, .bg-ink h3, .bg-ink h4,
+  .bg-primary h1, .bg-primary h2, .bg-primary h3, .bg-primary h4 {
+    color: #ffffff;
+  }
 }
 
 /* Faint dotted grid used behind editorial sections (reference styling) */
