@@ -99,7 +99,7 @@ export function Footer() {
 
         <div className="grid gap-10 border-b border-ink/10 py-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <h2 className="font-display text-3xl font-light tracking-tight">Stay in the loop.</h2>
+            <h2 className="font-display text-3xl font-semibold tracking-tight">Stay in the loop.</h2>
             <p className="mt-2 max-w-sm text-sm text-ink/65">
               Occasional updates on programmes, events, and impact. No noise.
             </p>

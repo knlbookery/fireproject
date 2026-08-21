@@ -77,7 +77,7 @@ export function Section({
                 )}
                 {title && (
                   <Reveal variant="blur" delay={80}>
-                    <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
+                    <h2 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
                       {title}
                     </h2>
                   </Reveal>
@@ -142,7 +142,7 @@ export function PageHero({
               <Eyebrow onDark>{eyebrow}</Eyebrow>
             </Reveal>
             <Reveal variant="blur" delay={90}>
-              <h1 className="mt-7 max-w-4xl font-display text-[2.6rem] font-light leading-[1] tracking-tight sm:text-6xl lg:text-[5rem]">
+              <h1 className="mt-7 max-w-4xl font-display text-[2.6rem] font-semibold leading-[1] tracking-tight sm:text-6xl lg:text-[5rem]">
                 {title}
               </h1>
             </Reveal>
@@ -178,7 +178,7 @@ export function LeadBlock({
   return (
     <div className="grid gap-10 border-t border-border pt-12 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
       <Reveal variant="blur">
-        <p className="font-display text-3xl font-light leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
+        <p className="font-display text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
           {statement}
         </p>
       </Reveal>
@@ -251,7 +251,7 @@ export function PullQuote({
       )}
       <div className={`${SHELL} max-w-4xl`}>
         <Reveal variant="blur">
-          <blockquote className="font-display text-3xl font-light leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
+          <blockquote className="font-display text-3xl font-semibold leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
             “{quote}”
           </blockquote>
         </Reveal>
@@ -281,7 +281,7 @@ export function ListRow({
     <div className="grid gap-4 border-t border-border py-8 md:grid-cols-[180px_1fr_auto] md:items-baseline md:gap-10">
       <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{lead}</div>
       <div>
-        <h3 className="font-display text-2xl font-light tracking-tight lg:text-3xl">{title}</h3>
+        <h3 className="font-display text-2xl font-semibold tracking-tight lg:text-3xl">{title}</h3>
         {meta && <p className="mt-1 text-sm text-muted-foreground">{meta}</p>}
         {children && <div className="measure mt-3 text-sm text-muted-foreground">{children}</div>}
       </div>
@@ -313,7 +313,7 @@ export function StatGrid({
             onDark ? "border-white/15 text-white" : "border-border"
           }`}
         >
-          <div className="font-display text-5xl font-light tracking-tight lg:text-6xl">
+          <div className="font-display text-5xl font-semibold tracking-tight lg:text-6xl">
             {s.value}
           </div>
           <div className="mt-4 text-xs font-medium uppercase tracking-[0.18em]">{s.label}</div>
@@ -343,7 +343,7 @@ export function CTABand({
   return (
     <section className="bg-pale-blue px-6 py-24 text-ink lg:px-10 lg:py-32">
       <div className={`${SHELL} grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end`}>
-        <h2 className="font-display text-4xl font-light leading-[1.03] tracking-tight sm:text-5xl lg:text-[4.5rem]">
+        <h2 className="font-display text-4xl font-semibold leading-[1.03] tracking-tight sm:text-5xl lg:text-[4.5rem]">
           {title}
         </h2>
         <div>

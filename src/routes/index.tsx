@@ -102,7 +102,7 @@ function Manifesto() {
               <Eyebrow>Who we are</Eyebrow>
             </Reveal>
             <Reveal variant="blur" delay={80}>
-              <p className="mt-8 font-display text-[2rem] font-light leading-[1.08] tracking-tight sm:text-[2.75rem] lg:text-[3.5rem]">
+              <p className="mt-8 font-display text-[2rem] font-semibold leading-[1.08] tracking-tight sm:text-[2.75rem] lg:text-[3.5rem]">
                 We put opportunity within walking distance of the young people who need it.
               </p>
             </Reveal>
@@ -153,7 +153,7 @@ function WorkIndex() {
         <div className="grid gap-8 border-t border-ink/10 pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
             <Eyebrow>What we do</Eyebrow>
-            <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
+            <h2 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
               Six programmes, one index.
             </h2>
           </div>
@@ -177,7 +177,7 @@ function WorkIndex() {
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="flex-1">
-                    <span className="block font-display text-2xl font-light tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-[2.25rem]">
+                    <span className="block font-display text-2xl font-semibold tracking-tight transition-transform duration-500 group-hover:translate-x-2 lg:text-[2.25rem]">
                       {p.title}
                     </span>
                     <span className="mt-2 block max-w-xl text-sm leading-relaxed text-ink/55 lg:hidden">
@@ -266,7 +266,7 @@ function TwoCountries() {
               <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
               {place.label}
             </span>
-            <h2 className="mt-6 font-display text-[2rem] font-light leading-[1.05] tracking-tight lg:text-[3rem]">
+            <h2 className="mt-6 font-display text-[2rem] font-semibold leading-[1.05] tracking-tight lg:text-[3rem]">
               {place.title}
             </h2>
             <p className="mt-5 text-sm leading-relaxed text-white/70">{place.body}</p>
@@ -294,7 +294,7 @@ function ImpactLedger() {
         <div className="grid gap-8 border-t border-border pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
             <Eyebrow>The ledger</Eyebrow>
-            <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
+            <h2 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
               Counted, not claimed.
             </h2>
           </div>
@@ -349,7 +349,7 @@ function Voices() {
               <Eyebrow>Leadership</Eyebrow>
             </div>
             <Reveal variant="blur" delay={80}>
-              <blockquote className="mt-8 font-display text-[1.9rem] font-light leading-[1.12] tracking-tight sm:text-[2.5rem] lg:text-[3.25rem]">
+              <blockquote className="mt-8 font-display text-[1.9rem] font-semibold leading-[1.12] tracking-tight sm:text-[2.5rem] lg:text-[3.25rem]">
                 “{lead.quote}”
               </blockquote>
             </Reveal>
@@ -451,7 +451,7 @@ function Gatherings() {
         <div className="grid gap-8 border-t border-border pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
             <Eyebrow>Gatherings</Eyebrow>
-            <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
+            <h2 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
               Come stand in the room.
             </h2>
           </div>
@@ -474,7 +474,7 @@ function Gatherings() {
                     {e.time ? ` · ${e.time}` : ""}
                   </span>
                   <span>
-                    <span className="block font-display text-2xl font-light tracking-tight lg:text-3xl">
+                    <span className="block font-display text-2xl font-semibold tracking-tight lg:text-3xl">
                       {e.name}
                     </span>
                     {e.location && (
@@ -523,7 +523,7 @@ function Dispatches() {
         <div className="grid gap-8 border-t border-border pt-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
           <div>
             <Eyebrow>Dispatches</Eyebrow>
-            <h2 className="mt-6 font-display text-4xl font-light leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
+            <h2 className="mt-6 font-display text-4xl font-semibold leading-[1.02] tracking-tight sm:text-5xl lg:text-[4rem]">
               Latest from the field.
             </h2>
           </div>
@@ -553,7 +553,7 @@ function Dispatches() {
                   {a.displayDate}
                   {a.category ? ` · ${a.category}` : ""}
                 </p>
-                <h3 className="mt-3 font-display text-2xl font-light leading-tight tracking-tight">
+                <h3 className="mt-3 font-display text-2xl font-semibold leading-tight tracking-tight">
                   {a.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{a.excerpt}</p>
@@ -582,7 +582,7 @@ function PartnerWall() {
         <div className="grid gap-10 border-t border-border pt-10 lg:grid-cols-[1fr_2fr] lg:gap-20">
           <div>
             <Eyebrow>Partners</Eyebrow>
-            <h2 className="mt-6 font-display text-3xl font-light leading-[1.05] tracking-tight lg:text-[2.75rem]">
+            <h2 className="mt-6 font-display text-3xl font-semibold leading-[1.05] tracking-tight lg:text-[2.75rem]">
               Nothing here was built alone.
             </h2>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">

@@ -106,14 +106,14 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
           </span>
           {safeIdx === 0 ? (
             <h1
-              className="animate-hero-text mt-7 whitespace-pre-line font-display text-[clamp(2.25rem,7vw,4.5rem)] font-light leading-[1.02] tracking-tight xl:text-[clamp(3.5rem,4.4vw,5rem)]"
+              className="animate-hero-text mt-7 whitespace-pre-line font-display text-[clamp(2.25rem,7vw,4.5rem)] font-semibold leading-[1.02] tracking-tight xl:text-[clamp(3.5rem,4.4vw,5rem)]"
               style={{ animationDelay: "160ms" }}
             >
               {slide.title}
             </h1>
           ) : (
             <p
-              className="animate-hero-text mt-7 whitespace-pre-line font-display text-[clamp(2.25rem,7vw,4.5rem)] font-light leading-[1.02] tracking-tight xl:text-[clamp(3.5rem,4.4vw,5rem)]"
+              className="animate-hero-text mt-7 whitespace-pre-line font-display text-[clamp(2.25rem,7vw,4.5rem)] font-semibold leading-[1.02] tracking-tight xl:text-[clamp(3.5rem,4.4vw,5rem)]"
               style={{ animationDelay: "160ms" }}
             >
               {slide.title}
