@@ -51,20 +51,20 @@
   --surface: #f6f8fc;
   --paper: #f6f8fc;
   --pale-blue: #f6f8fc;
-  --ink: #081628;
-  --foreground: #081628;
+  --ink: #12315C;
+  --foreground: #12315C;
 
   --card: #ffffff;
-  --card-foreground: #081628;
+  --card-foreground: #12315C;
 
   --popover: #ffffff;
-  --popover-foreground: #081628;
+  --popover-foreground: #12315C;
 
-  --primary: #081628;
+  --primary: #12315C;
   --primary-foreground: #ffffff;
 
   --secondary: #f6f8fc;
-  --secondary-foreground: #081628;
+  --secondary-foreground: #12315C;
 
   --accent: #2f6fed;
   --accent-foreground: #ffffff;
@@ -75,9 +75,9 @@
   --destructive: #d64545;
   --destructive-foreground: #ffffff;
 
-  --border: rgba(8, 22, 40, 0.1);
-  --input: rgba(8, 22, 40, 0.12);
-  --ring: rgba(8, 22, 40, 0.4);
+  --border: rgba(18, 49, 92, 0.12);
+  --input: rgba(18, 49, 92, 0.16);
+  --ring: rgba(18, 49, 92, 0.4);
 }
 
 @layer base {
@@ -104,7 +104,7 @@
 
 /* Faint dotted grid used behind editorial sections (reference styling) */
 @utility dot-grid {
-  background-image: radial-gradient(rgba(8, 22, 40, 0.09) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(18, 49, 92, 0.1) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
