@@ -266,7 +266,7 @@ function TwoCountries() {
               <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
               {place.label}
             </span>
-            <h2 className="mt-6 font-display text-[2rem] font-semibold leading-[1.05] tracking-tight lg:text-[3rem]">
+            <h2 className="mt-6 font-display text-[2rem] font-semibold leading-[1.05] tracking-tight text-white lg:text-[3rem]">
               {place.title}
             </h2>
             <p className="mt-5 text-sm leading-relaxed text-white/70">{place.body}</p>
