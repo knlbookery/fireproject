@@ -56,7 +56,7 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
 
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative min-h-[680px] w-full overflow-hidden bg-ink focus:outline-none lg:h-[100svh]"
+      className="navy-veil on-navy relative min-h-[680px] w-full overflow-hidden focus:outline-none lg:h-[100svh]"
     >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         Slide {safeIdx + 1} of {SLIDES.length}: {slide.title}
