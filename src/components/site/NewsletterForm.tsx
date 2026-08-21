@@ -48,8 +48,17 @@ export function NewsletterForm({ onDark = false }: { onDark?: boolean } = {}) {
 
   if (state === "done") {
     return (
-      <div className="flex items-center gap-3 rounded-2xl border border-ink/10 bg-ink/[0.03] px-5 py-6 text-sm text-ink/85">
-        <CheckCircle2 className="h-5 w-5 text-primary" aria-hidden="true" />
+      <div
+        className={`flex items-center gap-3 rounded-2xl border px-5 py-6 text-sm ${
+          onDark
+            ? "border-white/15 bg-white/5 text-white/85"
+            : "border-ink/10 bg-ink/[0.03] text-ink/85"
+        }`}
+      >
+        <CheckCircle2
+          className={`h-5 w-5 ${onDark ? "text-white" : "text-primary"}`}
+          aria-hidden="true"
+        />
         You're on the list. Look out for our next update.
       </div>
     );
@@ -71,7 +80,11 @@ export function NewsletterForm({ onDark = false }: { onDark?: boolean } = {}) {
           placeholder="you@example.com"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? "newsletter-error" : undefined}
-          className="w-full rounded-full border border-ink/20 bg-white px-5 py-3 text-sm text-ink placeholder:text-ink/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className={`w-full rounded-full px-5 py-3 text-sm focus:outline-none focus-visible:ring-2 ${
+            onDark
+              ? "border border-white/20 bg-white/10 text-white placeholder:text-white/50 focus-visible:ring-white/60"
+              : "border border-ink/20 bg-white text-ink placeholder:text-ink/45 focus-visible:ring-primary"
+          }`}
         />
         <input
           type="text"
@@ -85,14 +98,22 @@ export function NewsletterForm({ onDark = false }: { onDark?: boolean } = {}) {
         <button
           type="submit"
           disabled={state === "sending"}
-          className={`${BTN_BASE} shrink-0 bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-60`}
+          className={`${BTN_BASE} shrink-0 disabled:opacity-60 ${
+            onDark
+              ? "bg-white text-ink hover:bg-white/90"
+              : "bg-accent text-accent-foreground hover:bg-accent/90"
+          }`}
         >
           {state === "sending" ? "Signing up…" : "Subscribe"}
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
       {error && (
-        <p id="newsletter-error" role="alert" className="mt-3 text-sm text-destructive">
+        <p
+          id="newsletter-error"
+          role="alert"
+          className={`mt-3 text-sm ${onDark ? "text-white" : "text-destructive"}`}
+        >
           {error}
         </p>
       )}
