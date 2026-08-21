@@ -66,7 +66,7 @@ export function Footer() {
                 alt="F.I.R.E. — Free Inspiration Reaching Everyone"
                 width={277}
                 height={54}
-                className="h-[43px] w-auto object-contain brightness-0 invert md:h-[54px]"
+                className="h-[43px] w-auto object-contain md:h-[54px]"
               />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
