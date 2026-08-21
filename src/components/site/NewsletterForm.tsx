@@ -9,7 +9,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
  * Footer newsletter signup. Reuses the existing /api/contact.php contract
  * (no new endpoint) by submitting a composed message — see lovableRule.md §5.
  */
-export function NewsletterForm() {
+export function NewsletterForm({ onDark = false }: { onDark?: boolean } = {}) {
   const renderedAt = useRef(new Date().toISOString());
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
