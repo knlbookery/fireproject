@@ -42,7 +42,7 @@ const COLUMNS: { heading: string; links: { label: string; to: string }[] }[] = [
 export function Footer() {
   return (
     <footer className="w-full bg-background px-4 pb-6 pt-16 lg:px-6 lg:pt-24">
-      <div className="mx-auto max-w-[1400px] rounded-[28px] bg-ink px-6 pb-8 pt-12 text-white/70 lg:px-14 lg:pt-16">
+      <div className="navy-veil on-navy relative mx-auto max-w-[1400px] overflow-hidden rounded-[28px] px-6 pb-8 pt-12 text-white/70 lg:px-14 lg:pt-16">
         {/* Newsletter band */}
         <div className="grid gap-8 border-b border-white/12 pb-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
           <div>

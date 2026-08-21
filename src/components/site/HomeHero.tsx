@@ -53,9 +53,10 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
       onKeyDown={onKeyDown}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative min-h-[680px] w-full overflow-hidden bg-ink focus:outline-none lg:h-[100svh]"
+      className="navy-veil on-navy relative min-h-[680px] w-full overflow-hidden focus:outline-none lg:h-[100svh]"
     >
       <div aria-live="polite" aria-atomic="true" className="sr-only">
         Slide {safeIdx + 1} of {SLIDES.length}: {slide.title}
@@ -82,14 +83,12 @@ export function HomeHero({ slides: SLIDES }: { slides: HeroSlide[] }) {
             loading={i === 0 ? "eager" : "lazy"}
             fetchPriority={i === 0 ? "high" : "auto"}
           />
+          <div aria-hidden="true" className="navy-veil-overlay absolute inset-0" />
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-r from-ink via-ink/65 to-transparent"
+            className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0b1a2e] via-[#0b1a2e]/70 to-transparent"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink/85 to-transparent"
-          />
+
         </div>
       ))}
 
